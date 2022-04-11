@@ -21,8 +21,8 @@
         physics: {
             default: 'arcade',
             arcade: {
-                gravity: { y: 300 },
-                debug: false
+                gravity: { y: 850 },
+                debug: true
             }
         },
         scene: {
@@ -91,7 +91,8 @@
 
     function update ()
     {
-        if (cursors.left.isDown)
+        if (cursors.left.isDown) 
+
         {
             player.setVelocityX(-160);
 
@@ -110,9 +111,10 @@
             player.anims.play('turn');
         }
 
+        //Verifica se a tecla CIMA está apertada e se está tocando no chão à baixo
         if (cursors.up.isDown && player.body.touching.down)
         {
-            player.setVelocityY(-330);
+            player.setVelocityY(-500);
         }
     }
 

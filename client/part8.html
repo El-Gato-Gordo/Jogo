@@ -22,7 +22,7 @@
             default: 'arcade',
             arcade: {
                 gravity: { y: 300 },
-                debug: false
+                debug: true
             }
         },
         scene: {
@@ -90,7 +90,7 @@
         stars = this.physics.add.group({
             key: 'star',
             repeat: 11,
-            setXY: { x: 12, y: 0, stepX: 70 }
+            setXY: { x: 12, y: 0, stepX: 70 } //stepX incrementa a coordenada
         });
 
         stars.children.iterate(function (child) {
@@ -102,6 +102,8 @@
         this.physics.add.collider(player, platforms);
         this.physics.add.collider(stars, platforms);
 
+        //collider = colisão (pixel - pixel)
+        //overlap = atravessa pixels
         this.physics.add.overlap(player, stars, collectStar, null, this);
     }
 
@@ -132,6 +134,7 @@
         }
     }
 
+    //Função será executada quando o jogador colidir com a estrela
     function collectStar (player, star)
     {
         star.disableBody(true, true);

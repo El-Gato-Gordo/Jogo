@@ -98,7 +98,7 @@ function create ()
     });
 
     //  Input Events
-    cursors = this.input.keyboard.createCursorKeys();
+    cursors = this.input.keyboard.createCursorKeys(); //Informa que o jogo tem input das keys
 
     //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
     stars = this.physics.add.group({
@@ -156,12 +156,14 @@ function update ()
         player.anims.play('turn');
     }
 
+    //Verifica se a tecla CIMA está apertada e se está tocando no chão à baixo    
     if (cursors.up.isDown && player.body.touching.down)
     {
         player.setVelocityY(-330);
     }
 }
 
+//Função será executada quando o jogador colidir com a estrela
 function collectStar (player, star)
 {
     star.disableBody(true, true);
@@ -170,7 +172,7 @@ function collectStar (player, star)
     score += 10;
     scoreText.setText('Score: ' + score);
 
-    if (stars.countActive(true) === 0)
+    if (stars.countActive(true) === 0) //Conta quantas estrelas estão ativas
     {
         //  A new batch of stars to collect
         stars.children.iterate(function (child) {
@@ -179,7 +181,9 @@ function collectStar (player, star)
 
         });
 
+        //Verifica o X do player e seleciona um novo aleatório mais longe
         var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
 
         var bomb = bombs.create(x, 16, 'bomb');
         bomb.setBounce(1);
