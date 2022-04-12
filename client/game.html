@@ -1,0 +1,173 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Jogão</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 700 },
+            debug: false
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+var player;
+var platforms;
+var cursors;
+var gameOver = false;
+var last_direction = "null"
+
+var game = new Phaser.Game(config);
+
+function preload ()
+{
+    this.load.image('sky', 'assets/sky.png');
+    this.load.image('ground', 'assets/platform.png');
+    this.load.image('star', 'assets/star.png');
+    this.load.image('bomb', 'assets/bomb.png');
+    this.load.spritesheet('player', 'assets/player.png', { frameWidth: 64, frameHeight: 64 });
+}
+
+function create ()
+{
+    //  A simple background for our game
+    this.add.image(400, 300, 'sky');
+
+    //  The platforms group contains the ground and the 2 ledges we can jump on
+    platforms = this.physics.add.staticGroup();
+
+    //  Here we create the ground.
+    //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
+    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+
+    //  Now let's create some ledges
+    platforms.create(600, 400, 'ground');
+    platforms.create(50, 250, 'ground');
+    platforms.create(750, 220, 'ground');
+
+    // The player and its settings
+    player = this.physics.add.sprite(100, 450, 'player');
+
+    //  Player physics properties. Give the little guy a slight bounce.
+    player.setCollideWorldBounds(true);
+
+    //  Our player animations, turning, walking left and walking right.
+    this.anims.create({
+        key: 'walkLeft',
+        frames: this.anims.generateFrameNumbers('player', { start: 30, end: 35 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'idleRight',
+        frames: this.anims.generateFrameNumbers('player', {start: 0, end: 6}),
+        frameRate: 15,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'idleLeft',
+        frames: this.anims.generateFrameNumbers('player', {start: 7, end: 12}),
+        frameRate: 15,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'walkRight',
+        frames: this.anims.generateFrameNumbers('player', { start: 24, end: 29 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'risingRight',
+        frames: [ { key: 'player', frame: 20 } ],
+        frameRate: 20
+    });
+
+    this.anims.create({
+        key: 'risingLeft',
+        frames: [ { key: 'player', frame: 21 } ],
+        frameRate: 20
+    });
+
+    //  Input Events
+    cursors = this.input.keyboard.createCursorKeys(); //Informa que o jogo tem input das keys
+
+    //  Collide the player and the stars with the platforms
+    this.physics.add.collider(player, platforms);
+
+}
+
+function update ()
+{
+    if (gameOver)
+    {
+        return;
+    }
+
+    if (cursors.left.isDown)
+    {
+        player.setVelocityX(-160);
+
+        if (player.body.touching.down){}
+        player.anims.play('walkLeft', true);
+        last_direction = "LEFT"
+    }
+    else if (cursors.right.isDown)
+    {
+        player.setVelocityX(160);
+
+        player.anims.play('walkRight', true)
+        last_direction = "RIGHT";
+    }
+    else
+    {
+        player.setVelocityX(0);
+
+        //A variável last_direction serve para checar para qual direção o jogador estava olhando antes de soltar os botões LEFT e RIGHT,
+        //Assim podemos usar sprites de IDLE diferentes
+        if (last_direction === "RIGHT")
+        {
+            player.anims.play('idleRight', true);
+        }
+
+        if (last_direction === "LEFT")
+        {
+            player.anims.play('idleLeft', true);
+        }
+    }
+
+    //Verifica se a tecla CIMA está apertada e se está tocando no chão à baixo    
+    if (cursors.up.isDown && player.body.touching.down)
+    {
+        player.setVelocityY(-400);
+    }
+}
+
+</script>
+
+</body>
+</html>
