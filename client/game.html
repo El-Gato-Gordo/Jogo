@@ -47,9 +47,7 @@ function preload ()
 {
     this.load.image('sky', 'assets/sky.png');
     this.load.image('ground', 'assets/platform.png');
-    this.load.image('star', 'assets/star.png');
-    this.load.image('bomb', 'assets/bomb.png');
-    this.load.spritesheet('player', 'assets/player.png', { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('player', 'assets/player_move.png', { frameWidth: 64, frameHeight: 64 });
 }
 
 function create ()
@@ -111,10 +109,41 @@ function create ()
     });
 
     this.anims.create({
+        key: 'fallingRight',
+        frames: [ { key: 'player', frame: 22 } ],
+        frameRate: 20
+    });
+
+    this.anims.create({
+        key: 'crouchingRight',
+        frames: [ { key: 'player', frame: 37 } ],
+        frameRate: 20
+    });
+
+    this.anims.create({
+        key: 'crouchingLeft',
+        frames: [ { key: 'player', frame: 39 } ],
+        frameRate: 20
+    });
+
+    this.anims.create({
         key: 'risingLeft',
         frames: [ { key: 'player', frame: 21 } ],
         frameRate: 20
     });
+
+    this.anims.create({
+        key: 'fallingLeft',
+        frames: [ { key: 'player', frame: 23 } ],
+        frameRate: 20
+    });
+
+    this.anims.create({
+        key: 'combo1-1Right',
+        frames: this.anims.generateFrameNumbers('player', { start: 24, end: 29 }),
+        frameRate: 10,
+        repeat: -1
+    })
 
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys(); //Informa que o jogo tem input das keys
@@ -131,44 +160,94 @@ function update ()
         return;
     }
 
-    if (cursors.left.isDown)
+    if (player.body.touching.down) //NO CHÃO
     {
-        player.setVelocityX(-160);
 
-        if (player.body.touching.down){}
-        player.anims.play('walkLeft', true);
-        last_direction = "LEFT"
-    }
-    else if (cursors.right.isDown)
-    {
-        player.setVelocityX(160);
-
-        player.anims.play('walkRight', true)
-        last_direction = "RIGHT";
-    }
-    else
-    {
-        player.setVelocityX(0);
-
-        //A variável last_direction serve para checar para qual direção o jogador estava olhando antes de soltar os botões LEFT e RIGHT,
-        //Assim podemos usar sprites de IDLE diferentes
-        if (last_direction === "RIGHT")
+        if (cursors.left.isDown)
         {
-            player.anims.play('idleRight', true);
+            player.setVelocityX(-160);
+
+            if (player.body.touching.down){}
+                player.anims.play('walkLeft', true);
+                last_direction = "LEFT"
+        }
+        else if (cursors.right.isDown)
+        {
+            player.setVelocityX(160);
+
+            player.anims.play('walkRight', true)
+            last_direction = "RIGHT";
         }
 
-        if (last_direction === "LEFT")
+        else
         {
-            player.anims.play('idleLeft', true);
+            player.setVelocityX(0);
+
+            //A variável last_direction serve para checar para qual direção o jogador estava olhando antes de soltar os botões LEFT e RIGHT,
+            //Assim podemos usar sprites de IDLE diferentes
+
+            if (cursors.down.isDown && last_direction === "RIGHT")
+            {
+                player.anims.play('crouchingRight', true);
+            }
+
+            else if (cursors.down.isDown && last_direction === "LEFT")
+            {
+                player.anims.play('crouchingLeft', true);
+            }
+
+            else 
+            {
+
+            if (last_direction === "RIGHT")
+            {
+                player.anims.play('idleRight', true);
+            }
+
+            if (last_direction === "LEFT")
+            {
+                player.anims.play('idleLeft', true);
+            }
+            
+        }
+        
+    } 
+
+        //Verifica se a tecla CIMA está apertada e se está tocando no chão à baixo    
+        if (cursors.up.isDown && player.body.touching.down)
+        {
+
+            player.setVelocityY(-400);
         }
     }
 
-    //Verifica se a tecla CIMA está apertada e se está tocando no chão à baixo    
-    if (cursors.up.isDown && player.body.touching.down)
+
+    if (player.body.touching.down === false) //NO AR
     {
-        player.setVelocityY(-400);
+        //Checa se o jogador está indo para CIMA e aplica respectivas animações
+        if(player.body.velocity.y < 0 && last_direction === "RIGHT")
+        {
+            player.anims.play('risingRight');
+        }
+
+        if(player.body.velocity.y < 0 && last_direction === "LEFT")
+        {
+            player.anims.play('risingLeft');
+        }
+
+        //Checa se o jogador está indo para BAIXO e aplica respectivas animações
+        if(player.body.velocity.y > 0 && last_direction === "RIGHT")
+        {
+            player.anims.play('fallingRight');
+        }
+
+        if(player.body.velocity.y > 0 && last_direction === "LEFT")
+        {
+            player.anims.play('fallingLeft');
+        }
     }
 }
+
 
 </script>
 
