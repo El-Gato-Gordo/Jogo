@@ -36,9 +36,12 @@ var player;
 var platforms;
 var cursors;
 var gameOver = false;
-var last_direction = "null"
+var last_direction = "null" //Verifica qual a última direção que o jogador se moveu
 
 var game = new Phaser.Game(config);
+var player_hp //Define HP do Cavaleiro e Mago
+var player_mana //Define Mana do Mago
+
 
 function preload ()
 {
