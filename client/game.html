@@ -16,13 +16,13 @@
 
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 1930,
+    height: 970,
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 700 },
-            debug: false
+            debug: true
         }
     },
     scene: {
@@ -41,7 +41,12 @@ var last_direction = "null" //Verifica qual a última direção que o jogador se
 var game = new Phaser.Game(config);
 var player_hp //Define HP do Cavaleiro e Mago
 var player_mana //Define Mana do Mago
-
+var parryTime //Define o tempo que pode manter o aparo
+var nextParry //Define o cooldown entre parries
+var parrying = false //Define se está aparando ou não
+var airSpeed = 0 //Aceleração no ar
+var dodging = false //Verifica se está esquivando
+var dodgingStop = 0 //Verifica quando que a esquiva deve parar
 
 function preload ()
 {
@@ -53,7 +58,7 @@ function preload ()
 function create ()
 {
     //  A simple background for our game
-    this.add.image(400, 300, 'sky');
+    this.add.image(400, 300, 'sky').setScale(4);
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
@@ -66,7 +71,9 @@ function create ()
     platforms.create(600, 400, 'ground');
     platforms.create(50, 250, 'ground');
     platforms.create(750, 220, 'ground');
-
+    platforms.create(1400, 920, 'ground').setScale(3).refreshBody();
+    platforms.create(1, 910, 'ground').setScale(4).refreshBody();
+    platforms.create(1, 781, 'ground').setScale(4).refreshBody();
     // The player and its settings
     player = this.physics.add.sprite(100, 450, 'player');
 
@@ -74,76 +81,125 @@ function create ()
     player.setCollideWorldBounds(true);
 
     //  Our player animations, turning, walking left and walking right.
+    //Anda Esquerda
     this.anims.create({
         key: 'walkLeft',
-        frames: this.anims.generateFrameNumbers('player', { start: 30, end: 35 }),
-        frameRate: 10,
+        frames: this.anims.generateFrameNumbers('player', { start: 35, end: 42 }),
+        frameRate: 17,
         repeat: -1
     });
 
+    //Anda Direita
     this.anims.create({
         key: 'idleRight',
-        frames: this.anims.generateFrameNumbers('player', {start: 0, end: 6}),
-        frameRate: 15,
+        frames: this.anims.generateFrameNumbers('player', {start: 0, end: 13}),
+        frameRate: 10,
         repeat: -1
     });
 
+    //Parado Esquerda
     this.anims.create({
         key: 'idleLeft',
-        frames: this.anims.generateFrameNumbers('player', {start: 7, end: 12}),
-        frameRate: 15,
+        frames: this.anims.generateFrameNumbers('player', {start: 14, end: 27}),
+        frameRate: 10,
         repeat: -1
     });
 
+    //Parado Direita
     this.anims.create({
         key: 'walkRight',
-        frames: this.anims.generateFrameNumbers('player', { start: 24, end: 29 }),
-        frameRate: 10,
+        frames: this.anims.generateFrameNumbers('player', { start: 28, end: 34 }),
+        frameRate: 17,
         repeat: -1
     });
 
+    //Salto Direita
     this.anims.create({
         key: 'risingRight',
-        frames: [ { key: 'player', frame: 20 } ],
+        frames: [ { key: 'player', frame: 43 } ],
         frameRate: 20
     });
 
+    //Queda Direita
     this.anims.create({
         key: 'fallingRight',
-        frames: [ { key: 'player', frame: 22 } ],
+        frames: [ { key: 'player', frame: 45 } ],
         frameRate: 20
     });
 
+    //Agacha Direita
     this.anims.create({
         key: 'crouchingRight',
-        frames: [ { key: 'player', frame: 37 } ],
+        frames: [ { key: 'player', frame: 47 } ],
         frameRate: 20
     });
 
+    //Agacha Esquerda
     this.anims.create({
         key: 'crouchingLeft',
-        frames: [ { key: 'player', frame: 39 } ],
+        frames: [ { key: 'player', frame: 48 } ],
         frameRate: 20
     });
 
+    //Salto Esquerda
     this.anims.create({
         key: 'risingLeft',
-        frames: [ { key: 'player', frame: 21 } ],
+        frames: [ { key: 'player', frame: 44 } ],
         frameRate: 20
     });
 
+    //Queda Esquerda
     this.anims.create({
         key: 'fallingLeft',
-        frames: [ { key: 'player', frame: 23 } ],
+        frames: [ { key: 'player', frame: 46 } ],
         frameRate: 20
     });
 
+    //Aparo Direita
     this.anims.create({
-        key: 'combo1-1Right',
-        frames: this.anims.generateFrameNumbers('player', { start: 24, end: 29 }),
-        frameRate: 10,
+        key: 'parryRight',
+        frames: [ { key: 'player', frame: 70 } ],
+        frameRate: 20
+    });
+
+    //Aparo Esquerda
+    this.anims.create({
+        key: 'parryLeft',
+        frames: [ { key: 'player', frame: 71 } ],
+        frameRate: 20
+    });
+
+    //Esquiva Direita
+    this.anims.create({
+        key: 'dodgeRight',
+        frames: this.anims.generateFrameNumbers('player', { start: 60, end: 64 }),
+        frameRate: 17,
         repeat: -1
-    })
+    });
+
+    //Esquiva Esquerda
+    this.anims.create({
+        key: 'dodgeLeft',
+        frames: this.anims.generateFrameNumbers('player', { start: 65, end: 69 }),
+        frameRate: 17,
+        repeat: -1
+    });
+
+    //Corre Direita
+    this.anims.create({
+        key: 'sprintRight',
+        frames: this.anims.generateFrameNumbers('player', { start: 49, end: 54 }),
+        frameRate: 20,
+        repeat: -1
+    });
+
+    //Corre Esquerda
+    this.anims.create({
+        key: 'sprintLeft',
+        frames: this.anims.generateFrameNumbers('player', { start: 55, end: 59 }),
+        frameRate: 20,
+        repeat: -1
+    });
 
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys(); //Informa que o jogo tem input das keys
@@ -163,21 +219,112 @@ function update ()
     if (player.body.touching.down) //NO CHÃO
     {
 
+/*
+        if (cursors.alt.isDown)
+        {
+            if (game.time.now >= nextParry)
+            {
+
+                parrying = true
+                parryTime = 0
+                nextParry = game.time.now + 3000
+            }
+
+        if (parrying === true && parryTime <= 120)
+        {
+            parryTime =+ 1
+
+            if (last_direction === "RIGHT")
+            {
+                player.anims.play('parryRight', true)
+
+            }
+
+            else if (last_direction === "LEFT")
+            {
+                player.anims.play('parryLeft', true)
+            }
+            
+        }
+        
+        if (parrying === true && parryTime > 120)
+        {
+            parrying = false
+            parryTime = 0
+        }
+    }
+*/
+
+/*
+        if (cursors.shift.isDown && dodging === false)
+        {
+            dodging = true
+            dodgingStop = game.time.now + 1000
+
+            if (last_direction === "RIGHT" && game.time.now < dodgingStop)
+            {
+                
+                player.setVelocityX(900)
+                player.anims.play('dodgeRight', true)
+
+            }
+
+            if (last_direction === "LEFT" && game.time.now < dodgingStop)
+            {
+
+                player.setVelocityX(-900)
+                player.anims.play('dodgeLeft', true)
+            }
+
+
+        }
+
+*/
+        if (dodging === false)
+        {
+
         if (cursors.left.isDown)
         {
+            if (cursors.shift.isDown)
+            {
+                player.setVelocityX(-300);
+
+                player.anims.play('sprintLeft', true)
+                last_direction = "LEFT";
+                
+            }
+            else 
+            {
+
             player.setVelocityX(-160);
 
             if (player.body.touching.down){}
                 player.anims.play('walkLeft', true);
                 last_direction = "LEFT"
+            
+            }
         }
-        else if (cursors.right.isDown)
+        else if (cursors.right.isDown)  
         {
+            if (cursors.shift.isDown)
+            {
+                player.setVelocityX(300);
+
+                player.anims.play('sprintRight', true)
+                last_direction = "RIGHT";
+
+            }
+            else 
+            {
+
             player.setVelocityX(160);
 
             player.anims.play('walkRight', true)
             last_direction = "RIGHT";
+
+            }
         }
+
 
         else
         {
@@ -210,6 +357,7 @@ function update ()
             }
             
         }
+    }
         
     } 
 
@@ -217,7 +365,7 @@ function update ()
         if (cursors.up.isDown && player.body.touching.down)
         {
 
-            player.setVelocityY(-400);
+            player.setVelocityY(-500);
         }
     }
 
@@ -245,6 +393,30 @@ function update ()
         {
             player.anims.play('fallingLeft');
         }
+
+        if (cursors.right.isDown && player.body.velocity.x <= 200)
+        {
+            airSpeed = player.body.velocity.x + 5
+            player.setVelocityX(airSpeed)
+
+            if (player.body.velocity.x > 0)
+            {
+                last_direction = "RIGHT"
+            }
+        } 
+
+        
+        if (cursors.left.isDown && player.body.velocity.x >= -200)
+        {
+            airSpeed = player.body.velocity.x - 5
+            player.setVelocityX(airSpeed)
+            
+            if (player.body.velocity.x < 0)
+            {
+                last_direction = "LEFT"
+            }
+            
+        } 
     }
 }
 
