@@ -47,7 +47,8 @@ var parrying = false //Define se está aparando ou não
 var airSpeed = 0 //Aceleração no ar
 var dodging = false //Verifica se está esquivando
 var dodgingTime = 0 //Tempo da duração da esquiva
-var dodgingCooldown = 0 //Tempo que se passou após esquivar
+var jumpTimer = 0 //Tempo no ar
+var jumpTune = 0 
 
 //Declarando teclas do jogo
 let keyA;
@@ -77,6 +78,7 @@ function preload ()
 function create ()
 {
 
+    
     //Criando as teclas
     keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -254,15 +256,66 @@ function update ()
         return;
     }
 
+    //Verifica se a tecla CIMA está apertada e se está tocando no chão à baixo    
+    if (keyW.isDown)
+    {
+        
+        if (jumpTimer === 0 && player.body.touching.down) { //jumpTimer verifica o tempo que o jogador está no ar
+            
+            player.setVelocityY(-300); //Altura inicial do salto
+            jumpTimer = 1; //Inicia o jumpTimer
+            
+            }
+            else if (jumpTimer > 0 && jumpTimer <= 20) { //Enquanto o jumpTimer estiver entre 1 e 20, vai adicionar 1 ao jumpTimer e à cada verificação vai alterar a velocidade do Y
+                
+                jumpTimer = jumpTimer + 1;
+                jumpTune = -300 + jumpTimer * 4; //Assim, a cada jumpTimer, a velocidade será diminuida por um fator 4 em relação ao timer, tudo isso se segurar o W e o time for menor que 20
+                player.setVelocityY(jumpTune)
+            }
+            
+
+        }
+        
+    else {
+            jumpTimer = 0;
+        }
+
+    //Verifica se a velocidade horizontal do jogador está direcionada à direita, o que altera a variável last_direction
+    if (player.body.velocity.x > 0)
+    {
+        last_direction = "RIGHT"
+    }
+        
+    //Verifica se a velocidade horizontal do jogador está direcionada à esquerda, o que altera a variável last_direction
+    if (player.body.velocity.x < 0)
+    {
+        last_direction = "LEFT"
+    }
+
     if (player.body.touching.down) //NO CHÃO
     {
-        player.setSize(50, 46, false);
-        player.setOffset(7, 19);
+        player.setSize(50, 46, false); //Normaliza tamanho da hitbox do jogador
+        player.setOffset(7, 19); //Ajusta a posição da hitbox do jogador
 
-        //TEM QUE FAZE ROLAR!
+        if (dodgingTime > 25) //Se o tempo de esquiva houver passado
+        {   
+            dodging = false
+            dodgingCooldown = dodgingCooldown + 1
+            
+            if (dodgingCooldown >= 50) //Cooldown para se esquivar
+            {
+                dodgingTime = 0
+            } 
+        }
 
-        if (keyK.isDown)
+        if (keyK.isDown || dodging === true)
         {
+            if (dodgingTime <= 25) //Enquanto o tempo de esquiva não houver passado
+            {
+
+            dodging = true
+            dodgingCooldown = 0
+            dodgingTime = dodgingTime + 1
 
             if (last_direction === "RIGHT")
             {
@@ -279,12 +332,22 @@ function update ()
                 player.setVelocityX(-500)
             }
 
+            
+            }
+            else {
+
+                
+                dodging = false
+            }
         }
 
+
+        //Evasão tem prioridade máxima
         else if (dodging === false)
 
         {
-
+    
+        //Andar e Correr ESQUERDA
         if (keyA.isDown)
         {
             if (cursors.shift.isDown)
@@ -292,7 +355,6 @@ function update ()
                 player.setVelocityX(-300);
 
                 player.anims.play('sprintLeft', true)
-                last_direction = "LEFT";
                 
             }
             else 
@@ -302,10 +364,11 @@ function update ()
 
             if (player.body.touching.down){}
                 player.anims.play('walkLeft', true);
-                last_direction = "LEFT"
             
             }
         }
+
+        //Andar e Correr DIREITA
         else if (keyD.isDown)  
         {
             if (cursors.shift.isDown)
@@ -313,7 +376,6 @@ function update ()
                 player.setVelocityX(300);
 
                 player.anims.play('sprintRight', true)
-                last_direction = "RIGHT";
 
             }
             else 
@@ -322,11 +384,11 @@ function update ()
             player.setVelocityX(160);
 
             player.anims.play('walkRight', true)
-            last_direction = "RIGHT";
 
             }
         }
 
+        //Se estiver parado no chão
         else
         {
             player.setVelocityX(0);
@@ -334,28 +396,39 @@ function update ()
             //A variável last_direction serve para checar para qual direção o jogador estava olhando antes de soltar os botões LEFT e RIGHT,
             //Assim podemos usar sprites de IDLE diferentes
 
-            if (keyS.isDown && last_direction === "RIGHT")
+            //Verifica se está apertando S para agachar
+            if (keyS.isDown)
             {
-                player.anims.play('crouchingRight', true);
+
+                //Muda a hitbox do personagem para ficar devidamente agachado
                 player.setSize(49, 35, true);
                 player.setOffset(7, 30);
+                
+                //Agachado para direita
+                if (last_direction === "RIGHT")
+                {
+                    player.anims.play('crouchingRight', true)
+                }
+
+                //Agachado para esquerda
+                else if (last_direction === "LEFT")
+                {
+                    player.anims.play('crouchingLeft', true);
+                }
+
             }
 
-            else if (keyS.isDown && last_direction === "LEFT")
-            {
-                player.anims.play('crouchingLeft', true);
-                player.setSize(49, 35, true); //Muda tamanho da hitbox
-                player.setOffset(7, 30); //Muda posição da hitbox 
-            }
-
+            //Se não estiver segurando o S para se agachar
             else 
             {
 
+            //Parado para direita
             if (last_direction === "RIGHT")
             {
                 player.anims.play('idleRight', true);
             }
 
+            //Parado para esquerda
             if (last_direction === "LEFT")
             {
                 player.anims.play('idleLeft', true);
@@ -365,13 +438,6 @@ function update ()
     }
         
     } 
-
-        //Verifica se a tecla CIMA está apertada e se está tocando no chão à baixo    
-        if (keyW.isDown && player.body.touching.down)
-        {
-
-            player.setVelocityY(-500);
-        }
     }
 
 
@@ -399,27 +465,20 @@ function update ()
             player.anims.play('fallingLeft');
         }
 
+        //Define a aceleração do jogador no ar, para que não se movimente livremente fora do chão [DIREITA]
         if (keyD.isDown && player.body.velocity.x <= 200)
         {
             airSpeed = player.body.velocity.x + 5
             player.setVelocityX(airSpeed)
 
-            if (player.body.velocity.x > 0)
-            {
-                last_direction = "RIGHT"
-            }
+
         } 
 
-        
+        //Define a aceleração do jogador no ar, para que não se movimente livremente fora do chão [ESQUERDA]        
         if (keyA.isDown && player.body.velocity.x >= -200)
         {
             airSpeed = player.body.velocity.x - 5
             player.setVelocityX(airSpeed)
-            
-            if (player.body.velocity.x < 0)
-            {
-                last_direction = "LEFT"
-            }
             
         } 
     }
