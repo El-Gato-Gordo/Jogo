@@ -112,6 +112,8 @@ function create ()
 
     // The player and its settings
     player = this.physics.add.sprite(100, 450, 'player');
+    player.setSize(50, 46, false);
+    player.setOffset(7, 19);
 
 //  Player physics properties. Give the little guy a slight bounce.
     player.setCollideWorldBounds(true);
@@ -209,7 +211,7 @@ function create ()
     this.anims.create({
         key: 'dodgeRight',
         frames: this.anims.generateFrameNumbers('player', { start: 60, end: 64 }),
-        frameRate: 17,
+        frameRate: 10,
         repeat: -1
     });
 
@@ -217,7 +219,7 @@ function create ()
     this.anims.create({
         key: 'dodgeLeft',
         frames: this.anims.generateFrameNumbers('player', { start: 65, end: 69 }),
-        frameRate: 17,
+        frameRate: 10,
         repeat: -1
     });
 
@@ -254,77 +256,33 @@ function update ()
 
     if (player.body.touching.down) //NO CHÃO
     {
+        player.setSize(50, 46, false);
+        player.setOffset(7, 19);
 
-/*
-        if (cursors.alt.isDown)
+        //TEM QUE FAZE ROLAR!
+
+        if (keyK.isDown)
         {
-            if (game.time.now >= nextParry)
-            {
-
-                parrying = true
-                parryTime = 0
-                nextParry = game.time.now + 3000
-            }
-
-        if (parrying === true && parryTime <= 120)
-        {
-            parryTime =+ 1
 
             if (last_direction === "RIGHT")
             {
-                player.anims.play('parryRight', true)
 
-            }
-
-            else if (last_direction === "LEFT")
-            {
-                player.anims.play('parryLeft', true)
-            }
-            
-        }
-        
-        if (parrying === true && parryTime > 120)
-        {
-            parrying = false
-            parryTime = 0
-        }
-    }
-*/
-
-//TEM QUE FAZE ROLA!
-        if (dodgingCooldown <= 60 && dodging === false)
-        {
-            dodgingCooldown =+ 1
-        }
-
-        if (keyK.isDown && dodging === false && dodgingCooldown >= 60)
-        {
-
-            dodging = true
-            dodgingTime = 0
-            dodgingCooldown = 0
-        
-            if (last_direction === "RIGHT" && dodgingTime <= 120)
-
-            {
-                
-                player.setVelocityX(900)
                 player.anims.play('dodgeRight', true)
-                dodgingTime =+ 1
+                player.setVelocityX(500)
 
             }
 
-            if (last_direction === "LEFT" && dodgingTime <= 120)
+            if (last_direction === "LEFT")
             {
 
-                player.setVelocityX(-900)
                 player.anims.play('dodgeLeft', true)
-                dodgingTime =+ 1
+                player.setVelocityX(-500)
             }
 
         }
 
-        if (dodging === false && keyK.isUp)
+        else if (dodging === false)
+
         {
 
         if (keyA.isDown)
@@ -379,11 +337,15 @@ function update ()
             if (keyS.isDown && last_direction === "RIGHT")
             {
                 player.anims.play('crouchingRight', true);
+                player.setSize(49, 35, true);
+                player.setOffset(7, 30);
             }
 
             else if (keyS.isDown && last_direction === "LEFT")
             {
                 player.anims.play('crouchingLeft', true);
+                player.setSize(49, 35, true); //Muda tamanho da hitbox
+                player.setOffset(7, 30); //Muda posição da hitbox 
             }
 
             else 
