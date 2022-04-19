@@ -49,6 +49,9 @@ var dodging = false //Verifica se está esquivando
 var dodgingTime = 0 //Tempo da duração da esquiva
 var jumpTimer = 0 //Tempo no ar
 var jumpTune = 0 
+var parrying = false //
+var parryTime = 0
+var parryCooldown = 0 
 
 //Declarando teclas do jogo
 let keyA;
@@ -303,7 +306,7 @@ function update ()
         player.setSize(37, 45, false); //Normaliza tamanho da hitbox do jogador
         player.setOffset(13, 19); //Ajusta a posição da hitbox do jogador
 
-        if (dodgingTime > 25) //Se o tempo de esquiva houver passado
+        if (dodgingTime > 25) //COOLDOWN DA EVASÃO
         {   
             dodging = false
             dodgingCooldown = dodgingCooldown + 1
@@ -314,11 +317,13 @@ function update ()
             } 
         }
 
-        if (keyK.isDown || dodging === true)
+        if (keyK.isDown || dodging === true)  //EVASÃO
         {
             if (dodgingTime <= 25) //Enquanto o tempo de esquiva não houver passado
             {
 
+            parryTime = 0
+            parrying = false
             dodging = true
             dodgingCooldown = 0
             dodgingTime = dodgingTime + 1
@@ -350,49 +355,89 @@ function update ()
 
         //Evasão tem prioridade máxima
         if (dodging === false)
-
         {
-    
-        //Andar e Correr ESQUERDA
-        if (keyA.isDown)
-        {
-            if (cursors.shift.isDown)
-            {
-                player.setVelocityX(-300);
-
-                player.anims.play('sprintLeft', true)
-                
-            }
-            else 
-            {
-
-            player.setVelocityX(-160);
-
-            if (player.body.touching.down){}
-                player.anims.play('walkLeft', true);
+            if (parryTime > 25) //COOLDOWN DO APARO
+            {   
+                parrying = false
+                parryCooldown = parryCooldown + 1
             
-            }
-        }
+                if (parryCooldown >= 50)
+                    {
 
-        //Andar e Correr DIREITA
-        else if (keyD.isDown)  
-        {
-            if (cursors.shift.isDown)
+                    parryTime = 0
+                    
+                    } 
+            }
+
+            if (keyNum0.isDown || parrying === true) //APARO
+                {
+
+                if (parryTime <= 25) //Enquanto o tempo de aparo não houver passado
+                    {
+
+                    parrying = true
+                    parryCooldown = 0
+                    parryTime = parryTime + 1
+
+                    if (last_direction === "RIGHT")
+                        {
+
+                            player.anims.play('parryRight')
+
+                        }
+
+                    if (last_direction === "LEFT")
+                        {
+
+                        player.anims.play('parryLeft')
+                        }
+
+                    }
+                else {
+
+                
+                    parrying = false
+                }
+            }
+
+            if (parrying === false) {
+
+            //Andar e Correr ESQUERDA
+            if (keyA.isDown)
+            {   
+                if (cursors.shift.isDown)
+                {
+                    player.setVelocityX(-300);
+                    player.anims.play('sprintLeft', true)
+                
+                }
+
+                else 
+                {
+
+                    player.setVelocityX(-160);
+                    player.anims.play('walkLeft', true);
+            
+                }
+            }
+            
+            else if (keyD.isDown)  
             {
-                player.setVelocityX(300);
+                if (cursors.shift.isDown)
+                {
+                    player.setVelocityX(300);
+                    player.anims.play('sprintRight', true)
 
-                player.anims.play('sprintRight', true)
+                }
+                
+                else 
+                {
 
+                    player.setVelocityX(160);
+                    player.anims.play('walkRight', true)
+
+                }
             }
-            else 
-            {
-
-            player.setVelocityX(160);
-
-            player.anims.play('walkRight', true)
-
-            }
-        }
 
         //Se estiver parado no chão
         else
@@ -439,10 +484,11 @@ function update ()
             {
                 player.anims.play('idleLeft', true);
             }
-            
+           
+        }
         }
     }
-        
+
     } 
     }
 
