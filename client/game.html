@@ -32,28 +32,37 @@ var config = {
     }
 };
 
+//Declaração de objetos
 var player;
 var platforms;
+var php_bar;
+var pmn_bar;
+var bhp_bar;
 var cursors;
 var gameOver = false;
-var last_direction = "null" //Verifica qual a última direção que o jogador se moveu
+var last_direction = "null"; //Verifica qual a última direção que o jogador se moveu
 
 var game = new Phaser.Game(config);
-var player_hp //Define HP do Cavaleiro e Mago
-var player_mana //Define Mana do Mago
-var parryTime //Define o tempo que pode manter o aparo
-var nextParry //Define o cooldown entre parries
-var parrying = false //Define se está aparando ou não
-var airSpeed = 0 //Aceleração no ar
-var dodging = false //Verifica se está esquivando
-var dodgingTime = 0 //Tempo da duração da esquiva
-var jumpTimer = 0 //Tempo no ar
-var jumpTune = 0 
-var parrying = false //
-var parryTime = 0
-var parryCooldown = 0 
+
+//Declaração de variáveis de estado
+var php = 5; //Define HP do Cavaleiro e Mago
+var pmn = 3; //Define Mana do Mago
+var bhp; //Define HP do chefe
+var parryTime; //Define o tempo que pode manter o aparo
+var nextParry; //Define o cooldown entre parries
+var parrying = false; //Define se está aparando ou não
+var airSpeed = 0; //Aceleração no ar
+var dodging = false; //Verifica se está esquivando
+var dodgingTime = 0; //Tempo da duração da esquiva
+var jumpTimer = 0; //Tempo no ar
+var jumpTune = 0; 
+var parrying = false; //
+var parryTime = 0;
+var parryCooldown = 0; 
 
 //Declarando teclas do jogo
+
+//Cavaleiro
 let keyA;
 let keyS;
 let keyD;
@@ -61,11 +70,13 @@ let keyW;
 let keyJ;
 let keyK;
 
+//Ações Mago
 let keyNum0;
 let keyNum1;
 let keyNum2;
 let keyNum3;
 
+//Direções Mago
 let keyUp;
 let keyDown;
 let keyRight;
@@ -76,14 +87,15 @@ function preload ()
     this.load.image('sky', 'assets/sky.png');
     this.load.image('ground', 'assets/platform.png');
     this.load.spritesheet('player', 'assets/player_move.png', { frameWidth: 64, frameHeight: 64 });
-    this.load.audio('background_music', ['assets/amiga_da_mulher.mp3']);
+
+    this.load.spritesheet('PHP_Bar', 'assets/PHP_Bar.png', { frameWidth: 192, frameHeight: 192});
+    this.load.spritesheet('PMN_Bar', 'assets/PMN_Bar.png', { frameWidth: 192, frameHeight: 192});
+    this.load.spritesheet('BHP_Bar', 'assets/BHP_Bar.png', { frameWidth: 384, frameHeight: 192});
 
 }
 
 function create ()
 {
-
-    background_music = this.sound.add("background_music"); //NAO TA TOCANDO
 
     //Criando as teclas
     //Cavaleiro
@@ -124,11 +136,16 @@ function create ()
     //Player physics properties.
     player.setCollideWorldBounds(true);
 
-     //  Now let's create some ledges
+    //Now let's create some ledges
     platforms.create(1500, 500, 'ground').setScale(5).refreshBody();
     platforms.create(-400, 270, 'ground').setScale(3).refreshBody();
     platforms.create(600, 150, 'ground');
     platforms.create(125, 325, 'ground');
+    
+    //HUD do jogo
+    php_bar = this.add.image(90, 90, "PHP_Bar", 0);
+    pmn_bar = this.add.image(90, 90, "PMN_Bar", 0);
+    bhp_bar = this.add.image(600, 520, "BHP_Bar", 0);
 
     //  Our player animations, turning, walking left and walking right.
     //Anda Esquerda
@@ -266,26 +283,118 @@ function update ()
         return;
     }
 
-    background_music.play();
+    //HUD CÓDIGO
+    if (php === 5) //Vitalidade do Cavaleiro e do Mago HUD
+        {
+            php_bar.setFrame(0)
+        }
 
-    //Verifica se a tecla CIMA está apertada e se está tocando no chão à baixo    
-    if (keyW.isDown)
+        else if (php === 4)
+            {
+                php_bar.setFrame(1)
+            }
+            else if (php === 3)
+                {
+                    php_bar.setFrame(2)
+                }
+                else if (php === 2)
+                    {
+                        php_bar.setFrame(3)
+                    }
+                    else if (php === 1)
+                        {
+                            php_bar.setFrame(4)
+                        }
+                        else if (php <= 0)
+                            {
+                                php_bar.setFrame(5)
+                            }
+    
+    if (pmn === 3) //Mana do Mago HUD
+        {
+            pmn_bar.setFrame(0)
+        }
+
+        else if (pmn === 2)
+            {
+                pmn_bar.setFrame(1)
+            }
+            else if (pmn === 1)
+                {
+                    pmn_bar.setFrame(2)
+                }
+                else if (pmn === 0)
+                    {
+                        pmn_bar.setFrame(3)
+                    }
+
+    if (bhp === 11) //Vitalidade do Boss HUD
+        {
+            bhp_bar.setFrame(0)
+        }
+
+        else if (bhp === 10)
+            {
+                bhp_bar.setFrame(1)
+            }
+            else if (bhp === 9)
+                {
+                    bhp_bar.setFrame(2)
+                }
+                else if (bhp === 8)
+                    {
+                        bhp_bar.setFrame(3)
+                    }
+                    else if (bhp === 7)
+                        {
+                            bhp_bar.setFrame(4)
+                        }
+                        else if (bhp === 6)
+                            {
+                                bhp_bar.setFrame(5)
+                            }
+                            else if (bhp === 5)
+                                {
+                                    bhp_bar.setFrame(6) 
+                                }
+                                else if (bhp === 4)
+                                    {
+                                        bhp_bar.setFrame(7) 
+                                    }
+                                    else if (bhp === 3)
+                                        {
+                                            bhp_bar.setFrame(8)
+                                        }
+                                        else if (bhp === 2)
+                                            {
+                                                bhp_bar.setFrame(9)
+                                            }
+                                            else if (bhp === 1)
+                                                {
+                                                    bhp_bar.setFrame(10)
+                                                }
+                                                else if (bhp <= 0)
+                                                    {
+                                                        bhp_bar.setFrame(11)
+                                                    }
+
+    //SALTO
+    if (keyW.isDown && dodging == false && parrying == false)
     {
         
         if (jumpTimer === 0 && player.body.touching.down) { //jumpTimer verifica o tempo que o jogador está no ar
             
-            player.setVelocityY(-300); //Altura inicial do salto
+            player.setVelocityY(-350); //Altura inicial do salto
             jumpTimer = 1; //Inicia o jumpTimer
             
             }
-            else if (jumpTimer > 0 && jumpTimer <= 25) { //Enquanto o jumpTimer estiver entre 1 e 20, vai adicionar 1 ao jumpTimer e à cada verificação vai alterar a velocidade do Y
+            else if (jumpTimer > 0 && jumpTimer <= 20) { //Enquanto o jumpTimer estiver entre 1 e 20, vai adicionar 1 ao jumpTimer e à cada verificação vai alterar a velocidade do Y
                 
                 jumpTimer = jumpTimer + 1;
-                jumpTune = -300 + jumpTimer * 3; //Assim, a cada jumpTimer, a velocidade será diminuida por um fator 4 em relação ao timer, tudo isso se segurar o W e o time for menor que 20
+                jumpTune = -350 + jumpTimer * 4; //Assim, a cada jumpTimer, a velocidade será diminuida por um fator 4 em relação ao timer, tudo isso se segurar o W e o time for menor que 20
                 player.setVelocityY(jumpTune)
             }
             
-
         }
         
     else {
@@ -320,8 +429,10 @@ function update ()
             } 
         }
 
-        if (keyK.isDown || dodging === true)  //EVASÃO
+        //EVASÃO
+        if (keyK.isDown || dodging === true) 
         {
+
             if (dodgingTime <= 25) //Enquanto o tempo de esquiva não houver passado
             {
 
@@ -381,6 +492,7 @@ function update ()
                     parrying = true
                     parryCooldown = 0
                     parryTime = parryTime + 1
+                    player.setVelocityX(0)
 
                     if (last_direction === "RIGHT")
                         {
@@ -495,9 +607,11 @@ function update ()
     } 
     }
 
-
     if (player.body.touching.down === false) //NO AR
     {
+        dodging = false
+        parrying = false
+
         //Checa se o jogador está indo para CIMA e aplica respectivas animações
         if(player.body.velocity.y < 0 && last_direction === "RIGHT")
         {
