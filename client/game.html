@@ -51,8 +51,7 @@ var php = 5; //Define HP do Cavaleiro e Mago
 var pmn = 3; //Define Mana do Mago
 var bhp; //Define HP do chefe
 
-var parryTime; //Define o tempo que pode manter o aparo
-var nextParry; //Define o cooldown entre parries
+var parryTime = 0; //Define o tempo que pode manter o aparo
 var parrying = false; //Define se está aparando ou não
 var parryCooldown = 0; //Cooldown do aparo
 
@@ -98,17 +97,29 @@ let keyLeft;
 
 function preload ()
 {
+    //Plano de fundo
     this.load.image('sky', 'assets/sky.png');
-    this.load.spritesheet('p_spellOrb', "assets/p_spellOrb.png", { frameWidth: 64, frameHeight: 64});
-    this.load.spritesheet('skull', "assets/skull.png", { frameWidth: 64, frameHeight: 64});
 
+    //Tileset e personagens
     this.load.image('ground', 'assets/platform.png');
     this.load.spritesheet('playerDefault', 'assets/player_move.png', { frameWidth: 64, frameHeight: 64});
     this.load.spritesheet('playerAttack', 'assets/player_combo1.png', { frameWidth: 192, frameHeight: 128});
 
+    //Projéteis
+    this.load.spritesheet('p_spellOrb', "assets/p_spellOrb.png", { frameWidth: 64, frameHeight: 64});
+    this.load.spritesheet('skull', "assets/skull.png", { frameWidth: 64, frameHeight: 64});
+
+    //HUD principal
     this.load.spritesheet('PHP_Bar', 'assets/PHP_Bar.png', { frameWidth: 192, frameHeight: 192});
     this.load.spritesheet('PMN_Bar', 'assets/PMN_Bar.png', { frameWidth: 192, frameHeight: 192});
     this.load.spritesheet('BHP_Bar', 'assets/BHP_Bar.png', { frameWidth: 384, frameHeight: 192});
+
+    //Botões
+    this.load.spritesheet('musicButton', 'assets/music_button.png', { frameWidth: 384, frameHeight: 192});
+    this.load.spritesheet('pausedButton', 'assets/paused_button.png', { frameWidth: 384, frameHeight: 192});
+    this.load.spritesheet('playButton', 'assets/play_button.png', { frameWidth: 384, frameHeight: 192});
+    this.load.spritesheet('soundButton', 'assets/sound_button.png', { frameWidth: 384, frameHeight: 192});
+    this.load.spritesheet('startButton', 'assets/start_button.png', { frameWidth: 384, frameHeight: 192});
 
 }
 
@@ -117,24 +128,24 @@ function create ()
 
     //Criando as teclas
     //Cavaleiro
-    keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    keyJ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
-    keyK = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K);
+    keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); // A
+    keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S); // S
+    keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D); // D
+    keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W); // W
+    keyJ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J); // J
+    keyK = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K); // K
 
     //Mago
-    keyNum0 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ZERO);
-    keyNum1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
-    keyNum2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO);
-    keyNum3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE);
+    keyNum0 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ZERO); // Num0
+    keyNum1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);  // Num1
+    keyNum2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO);  // Num2
+    keyNum3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE); // Num3
 
     //Setas Direcionais do Mago
-    keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP); 
-    keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-    keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT); 
-    keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT); 
+    keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP); // UP
+    keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN); // DOWN
+    keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);  // RIGHT
+    keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT); // LEFT
 
     //  A simple background for our game
     this.add.image(400, 300, 'sky').setScale(4);
@@ -152,23 +163,24 @@ function create ()
     player.setOffset(13, 19);
 
     //THE SKELETON APPEARS
-    skull = this.physics.add.sprite(600, 250, 'skull');
+    skull = this.physics.add.sprite(630, 350, 'skull');
     this.physics.add.collider(skull, platforms);
 
     //Dano no jogador quando tocar na caveira
     this.physics.add.collider(skull, player, function (skull, player) {
-        if (p_justAttacked === false) {
+
+        if (p_justAttacked === false && dodging === false) {
             php = php - 1
             p_justAttacked = true
             p_attackedCooldown = 0
 
-            if (last_direction === "RIGHT" && p_attackedCooldown <= 10){
-                player.setVelocityX(-200)
+            if (last_direction === "RIGHT"){
+                player.setVelocityX(-300)
                 player.setVelocityY(-350)
             }
 
-            if (last_direction === "LEFT" && p_attackedCooldown <= 10){
-                player.setVelocityX(200)
+            else if (last_direction === "LEFT"){
+                player.setVelocityX(300)
                 player.setVelocityY(-350)
 
             }
@@ -380,7 +392,7 @@ function update ()
     }
 
     //Cooldown para receber dano
-    if (p_attackedCooldown <= 35){
+    if (p_attackedCooldown <= 10){
                 p_attackedCooldown = p_attackedCooldown + 1
             }      
             else {
@@ -590,8 +602,14 @@ function update ()
                     } 
             }
 
-            if (keyNum0.isDown || parrying === true) //APARO
+            //APARO
+            if (keyNum0.isDown || parrying === true && p_justAttacked === false) 
                 {
+                if (pmn >= 1){
+
+                if (parryTime === 25){
+                    pmn = pmn - 1
+                }   
 
                 if (parryTime <= 25) //Enquanto o tempo de aparo não houver passado
                     {
@@ -615,6 +633,8 @@ function update ()
                         }
 
                     }
+                }
+                
                 else {
 
                 
@@ -625,7 +645,7 @@ function update ()
             if (parrying === false) {
 
             //Andar e Correr ESQUERDA
-            if (keyA.isDown)
+            if (keyA.isDown && p_justAttacked === false)
             {   
                 if (cursors.shift.isDown)
                 {
@@ -643,7 +663,7 @@ function update ()
                 }
             }
             
-            else if (keyD.isDown)  
+            else if (keyD.isDown && p_justAttacked === false)  
             {
                 if (cursors.shift.isDown)
                 {
@@ -683,7 +703,7 @@ function update ()
 
         }
 
-        else
+        else if (p_justAttacked === false)
         {
             player.setVelocityX(0);
 
