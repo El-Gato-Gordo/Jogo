@@ -71,6 +71,9 @@ var p_lastAttack = "null" //Informa o último ataque feito, se um certo tempo pa
 var p_attackTime = 0; //Informa o tempo que está na animação de ataque
 var p_attackCooldown = 0; //Informa o tempo necessário para executar o próximo golpe
 
+var p_justAttacked = false; //Se estiver verdadeiro, jogador não recebe dano
+var p_attackedCooldown = 0; //Tempo até o jogador poder receber dano novamente
+
 //Declarando teclas do jogo
 
 //Cavaleiro
@@ -96,7 +99,8 @@ let keyLeft;
 function preload ()
 {
     this.load.image('sky', 'assets/sky.png');
-    this.load.spritesheet('p_spellOrb', "assets/p_spellOrb", { frameWidth: 64, frameHeight: 64});
+    this.load.spritesheet('p_spellOrb', "assets/p_spellOrb.png", { frameWidth: 64, frameHeight: 64});
+    this.load.spritesheet('skull', "assets/skull.png", { frameWidth: 64, frameHeight: 64});
 
     this.load.image('ground', 'assets/platform.png');
     this.load.spritesheet('playerDefault', 'assets/player_move.png', { frameWidth: 64, frameHeight: 64});
@@ -146,6 +150,31 @@ function create ()
     player = this.physics.add.sprite(100, 450, 'playerDefault');
     player.setSize(37, 45, false);
     player.setOffset(13, 19);
+
+    //THE SKELETON APPEARS
+    skull = this.physics.add.sprite(600, 250, 'skull');
+    this.physics.add.collider(skull, platforms);
+
+    //Dano no jogador quando tocar na caveira
+    this.physics.add.collider(skull, player, function (skull, player) {
+        if (p_justAttacked === false) {
+            php = php - 1
+            p_justAttacked = true
+            p_attackedCooldown = 0
+
+            if (last_direction === "RIGHT" && p_attackedCooldown <= 10){
+                player.setVelocityX(-200)
+                player.setVelocityY(-350)
+            }
+
+            if (last_direction === "LEFT" && p_attackedCooldown <= 10){
+                player.setVelocityX(200)
+                player.setVelocityY(-350)
+
+            }
+        }
+
+    });
 
     //Player physics properties.
     player.setCollideWorldBounds(true);
@@ -349,6 +378,17 @@ function update ()
     {
         return;
     }
+
+    //Cooldown para receber dano
+    if (p_attackedCooldown <= 35){
+                p_attackedCooldown = p_attackedCooldown + 1
+            }      
+            else {
+                p_justAttacked = false
+            }
+
+    skull.setVelocityX(0)
+    skull.setVelocityY(0)
 
     //HUD CÓDIGO
     if (php === 5) //Vitalidade do Cavaleiro e do Mago HUD
@@ -634,7 +674,7 @@ function update ()
 
             if (last_direction === "RIGHT"){
 
-            player.anims.play('combo1Right', true)                                                                         //FALTA AQUI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ATAQUE!!
+            player.anims.play('combo1Right', true)                                     //FALTA AQUI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ATAQUE!!
             }
 
             else if (last_direction === "LEFT"){
@@ -701,6 +741,8 @@ function update ()
         parrying = false
 
         //Checa se o jogador está indo para CIMA e aplica respectivas animações
+        if (p_attackedCooldown <= 25 || p_justAttacked === false){ //PARA O KNOCKBACK DOS ATAQUES
+
         if(player.body.velocity.y < 0 && last_direction === "RIGHT")
         {
             player.anims.play('risingRight');
@@ -721,7 +763,8 @@ function update ()
         {
             player.anims.play('fallingLeft');
         }
-
+    }
+    
         //Define a aceleração do jogador no ar, para que não se movimente livremente fora do chão [DIREITA]
         if (keyD.isDown && player.body.velocity.x <= 200)
         {
