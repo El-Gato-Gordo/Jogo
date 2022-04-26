@@ -645,7 +645,7 @@ function update ()
             if (parrying === false) {
 
             //Andar e Correr ESQUERDA
-            if (keyA.isDown && p_justAttacked === false)
+            if (keyA.isDown && p_justAttacked === false && p_attacking === false)
             {   
                 if (cursors.shift.isDown)
                 {
@@ -663,7 +663,7 @@ function update ()
                 }
             }
             
-            else if (keyD.isDown && p_justAttacked === false)  
+            else if (keyD.isDown && p_justAttacked === false && p_attacking === false)  
             {
                 if (cursors.shift.isDown)
                 {
@@ -685,22 +685,27 @@ function update ()
 
         //ATAQUE
         else if (keyJ.isDown && dodging === false && parrying === false)
-        {
-            p_attacking = true
-            p_attackTime = 0
-            p_attackCooldown = 0
-            player.setVelocityX(0);
-            
+        {   
+
+            if (p_lastAttack === "null"){
+                p_attacking = true
+                p_attackTime = 0
+                p_attackCooldown = 0
+                p_lastAttack = "null"
 
             if (last_direction === "RIGHT"){
 
-            player.anims.play('combo1Right', true)                                     //FALTA AQUI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ATAQUE!!
+                player.anims.play('combo1Right', true)   
+                player.setVelocityX(25);
+                                            
             }
 
             else if (last_direction === "LEFT"){
                 player.anims.play('combo1Left', true)
+                player.setVelocityX(-25);
             }
-
+        
+        }
         }
 
         else if (p_justAttacked === false)
