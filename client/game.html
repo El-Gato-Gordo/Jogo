@@ -46,10 +46,14 @@ var gameOver = false;
 
 var game = new Phaser.Game(config);
 
+
 //Declaração de variáveis de estado
 var php = 5; //Define HP do Cavaleiro e Mago
 var pmn = 3; //Define Mana do Mago
 var bhp; //Define HP do chefe
+
+var MUSIC_TitleOpening_Time = 0; //Para tocar apenas uma vez quando inicia o jogo
+var wasJumping = false; //Serve para tocar o som de aterrisagem, assim muda a variável e toca o som
 
 var parryTime = 0; //Define o tempo que pode manter o aparo
 var parrying = false; //Define se está aparando ou não
@@ -104,6 +108,7 @@ function preload ()
     this.load.image('ground', 'assets/platform.png');
     this.load.spritesheet('playerDefault', 'assets/player_move.png', { frameWidth: 64, frameHeight: 64});
     this.load.spritesheet('playerAttack', 'assets/player_combo1.png', { frameWidth: 192, frameHeight: 128});
+    this.load.spritesheet('P_Move1', 'assets/P_Move1.png', { frameWidth: 240, frameHeight: 240});
 
     //Projéteis
     this.load.spritesheet('p_spellOrb', "assets/p_spellOrb.png", { frameWidth: 64, frameHeight: 64});
@@ -120,6 +125,18 @@ function preload ()
     this.load.spritesheet('playButton', 'assets/play_button.png', { frameWidth: 384, frameHeight: 192});
     this.load.spritesheet('soundButton', 'assets/sound_button.png', { frameWidth: 384, frameHeight: 192});
     this.load.spritesheet('startButton', 'assets/start_button.png', { frameWidth: 384, frameHeight: 192});
+
+    //Áudio
+    this.load.audio('MUSIC_TitleOpening', [ 'assets/MUSIC_TitleOpening.wav']);
+    this.load.audio('SFX_Hit', [ 'assets/SFX_Hit.wav']);
+    this.load.audio('SFX_HitGround', [ 'assets/SFX_HitGround.wav']);
+    this.load.audio('SFX_HoverButton', [ 'assets/SFX_HoverButton.wav']);
+    this.load.audio('SFX_Jump', [ 'assets/SFX_Jump.wav']);
+    this.load.audio('SFX_Land', [ 'assets/SFX_Land.wav']);
+    this.load.audio('SFX_Parry', [ 'assets/SFX_Parry.wav']);
+    this.load.audio('SFX_ParryHit', [ 'assets/SFX_ParryHit.wav']);
+    this.load.audio('SFX_SpellCast', [ 'assets/SFX_SpellCast.wav']);
+    this.load.audio('SFX_Step', [ 'assets/SFX_Step.wav']);
 
 }
 
@@ -158,9 +175,9 @@ function create ()
     platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
     // The player and its settings
-    player = this.physics.add.sprite(100, 450, 'playerDefault');
-    player.setSize(37, 45, false);
-    player.setOffset(13, 19);
+    player = this.physics.add.sprite(100, 450, 'P_Move1').setScale(0.65);  
+    player.setSize(100, 130, true);  //Linha 537 contém normalização no UPDATE
+    player.setOffset(70, 54); //Linha 538 contém noramlização no UPDATE
 
     //THE SKELETON APPEARS
     skull = this.physics.add.sprite(630, 350, 'skull');
@@ -170,6 +187,8 @@ function create ()
     this.physics.add.collider(skull, player, function (skull, player) {
 
         if (p_justAttacked === false && dodging === false) {
+            
+            SFX_Hit.play();
             php = php - 1
             p_justAttacked = true
             p_attackedCooldown = 0
@@ -203,6 +222,18 @@ function create ()
     bhp_bar = this.add.image(600, 520, "BHP_Bar", 0);
         bhp_bar.visible = false;
 
+    //Áudio do jogo
+    MUSIC_TitleOpening = this.sound.add("MUSIC_TitleOpening", { loop: false });
+    SFX_Hit = this.sound.add("SFX_Hit", { loop: false});
+    SFX_HitGround = this.sound.add("SFX_HitGround", { loop: false});
+    SFX_HoverButton = this.sound.add("SFX_HoverButton", { loop: false});
+    SFX_Jump = this.sound.add("SFX_Jump", { loop: false});
+    SFX_Land = this.sound.add("SFX_Land", { loop: false});
+    SFX_Parry = this.sound.add("SFX_Parry", { loop: false});
+    SFX_ParryHit = this.sound.add("SFX_ParryHit", { loop: false});
+    SFX_SpellCast = this.sound.add("SFX_SpellCast", { loop: false});
+    SFX_Step = this.sound.add("SFX_Step", { loop: false});
+
     //ANIMAÇÕES DE MOVIMENTO
     //Anda Esquerda
     this.anims.create({
@@ -215,16 +246,16 @@ function create ()
     //Anda Direita
     this.anims.create({
         key: 'idleRight',
-        frames: this.anims.generateFrameNumbers('playerDefault', {start: 0, end: 13}),
-        frameRate: 10,
+        frames: this.anims.generateFrameNumbers('P_Move1', {start: 0, end: 11}),
+        frameRate: 8,
         repeat: -1
     });
 
     //Parado Esquerda
     this.anims.create({
         key: 'idleLeft',
-        frames: this.anims.generateFrameNumbers('playerDefault', {start: 14, end: 27}),
-        frameRate: 10,
+        frames: this.anims.generateFrameNumbers('P_Move1', {start: 12, end: 23}),
+        frameRate: 8,
         repeat: -1
     });
 
@@ -239,15 +270,15 @@ function create ()
     //Salto Direita
     this.anims.create({
         key: 'risingRight',
-        frames: [ { key: 'playerDefault', frame: 43 } ],
-        frameRate: 20
+        frames: [ { key: 'P_Move1', frame: 24 } ],
+        frameRate: 15
     });
 
     //Queda Direita
     this.anims.create({
         key: 'fallingRight',
-        frames: [ { key: 'playerDefault', frame: 45 } ],
-        frameRate: 20
+        frames: [ { key: 'P_Move1', frame: 26 } ],
+        frameRate: 15
     });
 
     //Agacha Direita
@@ -267,15 +298,15 @@ function create ()
     //Salto Esquerda
     this.anims.create({
         key: 'risingLeft',
-        frames: [ { key: 'playerDefault', frame: 44 } ],
-        frameRate: 20
+        frames: [ { key: 'P_Move1', frame: 25} ],
+        frameRate: 15
     });
 
     //Queda Esquerda
     this.anims.create({
         key: 'fallingLeft',
-        frames: [ { key: 'playerDefault', frame: 46 } ],
-        frameRate: 20
+        frames: [ { key: 'P_Move1', frame: 27 } ],
+        frameRate: 15
     });
 
     //Corre Direita
@@ -386,6 +417,14 @@ function create ()
 
 function update ()
 {
+
+ 
+    if (MUSIC_TitleOpening_Time === 0)
+    {
+        MUSIC_TitleOpening.play();
+        MUSIC_TitleOpening_Time = 1
+    }
+
     if (gameOver)
     {
         return;
@@ -503,6 +542,7 @@ function update ()
         
         if (jumpTimer === 0 && player.body.touching.down) { //jumpTimer verifica o tempo que o jogador está no ar
             
+            SFX_Jump.play();
             player.setVelocityY(-350); //Altura inicial do salto
             jumpTimer = 1; //Inicia o jumpTimer
             
@@ -532,10 +572,17 @@ function update ()
         last_direction = "LEFT"
     }
 
-    if (player.body.touching.down) //NO CHÃO
+    //NO CHÃO
+    if (player.body.touching.down) 
     {
-        player.setSize(37, 45, false); //Normaliza tamanho da hitbox do jogador
-        player.setOffset(13, 19); //Ajusta a posição da hitbox do jogador
+
+        if (wasJumping === true) {
+            SFX_Land.play();
+            wasJumping = false
+        }
+
+        player.setSize(100, 130, true); 
+        player.setOffset(70, 54); 
 
         if (dodgingTime > 25) //COOLDOWN DA EVASÃO
         {   
@@ -605,8 +652,12 @@ function update ()
             //APARO
             if (keyNum0.isDown || parrying === true && p_justAttacked === false) 
                 {
+                    
                 if (pmn >= 1){
-
+ 
+                if (parryTime === 1){
+                    SFX_Parry.play();
+                }
                 if (parryTime === 25){
                     pmn = pmn - 1
                 }   
@@ -762,6 +813,7 @@ function update ()
 
     if (player.body.touching.down === false) //NO AR
     {
+        wasJumping = true
         dodging = false
         parrying = false
 
