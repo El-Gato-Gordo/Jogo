@@ -41,6 +41,9 @@ var php_bar;
 var pmn_bar;
 var bhp_bar;
 
+var playerX;
+var playerY;
+
 var cursors;
 var gameOver = false;
 
@@ -65,7 +68,7 @@ var dodging = false; //Verifica se está esquivando
 var dodgingTime = 0; //Tempo da duração da esquiva
 
 var jumpTimer = 0; //Tempo no ar
-var jumpTune = 0; 
+var jumpTune = 0; //
 
 var last_direction = "null"; //Verifica qual a última direção que o jogador se moveu
 
@@ -142,6 +145,8 @@ function preload ()
 
 function create ()
 {
+    
+    this.cameras.main.setBounds(0, 0, 1000, 800);
 
     //Criando as teclas
     //Cavaleiro
@@ -165,7 +170,7 @@ function create ()
     keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT); // LEFT
 
     //  A simple background for our game
-    this.add.image(400, 300, 'sky').setScale(4);
+    this.add.image(400, 300, 'sky').setScale(8);
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
@@ -176,8 +181,8 @@ function create ()
 
     // The player and its settings
     player = this.physics.add.sprite(100, 450, 'P_Move1').setScale(0.65);  
-    player.setSize(100, 130, true);  //Linha 537 contém normalização no UPDATE
-    player.setOffset(70, 54); //Linha 538 contém noramlização no UPDATE
+    player.setSize(100, 130, true);  
+    player.setOffset(70, 54); 
 
     //THE SKELETON APPEARS
     skull = this.physics.add.sprite(630, 350, 'skull');
@@ -208,14 +213,15 @@ function create ()
     });
 
     //Player physics properties.
-    player.setCollideWorldBounds(true);
+    player.setCollideWorldBounds(false);
 
     //Now let's create some ledges
     platforms.create(1500, 500, 'ground').setScale(5).refreshBody();
     platforms.create(-400, 270, 'ground').setScale(3).refreshBody();
     platforms.create(600, 150, 'ground');
     platforms.create(125, 325, 'ground');
-    
+    platforms.create(800, 410, 'ground');
+
     //HUD do jogo
     php_bar = this.add.image(90, 90, "PHP_Bar", 0);
     pmn_bar = this.add.image(90, 90, "PMN_Bar", 0);
@@ -233,6 +239,10 @@ function create ()
     SFX_ParryHit = this.sound.add("SFX_ParryHit", { loop: false});
     SFX_SpellCast = this.sound.add("SFX_SpellCast", { loop: false});
     SFX_Step = this.sound.add("SFX_Step", { loop: false});
+
+
+    this.cameras.main.startFollow(player)
+
 
     //ANIMAÇÕES DE MOVIMENTO
     //Anda Esquerda
@@ -418,6 +428,8 @@ function create ()
 function update ()
 {
 
+    playerX = player.body.x
+    playerY = player.body.y
  
     if (MUSIC_TitleOpening_Time === 0)
     {
