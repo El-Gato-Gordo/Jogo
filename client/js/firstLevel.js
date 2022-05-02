@@ -3,6 +3,9 @@ var firstLevel = new Phaser.Scene("First Level");
 //Declaração de objetos
 var player;
 var platforms;
+var skull;
+
+var MUSIC_TitleOpening;
 
 var php_bar;
 var pmn_bar;
@@ -23,6 +26,15 @@ var bhp; //Define HP do chefe
 
 var MUSIC_TitleOpening_Time = 0; //Para tocar apenas uma vez quando inicia o jogo
 var wasJumping = false; //Serve para tocar o som de aterrisagem, assim muda a variável e toca o som
+var SFX_Hit;
+var SFX_HitGround;
+var SFX_HoverButton;
+var SFX_Jump;
+var SFX_Land;
+var SFX_Parry;
+var SFX_ParryHit;
+var SFX_SpellCast;
+var SFX_Step;
 
 var parryTime = 0; //Define o tempo que pode manter o aparo
 var parrying = false; //Define se está aparando ou não
@@ -68,85 +80,93 @@ let keyDown;
 let keyRight;
 let keyLeft;
 
-function preload() {
+//PRELOAD
+firstLevel.preload = function () {
   //Plano de fundo
-  this.load.image("sky", "assets/sky.png");
+  this.load.image("sky", "assets/images/sky.png");
 
   //Tileset e personagens
-  this.load.image("ground", "assets/platform.png");
-  this.load.spritesheet("playerDefault", "assets/player_move.png", {
+  this.load.image("ground", "assets/images/platform.png");
+  this.load.spritesheet("playerDefault", "assets/spritesheets/player_move.png", {
     frameWidth: 64,
     frameHeight: 64,
   });
-  this.load.spritesheet("playerAttack", "assets/player_combo1.png", {
-    frameWidth: 192,
-    frameHeight: 128,
-  });
-  this.load.spritesheet("P_Move1", "assets/P_Move1.png", {
+  this.load.spritesheet(
+    "playerAttack",
+    "assets/spritesheets/player_combo1.png",
+    {
+      frameWidth: 192,
+      frameHeight: 128,
+    }
+  );
+  this.load.spritesheet("P_Move1", "assets/spritesheets/P_Move1.png", {
     frameWidth: 240,
     frameHeight: 240,
   });
 
   //Projéteis
-  this.load.spritesheet("p_spellOrb", "assets/p_spellOrb.png", {
+  this.load.spritesheet("p_spellOrb", "assets/spritesheets/p_spellOrb.png", {
     frameWidth: 64,
     frameHeight: 64,
   });
-  this.load.spritesheet("skull", "assets/skull.png", {
+  this.load.spritesheet("skull", "assets/images/skull.png", {
     frameWidth: 64,
     frameHeight: 64,
   });
 
   //HUD principal
-  this.load.spritesheet("PHP_Bar", "assets/PHP_Bar.png", {
+  this.load.spritesheet("PHP_Bar", "assets/hud/PHP_Bar.png", {
     frameWidth: 192,
     frameHeight: 192,
   });
-  this.load.spritesheet("PMN_Bar", "assets/PMN_Bar.png", {
+  this.load.spritesheet("PMN_Bar", "assets/hud/PMN_Bar.png", {
     frameWidth: 192,
     frameHeight: 192,
   });
-  this.load.spritesheet("BHP_Bar", "assets/BHP_Bar.png", {
+  this.load.spritesheet("BHP_Bar", "assets/hud/BHP_Bar.png", {
     frameWidth: 384,
     frameHeight: 192,
   });
 
   //Botões
-  this.load.spritesheet("musicButton", "assets/music_button.png", {
+  this.load.spritesheet("musicButton", "assets/hud/music_button.png", {
     frameWidth: 384,
     frameHeight: 192,
   });
-  this.load.spritesheet("pausedButton", "assets/paused_button.png", {
+  this.load.spritesheet("pausedButton", "assets/hud/paused_button.png", {
     frameWidth: 384,
     frameHeight: 192,
   });
-  this.load.spritesheet("playButton", "assets/play_button.png", {
+  this.load.spritesheet("playButton", "assets/hud/play_button.png", {
     frameWidth: 384,
     frameHeight: 192,
   });
-  this.load.spritesheet("soundButton", "assets/sound_button.png", {
+  this.load.spritesheet("soundButton", "assets/hud/sound_button.png", {
     frameWidth: 384,
     frameHeight: 192,
   });
-  this.load.spritesheet("startButton", "assets/start_button.png", {
+  this.load.spritesheet("startButton", "assets/hud/start_button.png", {
     frameWidth: 384,
     frameHeight: 192,
   });
 
   //Áudio
-  this.load.audio("MUSIC_TitleOpening", ["assets/MUSIC_TitleOpening.wav"]);
-  this.load.audio("SFX_Hit", ["assets/SFX_Hit.wav"]);
-  this.load.audio("SFX_HitGround", ["assets/SFX_HitGround.wav"]);
-  this.load.audio("SFX_HoverButton", ["assets/SFX_HoverButton.wav"]);
-  this.load.audio("SFX_Jump", ["assets/SFX_Jump.wav"]);
-  this.load.audio("SFX_Land", ["assets/SFX_Land.wav"]);
-  this.load.audio("SFX_Parry", ["assets/SFX_Parry.wav"]);
-  this.load.audio("SFX_ParryHit", ["assets/SFX_ParryHit.wav"]);
-  this.load.audio("SFX_SpellCast", ["assets/SFX_SpellCast.wav"]);
-  this.load.audio("SFX_Step", ["assets/SFX_Step.wav"]);
-}
+  this.load.audio("MUSIC_TitleOpening", [
+    "assets/music/MUSIC_TitleOpening.wav",
+  ]);
+  this.load.audio("SFX_Hit", ["assets/sfx/SFX_Hit.wav"]);
+  this.load.audio("SFX_HitGround", ["assets/sfx/SFX_HitGround.wav"]);
+  this.load.audio("SFX_HoverButton", ["assets/sfx/SFX_HoverButton.wav"]);
+  this.load.audio("SFX_Jump", ["assets/sfx/SFX_Jump.wav"]);
+  this.load.audio("SFX_Land", ["assets/sfx/SFX_Land.wav"]);
+  this.load.audio("SFX_Parry", ["assets/sfx/SFX_Parry.wav"]);
+  this.load.audio("SFX_ParryHit", ["assets/sfx/SFX_ParryHit.wav"]);
+  this.load.audio("SFX_SpellCast", ["assets/sfx/SFX_SpellCast.wav"]);
+  this.load.audio("SFX_Step", ["assets/sfx/SFX_Step.wav"]);
+};
 
-function create() {
+//CREATE
+firstLevel.create = function () {
   this.cameras.main.setBounds(0, 0, 1000, 800);
 
   //Criando as teclas
@@ -459,9 +479,10 @@ function create() {
 
   //  Collide the player and the stars with the platforms
   this.physics.add.collider(player, platforms);
-}
+};
 
-function update() {
+//UPDATE
+firstLevel.update = function () {
   playerX = player.body.x;
   playerY = player.body.y;
 
@@ -776,6 +797,6 @@ function update() {
       player.setVelocityX(airSpeed);
     }
   }
-}
+};
 
 export { firstLevel };

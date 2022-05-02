@@ -1,6 +1,7 @@
 import { mainMenu } from "./mainMenu.js";
 
 var pressStart = new Phaser.Scene("Press Start");
+var background;
 
 pressStart.preload = function () {
  this.load.spritesheet("pressStart_bg", "assets/spritesheets/pressStart_bg.png", {
@@ -13,7 +14,7 @@ pressStart.create = function () {
   background = this.physics.add.sprite(800, 600, "backgroundLoop")
 
     this.anims.create({
-      key: "backgroundLoop",
+      key: "background",
       frames: this.anims.generateFrameNumbers("backgroundLoop", {
         start: 0,
         end: 9,
@@ -25,7 +26,7 @@ pressStart.create = function () {
 
 pressStart.update = function () {
     
-    background.anims.play("backgroundLoop");
+    background.anims.play("background");
 
 };
 

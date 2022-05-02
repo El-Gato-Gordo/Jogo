@@ -12,7 +12,7 @@ var config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 300 },
+      gravity: { y: 900 },
       debug: false,
     },
   },
@@ -23,7 +23,10 @@ var config = {
     width: 800,
     height: 600,
   },
+
   scene: [pressStart, mainMenu, firstLevel, gameOver, endingScene],
 };
-
+//pressStart;
 var game = new Phaser.Game(config);
+
+//Só foi modular o jogo que o personagem ficou bugado daquele jeito na hora de andar
