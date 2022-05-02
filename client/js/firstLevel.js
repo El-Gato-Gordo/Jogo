@@ -726,8 +726,8 @@ firstLevel.update = function () {
           //Verifica se está apertando S para agachar
           if (keyS.isDown) {
             //Muda a hitbox do personagem para ficar devidamente agachado
-            player.setSize(49, 34, true);
-            player.setOffset(7, 30);
+            //player.setSize(49, 34, true);
+            //player.setOffset(7, 30);
 
             //Agachado para direita
             if (last_direction === "RIGHT") {
