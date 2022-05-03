@@ -87,10 +87,14 @@ firstLevel.preload = function () {
 
   //Tileset e personagens
   this.load.image("ground", "assets/images/platform.png");
-  this.load.spritesheet("playerDefault", "assets/spritesheets/player_move.png", {
-    frameWidth: 64,
-    frameHeight: 64,
-  });
+  this.load.spritesheet(
+    "playerDefault",
+    "assets/spritesheets/player_move.png",
+    {
+      frameWidth: 64,
+      frameHeight: 64,
+    }
+  );
   this.load.spritesheet(
     "playerAttack",
     "assets/spritesheets/player_combo1.png",
@@ -130,24 +134,24 @@ firstLevel.preload = function () {
 
   //Botões
   this.load.spritesheet("musicButton", "assets/hud/music_button.png", {
-    frameWidth: 384,
-    frameHeight: 192,
+    frameWidth: 64,
+    frameHeight: 64,
   });
   this.load.spritesheet("pausedButton", "assets/hud/paused_button.png", {
-    frameWidth: 384,
-    frameHeight: 192,
+    frameWidth: 64,
+    frameHeight: 64,
   });
   this.load.spritesheet("playButton", "assets/hud/play_button.png", {
-    frameWidth: 384,
-    frameHeight: 192,
+    frameWidth: 64,
+    frameHeight: 64,
   });
   this.load.spritesheet("soundButton", "assets/hud/sound_button.png", {
-    frameWidth: 384,
-    frameHeight: 192,
+    frameWidth: 64,
+    frameHeight: 64,
   });
   this.load.spritesheet("startButton", "assets/hud/start_button.png", {
-    frameWidth: 384,
-    frameHeight: 192,
+    frameWidth: 64,
+    frameHeight: 64,
   });
 
   //Áudio
@@ -209,9 +213,9 @@ firstLevel.create = function () {
   platforms.create(400, 568, "ground").setScale(2).refreshBody();
 
   // The player and its settings
-  player = this.physics.add.sprite(100, 450, "P_Move1").setScale(0.65);
-  player.setSize(100, 130, true);
-  player.setOffset(70, 54);
+  player = this.physics.add.sprite(100, 450, "playerDefault")//.setScale(0.65);
+  // player.setSize(100, 130, true);
+  // player.setOffset(70, 54);
 
   //THE SKELETON APPEARS
   skull = this.physics.add.sprite(630, 350, "skull");
@@ -246,9 +250,9 @@ firstLevel.create = function () {
   platforms.create(800, 410, "ground");
 
   //HUD do jogo
-  php_bar = this.add.image(90, 90, "PHP_Bar", 0);
-  pmn_bar = this.add.image(90, 90, "PMN_Bar", 0);
-  bhp_bar = this.add.image(600, 520, "BHP_Bar", 0);
+  php_bar = this.add.image(90, 90, "PHP_Bar", 0).setScrollFactor(0);
+  pmn_bar = this.add.image(90, 90, "PMN_Bar", 0).setScrollFactor(0);
+  bhp_bar = this.add.image(600, 520, "BHP_Bar", 0).setScrollFactor(0);
   bhp_bar.visible = false;
 
   //Áudio do jogo
@@ -280,7 +284,7 @@ firstLevel.create = function () {
   //Anda Direita
   this.anims.create({
     key: "idleRight",
-    frames: this.anims.generateFrameNumbers("P_Move1", { start: 0, end: 11 }),
+    frames: this.anims.generateFrameNumbers("playerDefault", { start: 0, end: 11 }),
     frameRate: 8,
     repeat: -1,
   });
@@ -288,7 +292,7 @@ firstLevel.create = function () {
   //Parado Esquerda
   this.anims.create({
     key: "idleLeft",
-    frames: this.anims.generateFrameNumbers("P_Move1", { start: 12, end: 23 }),
+    frames: this.anims.generateFrameNumbers("playerDefault", { start: 12, end: 23 }),
     frameRate: 8,
     repeat: -1,
   });
@@ -307,14 +311,14 @@ firstLevel.create = function () {
   //Salto Direita
   this.anims.create({
     key: "risingRight",
-    frames: [{ key: "P_Move1", frame: 24 }],
+    frames: [{ key: "playerDefault", frame: 24 }],
     frameRate: 15,
   });
 
   //Queda Direita
   this.anims.create({
     key: "fallingRight",
-    frames: [{ key: "P_Move1", frame: 26 }],
+    frames: [{ key: "playerDefault", frame: 26 }],
     frameRate: 15,
   });
 
@@ -335,14 +339,14 @@ firstLevel.create = function () {
   //Salto Esquerda
   this.anims.create({
     key: "risingLeft",
-    frames: [{ key: "P_Move1", frame: 25 }],
+    frames: [{ key: "playerDefault", frame: 25 }],
     frameRate: 15,
   });
 
   //Queda Esquerda
   this.anims.create({
     key: "fallingLeft",
-    frames: [{ key: "P_Move1", frame: 27 }],
+    frames: [{ key: "playerDefault", frame: 27 }],
     frameRate: 15,
   });
 
@@ -595,8 +599,8 @@ firstLevel.update = function () {
       wasJumping = false;
     }
 
-    player.setSize(100, 130, true);
-    player.setOffset(70, 54);
+    // player.setSize(100, 130, true);
+    // player.setOffset(70, 54);
 
     if (dodgingTime > 25) {
       //COOLDOWN DA EVASÃO
