@@ -10,7 +10,7 @@ var config = {
   width: 800,
   height: 600,
   physics: {
-    default: "game-container",
+    default: "arcade",
     arcade: {
       gravity: { y: 900 },
       debug: true,
@@ -18,14 +18,15 @@ var config = {
   },
   scale: {
     mode: Phaser.Scale.FIT,
-    parent: "game-container",
+    parent: "arcade",
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: 800,
     height: 600,
   },
 
-  scene: [gameOver]
+  scene: [firstLevel]
 };
+
 //pressStart;
 var game = new Phaser.Game(config);
 
