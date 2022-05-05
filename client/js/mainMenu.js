@@ -1,16 +1,9 @@
 var mainMenu = new Phaser.Scene("Main Menu");
 
-mainMenu.preload = function () {
+mainMenu.preload = function () {};
 
-};
+mainMenu.create = function () {};
 
-mainMenu.create = function () {
-
-};
-
-mainMenu.update = function () {
-
-};
-
+mainMenu.update = function () {};
 
 export { mainMenu };
