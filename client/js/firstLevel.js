@@ -10,6 +10,7 @@ var MUSIC_TitleOpening;
 var php_bar;
 var pmn_bar;
 var bhp_bar;
+var psp_hud;
 
 var playerX;
 var playerY;
@@ -120,12 +121,16 @@ firstLevel.preload = function () {
 
   //HUD principal
   this.load.spritesheet("PHP_Bar", "assets/hud/PHP_Bar.png", {
-    frameWidth: 192,
-    frameHeight: 192,
+    frameWidth: 216,
+    frameHeight: 216,
+  });
+  this.load.spritesheet("PSP_HUD", "assets/hud/PSP_HUD.png", {
+      frameWidth: 216,
+      frameHeight: 216,
   });
   this.load.spritesheet("PMN_Bar", "assets/hud/PMN_Bar.png", {
-    frameWidth: 192,
-    frameHeight: 192,
+    frameWidth: 216,
+    frameHeight: 216,
   });
   this.load.spritesheet("BHP_Bar", "assets/hud/BHP_Bar.png", {
     frameWidth: 384,
@@ -250,8 +255,9 @@ firstLevel.create = function () {
   platforms.create(800, 410, "ground");
 
   //HUD do jogo
-  php_bar = this.add.image(90, 90, "PHP_Bar", 0).setScrollFactor(0);
-  pmn_bar = this.add.image(90, 90, "PMN_Bar", 0).setScrollFactor(0);
+  php_bar = this.add.image(120, 45, "PHP_Bar", 0).setScrollFactor(0);
+  psp_hud = this.add.sprite(120, 45, "PSP_HUD", 0).setScrollFactor(0);
+  pmn_bar = this.add.image(120, 45, "PMN_Bar", 0).setScrollFactor(0);
   bhp_bar = this.add.image(600, 520, "BHP_Bar", 0).setScrollFactor(0);
   bhp_bar.visible = false;
 
@@ -268,6 +274,17 @@ firstLevel.create = function () {
   SFX_Step = this.sound.add("SFX_Step", { loop: false });
 
   this.cameras.main.startFollow(player);
+
+  //ANIMAÇÕES DE HUD
+  this.anims.create({
+    key: "coreSpin",
+    frames: this.anims.generateFrameNumbers("PSP_HUD", {
+      start: 0,
+      end: 11,
+    }),
+    frameRate: 15,
+    repeat: -1,
+  });
 
   //ANIMAÇÕES DE MOVIMENTO
   //Anda Esquerda
@@ -510,6 +527,10 @@ firstLevel.update = function () {
   skull.setVelocityY(0);
 
   //HUD CÓDIGO
+  if (php >= 0) {
+    psp_hud.anims.play("coreSpin", true);    
+  }
+
   if (php === 5) {
     //Vitalidade do Cavaleiro e do Mago HUD
     php_bar.setFrame(0);
@@ -522,7 +543,7 @@ firstLevel.update = function () {
   } else if (php === 1) {
     php_bar.setFrame(4);
   } else if (php <= 0) {
-    php_bar.setFrame(5);
+    psp_hud.setFrame(12);
   }
 
   if (pmn === 3) {
