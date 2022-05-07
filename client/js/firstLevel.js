@@ -9,11 +9,11 @@ var MUSIC_TitleOpening;
 
 var php_bar;
 var pmn_bar;
-var bhp_bar;
 var psp_hud;
-
+var bsp_hud;
 var playerX;
 var playerY;
+var bhp_bar;
 
 var cursors;
 var gameOver = false;
@@ -23,7 +23,7 @@ var gameOver = false;
 //Declaração de variáveis de estado
 var php = 5; //Define HP do Cavaleiro e Mago
 var pmn = 3; //Define Mana do Mago
-var bhp; //Define HP do chefe
+var bhp = 10; //Define HP do chefe
 
 var MUSIC_TitleOpening_Time = 0; //Para tocar apenas uma vez quando inicia o jogo
 var wasJumping = false; //Serve para tocar o som de aterrisagem, assim muda a variável e toca o som
@@ -133,8 +133,12 @@ firstLevel.preload = function () {
     frameHeight: 216,
   });
   this.load.spritesheet("BHP_Bar", "assets/hud/BHP_Bar.png", {
-    frameWidth: 384,
-    frameHeight: 192,
+    frameWidth: 512,
+    frameHeight: 256,
+  });
+  this.load.spritesheet("BSP_HUD", "assets/hud/BSP_HUD.png", {
+    frameWidth: 512,
+    frameHeight: 256,
   });
 
   //Botões
@@ -176,7 +180,7 @@ firstLevel.preload = function () {
 
 //CREATE
 firstLevel.create = function () {
-  this.cameras.main.setBounds(0, 0, 1000, 800);
+  this.cameras.main.setBounds(0, -150, 1000, 800);
 
   //Criando as teclas
   //Cavaleiro
@@ -231,6 +235,7 @@ firstLevel.create = function () {
     if (p_justAttacked === false && dodging === false) {
       SFX_Hit.play();
       php = php - 1;
+      bhp = bhp - 1;
       p_justAttacked = true;
       p_attackedCooldown = 0;
 
@@ -258,8 +263,10 @@ firstLevel.create = function () {
   php_bar = this.add.image(120, 45, "PHP_Bar", 0).setScrollFactor(0);
   psp_hud = this.add.sprite(120, 45, "PSP_HUD", 0).setScrollFactor(0);
   pmn_bar = this.add.image(120, 45, "PMN_Bar", 0).setScrollFactor(0);
-  bhp_bar = this.add.image(600, 520, "BHP_Bar", 0).setScrollFactor(0);
-  bhp_bar.visible = false;
+  bhp_bar = this.add.image(575, 565, "BHP_Bar", 0).setScrollFactor(0);
+  bhp_bar.visible = true;
+  bsp_hud = this.add.sprite(575, 565, "BSP_HUD", 0).setScrollFactor(0);
+  bsp_hud.visible = true;
 
   //Áudio do jogo
   MUSIC_TitleOpening = this.sound.add("MUSIC_TitleOpening", { loop: false });
@@ -280,9 +287,19 @@ firstLevel.create = function () {
     key: "coreSpin",
     frames: this.anims.generateFrameNumbers("PSP_HUD", {
       start: 0,
+      end: 7,
+    }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "bossCoreLoop",
+    frames: this.anims.generateFrameNumbers("BSP_HUD", {
+      start: 0,
       end: 11,
     }),
-    frameRate: 15,
+    frameRate: 10,
     repeat: -1,
   });
 
@@ -527,8 +544,12 @@ firstLevel.update = function () {
   skull.setVelocityY(0);
 
   //HUD CÓDIGO
-  if (php >= 0) {
+  if (php >= 1) {
     psp_hud.anims.play("coreSpin", true);    
+  }
+
+  if (bhp >= 1){
+    bsp_hud.anims.play("bossCoreLoop", true);
   }
 
   if (php === 5) {
@@ -543,7 +564,7 @@ firstLevel.update = function () {
   } else if (php === 1) {
     php_bar.setFrame(4);
   } else if (php <= 0) {
-    psp_hud.setFrame(12);
+    psp_hud.setFrame(8);
   }
 
   if (pmn === 3) {
@@ -556,32 +577,29 @@ firstLevel.update = function () {
   } else if (pmn === 0) {
     pmn_bar.setFrame(3);
   }
-
-  if (bhp === 11) {
-    //Vitalidade do Boss HUD
-    bhp_bar.setFrame(0);
-  } else if (bhp === 10) {
-    bhp_bar.setFrame(1);
-  } else if (bhp === 9) {
-    bhp_bar.setFrame(2);
-  } else if (bhp === 8) {
-    bhp_bar.setFrame(3);
-  } else if (bhp === 7) {
-    bhp_bar.setFrame(4);
-  } else if (bhp === 6) {
-    bhp_bar.setFrame(5);
-  } else if (bhp === 5) {
-    bhp_bar.setFrame(6);
-  } else if (bhp === 4) {
-    bhp_bar.setFrame(7);
-  } else if (bhp === 3) {
-    bhp_bar.setFrame(8);
-  } else if (bhp === 2) {
-    bhp_bar.setFrame(9);
-  } else if (bhp === 1) {
+  
+  if (bhp === 10) {
     bhp_bar.setFrame(10);
+  } else if (bhp === 9) {
+    bhp_bar.setFrame(9);
+  } else if (bhp === 8) {
+    bhp_bar.setFrame(8);
+  } else if (bhp === 7) {
+    bhp_bar.setFrame(7);
+  } else if (bhp === 6) {
+    bhp_bar.setFrame(6);
+  } else if (bhp === 5) {
+    bhp_bar.setFrame(5);
+  } else if (bhp === 4) {
+    bhp_bar.setFrame(4);
+  } else if (bhp === 3) {
+    bhp_bar.setFrame(3);
+  } else if (bhp === 2) {
+    bhp_bar.setFrame(2);
+  } else if (bhp === 1) {
+    bhp_bar.setFrame(1);
   } else if (bhp <= 0) {
-    bhp_bar.setFrame(11);
+    bsp_hud.setFrame(12);
   }
 
   //SALTO
