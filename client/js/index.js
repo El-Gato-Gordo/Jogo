@@ -29,5 +29,3 @@ var config = {
 
 //pressStart;
 var game = new Phaser.Game(config);
-
-//Só foi modular o jogo que o personagem ficou bugado daquele jeito na hora de andar

@@ -10,10 +10,15 @@ mainMenu.preload = function () {
         frameWidth: 800,
         frameHeight: 600
     });
-};
-mainMenu.create = function () {
-    ;
 
+    this.load.spritesheet("fullScreen_button", "assets/hud/fullScreen_button.png", {
+        frameWidth: 128,
+        frameHeight: 128
+    });
+};
+
+mainMenu.create = function () {
+    
     logo = this.physics.add.staticSprite(
         400,
         300,
@@ -27,14 +32,15 @@ mainMenu.create = function () {
             end: 47,
         }),
 
-        frameRate: 10,
-        repeat: -1,
+        frameRate: 20,
+        repeat: 1,
     });
 };
+
 mainMenu.update = function () {
     if (logoPlayed === false) {
         logo.anims.play("logoIntro", true);
-        if (logo.frames === 47) {
+        if (logo.currentFrame === 47) {
             logoPlayed = true;
             logo.setFrame(47);
 
@@ -42,4 +48,5 @@ mainMenu.update = function () {
     }
 
 };
+
 export { mainMenu };
