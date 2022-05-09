@@ -13,7 +13,7 @@ var config = {
     default: "arcade",
     arcade: {
       gravity: { y: 900 },
-      debug: true,
+      debug: false,
     },
   },
   scale: {
@@ -24,7 +24,7 @@ var config = {
     height: 600,
   },
 
-  scene: [firstLevel]
+  scene: [pressStart, mainMenu]
 };
 
 //pressStart;

@@ -14,7 +14,7 @@ var bsp_hud;
 var playerX;
 var playerY;
 var bhp_bar;
-
+var psc_counter;
 var cursors;
 var gameOver = false;
 
@@ -88,6 +88,7 @@ firstLevel.preload = function () {
 
   //Tileset e personagens
   this.load.image("ground", "assets/images/platform.png");
+
   this.load.spritesheet(
     "playerDefault",
     "assets/spritesheets/player_move.png",
@@ -283,6 +284,7 @@ firstLevel.create = function () {
   this.cameras.main.startFollow(player);
 
   //ANIMAÇÕES DE HUD
+
   this.anims.create({
     key: "coreSpin",
     frames: this.anims.generateFrameNumbers("PSP_HUD", {
@@ -544,6 +546,7 @@ firstLevel.update = function () {
   skull.setVelocityY(0);
 
   //HUD CÓDIGO
+
   if (php >= 1) {
     psp_hud.anims.play("coreSpin", true);    
   }

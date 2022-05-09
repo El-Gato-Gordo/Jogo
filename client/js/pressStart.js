@@ -29,6 +29,7 @@ pressStart.create = function () {
     300,
     "pressStart_bg"
   );
+  
   startButton = this.physics.add.staticSprite(400, 300, "startButton");
 
   this.anims.create({
