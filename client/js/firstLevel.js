@@ -4,6 +4,7 @@ var firstLevel = new Phaser.Scene("First Level");
 var player;
 var platforms;
 var skull;
+var fullScreen_button;
 
 var MUSIC_TitleOpening;
 
@@ -17,8 +18,7 @@ var bhp_bar;
 var psc_counter;
 var cursors;
 var gameOver = false;
-
-//var game = new Phaser.Game(config);
+var isPaused;
 
 //Declaração de variáveis de estado
 var php = 5; //Define HP do Cavaleiro e Mago
@@ -60,6 +60,7 @@ var p_justAttacked = false; //Se estiver verdadeiro, jogador não recebe dano
 var p_attackedCooldown = 0; //Tempo até o jogador poder receber dano novamente
 
 //Declarando teclas do jogo
+let keyP;
 
 //Cavaleiro
 let keyA;
@@ -97,6 +98,7 @@ firstLevel.preload = function () {
       frameHeight: 64,
     }
   );
+
   this.load.spritesheet(
     "playerAttack",
     "assets/spritesheets/player_combo1.png",
@@ -163,6 +165,11 @@ firstLevel.preload = function () {
     frameWidth: 64,
     frameHeight: 64,
   });
+  
+  this.load.spritesheet("fullScreen_button", "assets/hud/fullScreen_button.png", {
+    frameWidth: 128,
+    frameHeight: 128,
+  });
 
   //Áudio
   this.load.audio("MUSIC_TitleOpening", [
@@ -184,6 +191,9 @@ firstLevel.create = function () {
   this.cameras.main.setBounds(0, -150, 1000, 800);
 
   //Criando as teclas
+
+  keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
   //Cavaleiro
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A); // A
   keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S); // S
@@ -227,10 +237,13 @@ firstLevel.create = function () {
   // player.setSize(100, 130, true);
   // player.setOffset(70, 54);
 
+  //Pause
+      //spaceKey.onDown.add(togglePause, this);
+
   //THE SKELETON APPEARS
   skull = this.physics.add.sprite(630, 350, "skull");
   this.physics.add.collider(skull, platforms);
-
+  
   //Dano no jogador quando tocar na caveira
   this.physics.add.collider(skull, player, function (skull, player) {
     if (p_justAttacked === false && dodging === false) {
@@ -282,6 +295,26 @@ firstLevel.create = function () {
   SFX_Step = this.sound.add("SFX_Step", { loop: false });
 
   this.cameras.main.startFollow(player);
+
+  fullScreen_button = this.physics.add
+    .staticSprite(760, 40, "fullScreen_button")
+    .setScale(0.7)
+    .setInteractive()
+    .setScrollFactor(0);
+
+  fullScreen_button.on(
+    "pointerup",
+    function () {
+      if (this.scale.isFullscreen) {
+        fullScreen_button.setFrame(0);
+        this.scale.stopFullscreen();
+      } else {
+        fullScreen_button.setFrame(1);
+        this.scale.startFullscreen();
+      }
+    },
+    this
+  );
 
   //ANIMAÇÕES DE HUD
 

@@ -12,19 +12,19 @@ var config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 900 },
+      gravity: { y: 1000 },
       debug: false,
     },
   },
   scale: {
     mode: Phaser.Scale.FIT,
-    parent: "arcade",
+    parent: "game",
     autoCenter: Phaser.Scale.CENTER_BOTH,
     width: 800,
     height: 600,
   },
 
-  scene: [pressStart, mainMenu]
+  scene: [firstLevel]
 };
 
 //pressStart;
