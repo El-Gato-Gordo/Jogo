@@ -99,14 +99,27 @@ firstLevel.preload = function () {
     }
   );
 
+  //Ataques do Personagem
+
+  //Chão Frente
   this.load.spritesheet(
-    "playerAttack",
-    "assets/spritesheets/player_combo1.png",
+    "p_groundFrontR",
+    "assets/spritesheets/p_groundFrontR.png",
     {
-      frameWidth: 192,
-      frameHeight: 128,
+      frameWidth: 480,
+      frameHeight: 240,
     }
   );
+  
+  this.load.spritesheet(
+    "p_groundFrontL",
+    "assets/spritesheets/p_groundFrontL.png",
+    {
+      frameWidth: 480,
+      frameHeight: 240,
+    }
+  );
+
   this.load.spritesheet("P_Move1", "assets/spritesheets/P_Move1.png", {
     frameWidth: 240,
     frameHeight: 240,
@@ -481,71 +494,27 @@ firstLevel.create = function () {
 
   //ANIMAÇÕES OFENSIVAS
 
-  //Combo 1 Direita
+  //Chão Frente
   this.anims.create({
-    key: "combo1Right",
-    frames: this.anims.generateFrameNumbers("playerAttack", {
+    key: "p_groundFrontR",
+    frames: this.anims.generateFrameNumbers("p_groundFrontR", {
       start: 0,
-      end: 11,
+      end: 4,
     }),
-    frameRate: 12,
+    frameRate: 10,
+    repeat: -1,
+  });
+  this.anims.create({
+    key: "p_groundFrontL",
+    frames: this.anims.generateFrameNumbers("p_groundFrontL", {
+      start: 0,
+      end: 4,
+    }),
+    frameRate: 10,
     repeat: -1,
   });
 
-  //Combo 1 Esquerda
-
-  this.anims.create({
-    key: "combo1Left",
-    frames: this.anims.generateFrameNumbers("playerAttack", {
-      start: 12,
-      end: 24,
-    }),
-    frameRate: 12,
-    repeat: -1,
-  });
-
-  //Combo 2 Direita
-  this.anims.create({
-    key: "combo2Right",
-    frames: this.anims.generateFrameNumbers("playerAttack", {
-      start: 25,
-      end: 37,
-    }),
-    frameRate: 12,
-    repeat: -1,
-  });
-  //Combo 2 Esquerda
-  this.anims.create({
-    key: "combo2Left",
-    frames: this.anims.generateFrameNumbers("playerAttack", {
-      start: 38,
-      end: 50,
-    }),
-    frameRate: 12,
-    repeat: -1,
-  });
-
-  //Combo 3 Direita
-  this.anims.create({
-    key: "combo3Right",
-    frames: this.anims.generateFrameNumbers("playerAttack", {
-      start: 51,
-      end: 56,
-    }),
-    frameRate: 12,
-    repeat: -1,
-  });
-
-  //Combo 3 Esquerda
-  this.anims.create({
-    key: "combo3Left",
-    frames: this.anims.generateFrameNumbers("playerAttack", {
-      start: 57,
-      end: 62,
-    }),
-    frameRate: 12,
-    repeat: -1,
-  });
+  
 
   //  Input Events
   cursors = this.input.keyboard.createCursorKeys(); //Informa que o jogo tem input das keys
@@ -782,26 +751,7 @@ firstLevel.update = function () {
 
         //ATAQUE
         else if (keyJ.isDown && dodging === false && parrying === false) {
-          if (p_lastAttack === "null") {
-            p_attacking = true;
-            p_attackTime = 0;
-            p_attackCooldown = 0;
-            p_lastAttack = "null";
-
-            if (last_direction === "RIGHT") {
-              player.anims.play("combo1Right", true);
-              player.setVelocityX(25);
-            } else if (last_direction === "LEFT") {
-              player.anims.play("combo1Left", true);
-              player.setVelocityX(-25);
-            }
-          }
-        } else if (p_justAttacked === false) {
-          player.setVelocityX(0);
-
-          //A variável last_direction serve para checar para qual direção o jogador estava olhando antes de soltar os botões LEFT e RIGHT,
-          //Assim podemos usar sprites de IDLE diferentes
-
+          AQUI
           //Verifica se está apertando S para agachar
           if (keyS.isDown) {
             //Muda a hitbox do personagem para ficar devidamente agachado
