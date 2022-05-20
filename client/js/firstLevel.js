@@ -24,6 +24,7 @@ var isPaused;
 var php = 5; //Define HP do Cavaleiro e Mago
 var pmn = 3; //Define Mana do Mago
 var bhp = 10; //Define HP do chefe
+var ehp = 3; //HP do CAVEIRÃO
 
 var MUSIC_TitleOpening_Time = 0; //Para tocar apenas uma vez quando inicia o jogo
 var wasJumping = false; //Serve para tocar o som de aterrisagem, assim muda a variável e toca o som
@@ -37,6 +38,8 @@ var SFX_ParryHit;
 var SFX_SpellCast;
 var SFX_Step;
 
+var enemyKnockback = 0; //Tempo de knockback do CAVEIRÃO
+
 var parryTime = 0; //Define o tempo que pode manter o aparo
 var parrying = false; //Define se está aparando ou não
 var parryCooldown = 0; //Cooldown do aparo
@@ -45,6 +48,7 @@ var airSpeed = 0; //Aceleração no ar
 
 var dodging = false; //Verifica se está esquivando
 var dodgingTime = 0; //Tempo da duração da esquiva
+var dodgingCooldown;
 
 var jumpTimer = 0; //Tempo no ar
 var jumpTune = 0; //
@@ -106,17 +110,17 @@ firstLevel.preload = function () {
     "p_groundFrontR",
     "assets/spritesheets/p_groundFrontR.png",
     {
-      frameWidth: 480,
-      frameHeight: 240,
+      frameWidth: 128,
+      frameHeight: 64,
     }
   );
-  
+
   this.load.spritesheet(
     "p_groundFrontL",
     "assets/spritesheets/p_groundFrontL.png",
     {
-      frameWidth: 480,
-      frameHeight: 240,
+      frameWidth: 128,
+      frameHeight: 64,
     }
   );
 
@@ -130,7 +134,7 @@ firstLevel.preload = function () {
     frameWidth: 64,
     frameHeight: 64,
   });
-  this.load.spritesheet("skull", "assets/images/skull.png", {
+  this.load.spritesheet("skull", "assets/spritesheets/skull.png", {
     frameWidth: 64,
     frameHeight: 64,
   });
@@ -141,8 +145,8 @@ firstLevel.preload = function () {
     frameHeight: 216,
   });
   this.load.spritesheet("PSP_HUD", "assets/hud/PSP_HUD.png", {
-      frameWidth: 216,
-      frameHeight: 216,
+    frameWidth: 216,
+    frameHeight: 216,
   });
   this.load.spritesheet("PMN_Bar", "assets/hud/PMN_Bar.png", {
     frameWidth: 216,
@@ -178,11 +182,15 @@ firstLevel.preload = function () {
     frameWidth: 64,
     frameHeight: 64,
   });
-  
-  this.load.spritesheet("fullScreen_button", "assets/hud/fullScreen_button.png", {
-    frameWidth: 128,
-    frameHeight: 128,
-  });
+
+  this.load.spritesheet(
+    "fullScreen_button",
+    "assets/hud/fullScreen_button.png",
+    {
+      frameWidth: 128,
+      frameHeight: 128,
+    }
+  );
 
   //Áudio
   this.load.audio("MUSIC_TitleOpening", [
@@ -246,20 +254,25 @@ firstLevel.create = function () {
   platforms.create(400, 568, "ground").setScale(2).refreshBody();
 
   // The player and its settings
-  player = this.physics.add.sprite(100, 450, "playerDefault")//.setScale(0.65);
+  player = this.physics.add.sprite(100, 450, "playerDefault"); //.setScale(0.65);
   // player.setSize(100, 130, true);
   // player.setOffset(70, 54);
 
   //Pause
-      //spaceKey.onDown.add(togglePause, this);
+  //spaceKey.onDown.add(togglePause, this);
 
   //THE SKELETON APPEARS
   skull = this.physics.add.sprite(630, 350, "skull");
   this.physics.add.collider(skull, platforms);
-  
+
   //Dano no jogador quando tocar na caveira
   this.physics.add.collider(skull, player, function (skull, player) {
-    if (p_justAttacked === false && dodging === false) {
+    if (
+      p_justAttacked === false &&
+      dodging === false &&
+      p_attacking === false &&
+      enemyKnockback < 1
+    ) {
       SFX_Hit.play();
       php = php - 1;
       bhp = bhp - 1;
@@ -273,6 +286,27 @@ firstLevel.create = function () {
         player.setVelocityX(300);
         player.setVelocityY(-350);
       }
+    }
+  });
+
+  this.physics.add.overlap(skull, player, function (skull, player) {
+    if (p_attacking === true && enemyKnockback < 1) {
+      ehp = ehp - 1;
+      enemyKnockback = 60;
+    }
+
+    if (last_direction === "RIGHT" && enemyKnockback > 0) {
+      skull.setVelocityX(100);
+      enemyKnockback = enemyKnockback - 1;
+    }
+
+    if (last_direction === "LEFT" && enemyKnockback > 0) {
+      skull.setVelocityX(-100);
+      enemyKnockback = enemyKnockback - 1;
+    }
+
+    if (ehp === 0) {
+      skull.setFrame(1);
     }
   });
 
@@ -366,7 +400,10 @@ firstLevel.create = function () {
   //Anda Direita
   this.anims.create({
     key: "idleRight",
-    frames: this.anims.generateFrameNumbers("playerDefault", { start: 0, end: 11 }),
+    frames: this.anims.generateFrameNumbers("playerDefault", {
+      start: 0,
+      end: 11,
+    }),
     frameRate: 8,
     repeat: -1,
   });
@@ -374,7 +411,10 @@ firstLevel.create = function () {
   //Parado Esquerda
   this.anims.create({
     key: "idleLeft",
-    frames: this.anims.generateFrameNumbers("playerDefault", { start: 12, end: 23 }),
+    frames: this.anims.generateFrameNumbers("playerDefault", {
+      start: 12,
+      end: 23,
+    }),
     frameRate: 8,
     repeat: -1,
   });
@@ -514,8 +554,6 @@ firstLevel.create = function () {
     repeat: -1,
   });
 
-  
-
   //  Input Events
   cursors = this.input.keyboard.createCursorKeys(); //Informa que o jogo tem input das keys
 
@@ -550,10 +588,10 @@ firstLevel.update = function () {
   //HUD CÓDIGO
 
   if (php >= 1) {
-    psp_hud.anims.play("coreSpin", true);    
+    psp_hud.anims.play("coreSpin", true);
   }
 
-  if (bhp >= 1){
+  if (bhp >= 1) {
     bsp_hud.anims.play("bossCoreLoop", true);
   }
 
@@ -582,7 +620,7 @@ firstLevel.update = function () {
   } else if (pmn === 0) {
     pmn_bar.setFrame(3);
   }
-  
+
   if (bhp === 10) {
     bhp_bar.setFrame(10);
   } else if (bhp === 9) {
@@ -723,7 +761,7 @@ firstLevel.update = function () {
         }
       }
 
-      if (parrying === false) {
+      if (parrying === false && p_attacking === false) {
         //Andar e Correr ESQUERDA
         if (keyA.isDown && p_justAttacked === false && p_attacking === false) {
           if (cursors.shift.isDown) {
@@ -745,54 +783,77 @@ firstLevel.update = function () {
             player.setVelocityX(160);
             player.anims.play("walkRight", true);
           }
-        }
-        else {
+        } else {
           player.setVelocityX(0);
-          if (last_direction === "RIGHT"){
-            player.anims.play("idleRight", true)
+
+          //Parado para direita
+          if (last_direction === "RIGHT") {
+            player.anims.play("idleRight", true);
           }
 
-          if (last_direction === "LEFT"){
-            player.anims.play("idleLeft", true)
+          //Parado para esquerda
+          if (last_direction === "LEFT") {
+            player.anims.play("idleLeft", true);
           }
         }
-
-        //Se estiver parado no chão
-
-        //ATAQUE
-        if (keyJ.isDown && dodging === false && parrying === false) {
-          php = 1
-        }
-          //Verifica se está apertando S para agachar
-          if (keyS.isDown && player.body.velocity.x === 0) {
-            //Muda a hitbox do personagem para ficar devidamente agachado
-            //player.setSize(49, 34, true);
-            //player.setOffset(7, 30);
-
-            //Agachado para direita
-            if (last_direction === "RIGHT") {
-              player.anims.play("crouchingRight", true);
-            }
-
-            //Agachado para esquerda
-            if (last_direction === "LEFT") {
-              player.anims.play("crouchingLeft", true);
-            }
-          }
-
-          //Se não estiver segurando o S para se agachar
-          else if (keyS.isDown === false && keyD.isDown === false && keyA.isDown === false){
-            //Parado para direita
-            if (last_direction === "RIGHT") {
-              player.anims.play("idleRight", true);
-            }
-
-            //Parado para esquerda
-            if (last_direction === "LEFT") {
-              player.anims.play("idleLeft", true);
-            }
-          }
       }
+
+      //Se estiver parado no chão
+
+      if (p_attackTime > 10) {
+        p_attacking = false;
+        p_attackCooldown = p_attackCooldown + 1;
+
+        if (p_attackCooldown >= 30) {
+          p_attackTime = 0;
+        }
+      }
+
+      //ATAQUE
+      if (
+        keyJ.isDown ||
+        (p_attacking === true && dodging === false && parrying === false)
+      ) {
+        if (p_attackTime <= 10) {
+          parryTime = 0;
+          parrying = false;
+          dodging = false;
+          p_attacking = true;
+          p_attackCooldown = 0;
+          p_attackTime = p_attackTime + 1;
+
+          if (last_direction === "RIGHT") {
+            player.anims.play("p_groundFrontR", true);
+            player.setVelocityX(10);
+          }
+
+          if (last_direction === "LEFT") {
+            player.anims.play("p_groundFrontL", true);
+            player.setVelocityX(-10);
+          }
+        } else {
+          p_attacking = false;
+        }
+      }
+
+      //Verifica se está apertando S para agachar
+      if (keyS.isDown) {
+        //Muda a hitbox do personagem para ficar devidamente agachado
+        //player.setSize(49, 34, true);
+        //player.setOffset(7, 30);
+
+        //Agachado para direita
+        if (last_direction === "RIGHT") {
+          player.anims.play("crouchingRight", true);
+        }
+
+        //Agachado para esquerda
+        else if (last_direction === "LEFT") {
+          player.anims.play("crouchingLeft", true);
+        }
+      }
+
+      //Se não estiver segurando o S para se agachar
     }
   }
 
