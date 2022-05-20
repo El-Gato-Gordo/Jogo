@@ -746,14 +746,25 @@ firstLevel.update = function () {
             player.anims.play("walkRight", true);
           }
         }
+        else {
+          player.setVelocityX(0);
+          if (last_direction === "RIGHT"){
+            player.anims.play("idleRight", true)
+          }
+
+          if (last_direction === "LEFT"){
+            player.anims.play("idleLeft", true)
+          }
+        }
 
         //Se estiver parado no chão
 
         //ATAQUE
-        else if (keyJ.isDown && dodging === false && parrying === false) {
-          AQUI
+        if (keyJ.isDown && dodging === false && parrying === false) {
+          php = 1
+        }
           //Verifica se está apertando S para agachar
-          if (keyS.isDown) {
+          if (keyS.isDown && player.body.velocity.x === 0) {
             //Muda a hitbox do personagem para ficar devidamente agachado
             //player.setSize(49, 34, true);
             //player.setOffset(7, 30);
@@ -764,13 +775,13 @@ firstLevel.update = function () {
             }
 
             //Agachado para esquerda
-            else if (last_direction === "LEFT") {
+            if (last_direction === "LEFT") {
               player.anims.play("crouchingLeft", true);
             }
           }
 
           //Se não estiver segurando o S para se agachar
-          else {
+          else if (keyS.isDown === false && keyD.isDown === false && keyA.isDown === false){
             //Parado para direita
             if (last_direction === "RIGHT") {
               player.anims.play("idleRight", true);
@@ -781,7 +792,6 @@ firstLevel.update = function () {
               player.anims.play("idleLeft", true);
             }
           }
-        }
       }
     }
   }
