@@ -124,6 +124,24 @@ firstLevel.preload = function () {
     }
   );
 
+  this.load.spritesheet(
+    "p_groundUpL",
+    "assets/spritesheets/p_groundUpL.png",
+    {
+      frameWidth: 64,
+      frameHeight: 128,
+    }
+  );
+
+  this.load.spritesheet(
+    "p_groundUpR",
+    "assets/spritesheets/p_groundUpR.png",
+    {
+      frameWidth: 64,
+      frameHeight: 128,
+    }
+  );
+
   this.load.spritesheet("P_Move1", "assets/spritesheets/P_Move1.png", {
     frameWidth: 240,
     frameHeight: 240,
@@ -723,6 +741,7 @@ firstLevel.update = function () {
         keyJ.isDown ||
         (p_attacking === true && dodging === false && parrying === false)
       ) {
+
         if (p_attackTime <= 10) {
           parryTime = 0;
           parrying = false;
@@ -731,16 +750,32 @@ firstLevel.update = function () {
           p_attackCooldown = 0;
           p_attackTime = p_attackTime + 1;
 
-          if (last_direction === "RIGHT") {
-            player.anims.play("p_groundFrontR", true);
-            player.setVelocityX(10);
-          }
+          if (keyW.isDown && player.body.touching.down) {
 
-          if (last_direction === "LEFT") {
-            player.anims.play("p_groundFrontL", true);
-            player.setVelocityX(-10);
+            if (last_direction === "RIGHT") {
+              player.anims.play("p_groundFrontR", true);
+              player.setVelocityX(10);
+            }
+
+            if (last_direction === "LEFT") {
+              player.anims.play("p_groundFrontL", true);
+              player.setVelocityX(-10);
+            }
           }
-        } else {
+          else {
+
+            if (last_direction === "RIGHT") {
+              player.anims.play("p_groundFrontR", true);
+              player.setVelocityX(10);
+            }
+
+            if (last_direction === "LEFT") {
+              player.anims.play("p_groundFrontL", true);
+              player.setVelocityX(-10);
+            }
+          }
+        }
+        else {
           p_attacking = false;
         }
       }
