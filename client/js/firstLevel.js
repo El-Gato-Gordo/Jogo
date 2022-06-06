@@ -139,28 +139,6 @@ firstLevel.preload = function () {
     frameHeight: 64,
   });
 
-  //HUD principal
-  this.load.spritesheet("PHP_Bar", "assets/hud/PHP_Bar.png", {
-    frameWidth: 216,
-    frameHeight: 216,
-  });
-  this.load.spritesheet("PSP_HUD", "assets/hud/PSP_HUD.png", {
-    frameWidth: 216,
-    frameHeight: 216,
-  });
-  this.load.spritesheet("PMN_Bar", "assets/hud/PMN_Bar.png", {
-    frameWidth: 216,
-    frameHeight: 216,
-  });
-  this.load.spritesheet("BHP_Bar", "assets/hud/BHP_Bar.png", {
-    frameWidth: 512,
-    frameHeight: 256,
-  });
-  this.load.spritesheet("BSP_HUD", "assets/hud/BSP_HUD.png", {
-    frameWidth: 512,
-    frameHeight: 256,
-  });
-
   //Botões
   this.load.spritesheet("musicButton", "assets/hud/music_button.png", {
     frameWidth: 64,
@@ -319,15 +297,6 @@ firstLevel.create = function () {
   platforms.create(600, 150, "ground");
   platforms.create(125, 325, "ground");
   platforms.create(800, 410, "ground");
-
-  //HUD do jogo
-  php_bar = this.add.image(120, 45, "PHP_Bar", 0).setScrollFactor(0);
-  psp_hud = this.add.sprite(120, 45, "PSP_HUD", 0).setScrollFactor(0);
-  pmn_bar = this.add.image(120, 45, "PMN_Bar", 0).setScrollFactor(0);
-  bhp_bar = this.add.image(575, 565, "BHP_Bar", 0).setScrollFactor(0);
-  bhp_bar.visible = true;
-  bsp_hud = this.add.sprite(575, 565, "BSP_HUD", 0).setScrollFactor(0);
-  bsp_hud.visible = true;
 
   //Áudio do jogo
   MUSIC_TitleOpening = this.sound.add("MUSIC_TitleOpening", { loop: false });
@@ -584,66 +553,6 @@ firstLevel.update = function () {
 
   skull.setVelocityX(0);
   skull.setVelocityY(0);
-
-  //HUD CÓDIGO
-
-  if (php >= 1) {
-    psp_hud.anims.play("coreSpin", true);
-  }
-
-  if (bhp >= 1) {
-    bsp_hud.anims.play("bossCoreLoop", true);
-  }
-
-  if (php === 5) {
-    //Vitalidade do Cavaleiro e do Mago HUD
-    php_bar.setFrame(0);
-  } else if (php === 4) {
-    php_bar.setFrame(1);
-  } else if (php === 3) {
-    php_bar.setFrame(2);
-  } else if (php === 2) {
-    php_bar.setFrame(3);
-  } else if (php === 1) {
-    php_bar.setFrame(4);
-  } else if (php <= 0) {
-    psp_hud.setFrame(8);
-  }
-
-  if (pmn === 3) {
-    //Mana do Mago HUD
-    pmn_bar.setFrame(0);
-  } else if (pmn === 2) {
-    pmn_bar.setFrame(1);
-  } else if (pmn === 1) {
-    pmn_bar.setFrame(2);
-  } else if (pmn === 0) {
-    pmn_bar.setFrame(3);
-  }
-
-  if (bhp === 10) {
-    bhp_bar.setFrame(10);
-  } else if (bhp === 9) {
-    bhp_bar.setFrame(9);
-  } else if (bhp === 8) {
-    bhp_bar.setFrame(8);
-  } else if (bhp === 7) {
-    bhp_bar.setFrame(7);
-  } else if (bhp === 6) {
-    bhp_bar.setFrame(6);
-  } else if (bhp === 5) {
-    bhp_bar.setFrame(5);
-  } else if (bhp === 4) {
-    bhp_bar.setFrame(4);
-  } else if (bhp === 3) {
-    bhp_bar.setFrame(3);
-  } else if (bhp === 2) {
-    bhp_bar.setFrame(2);
-  } else if (bhp === 1) {
-    bhp_bar.setFrame(1);
-  } else if (bhp <= 0) {
-    bsp_hud.setFrame(12);
-  }
 
   //SALTO
   if (keyW.isDown && dodging == false && parrying == false) {
