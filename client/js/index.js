@@ -4,6 +4,7 @@ import { mainMenu } from "./mainMenu.js";
 import { firstLevel } from "./firstLevel.js";
 import { gameOver } from "./gameOver.js";
 import { endingScene } from "./endingScene.js";
+import { mainGame } from "./mainGame.js";
 
 var config = {
   type: Phaser.AUTO,
@@ -13,7 +14,7 @@ var config = {
     default: "arcade",
     arcade: {
       gravity: { y: 1000 },
-      debug: false,
+      debug: true,
     },
   },
   scale: {
@@ -24,7 +25,7 @@ var config = {
     height: 600,
   },
 
-  scene: [firstLevel]
+  scene: [mainGame]
 };
 
 //pressStart;
