@@ -150,6 +150,27 @@ mainGame.preload = function () {
       frameHeight: 150,
     }
   );
+
+  this.load.spritesheet(
+    "MK-runRight",
+    "assets/spritesheets/mageknight/MK-runRight.png",
+    {
+      frameWidth: 150,
+      frameHeight: 150,
+    }
+  );
+
+  this.load.spritesheet(
+    "MK-runLeft",
+    "assets/spritesheets/mageknight/MK-runLeft.png",
+    {
+      frameWidth: 150,
+      frameHeight: 150,
+    }
+  );
+
+  cursors = this.input.keyboard.createCursorKeys();
+
 };
 
 //CREATE
@@ -314,6 +335,26 @@ mainGame.create = function () {
     repeat: -1,
   });
 
+  this.anims.create({
+    key: "MK-runRight",
+    frames: this.anims.generateFrameNumbers("MK-runRight", {
+      start: 0,
+      end: 5,
+    }),
+    frameRate: 13,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "MK-runLeft",
+    frames: this.anims.generateFrameNumbers("MK-runLeft", {
+      start: 0,
+      end: 5,
+    }),
+    frameRate: 13,
+    repeat: -1,
+  });
+
 };
 
 //UPDATE
@@ -342,35 +383,43 @@ mainGame.update = function () {
 
   if (player.body.touching.down) {
     //SE ESTÁ NO CHÃO
+    if (cursors.shift.isDown) {
+      is_running = true;
+    }
+    else {
+      is_running = false;
+    };
 
     //ANDAR E CORRER INÍCIO
-
     if (keyD.isDown) {
       player.setSize(90, 110, true);
       player.setOffset(25, 26, true);
+      last_direction = "R";
 
       if (is_running === false) {
         player.setVelocityX(115);
         player.anims.play("MK-walkRight", true);
-        last_direction = "R";
       } else {
-        player.setVelocityX(300);
+        player.setVelocityX(350);
+        player.anims.play("MK-runRight", true);
       }
+
     } else if (keyA.isDown) {
       player.setSize(90, 110, true);
       player.setOffset(38, 26, true);
+      last_direction = "L";
 
       if (is_running === false) {
         player.setVelocityX(-115);
         player.anims.play("MK-walkLeft", true);
-        last_direction = "L";
       } else {
-        player.setVelocityX(-300);
+        player.setVelocityX(-350);
+        player.anims.play("MK-runLeft", true);
       }
     } else {
       player.setVelocityX(0);
     }
-
+  
     //ANDAR E CORRER FIM
 
     //PARADO INÍCIO

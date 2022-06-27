@@ -17,23 +17,48 @@ var jogadores = {
 };
 
 io.on("connection", (socket) => {
-  if (jogadores.primeiro === undefined) {
-    jogadores.primeiro = socket.id;
-  } else if (jogadores.segundo === undefined) {
-    jogadores.segundo = socket.id;
-  }
-  io.emit("jogadores", jogadores);
-  console.log("+Lista de jogadores: %s", jogadores);
+  // Aguardar pelo jogador enviar o nome da sala
+  socket.on("entrar-na-sala", (sala) => {
+    socket.join(sala);
+    var jogadores = {};
+    if (io.sockets.adapter.rooms.get(sala).size === 1) { // 1 jogador
+      jogadores = {
+        primeiro: socket.id,
+        segundo: undefined,
+      };
+    } else if (io.sockets.adapter.rooms.get(sala).size === 2) { // 2 jogadores
+      let [primeiro] = io.sockets.adapter.rooms.get(sala);
+      jogadores = {
+        primeiro: primeiro,
+        segundo: socket.id,
+      };
+    }
+    console.log("Sala %s: %s", sala, jogadores);
+    // Envia a todos a lista atual de jogadores (mesmo incompleta)
+    io.to(sala).emit("jogadores", jogadores);
+  });
 
-  socket.on("disconnect", () => {
-    if (jogadores.primeiro === socket.id) {
-      jogadores.primeiro = undefined;
-    }
-    if (jogadores.segundo === socket.id) {
-      jogadores.segundo = undefined;
-    }
-    io.emit("jogadores", jogadores);
-    console.log("-Lista de jogadores: %s", jogadores);
+  // Sinalização de áudio: oferta
+  socket.on("offer", (sala, description) => {
+    socket.broadcast.to(sala).emit("offer", socket.id, description);
+  });
+
+  // Sinalização de áudio: atendimento da oferta
+  socket.on("answer", (sala, description) => {
+    socket.broadcast.to(sala).emit("answer", description);
+  });
+
+  // Sinalização de áudio: envio dos candidatos de caminho
+  socket.on("candidate", (sala, signal) => {
+    socket.broadcast.to(sala).emit("candidate", signal);
+  });
+
+  // Disparar evento quando jogador sair da partida
+  socket.on("disconnect", () => { });
+
+  // Envio do estado do outro jogador
+  socket.on("estadoDoJogador", (sala, estado) => {
+    socket.broadcast.to(sala).emit("desenharOutroJogador", estado);
   });
 });
 
