@@ -84,7 +84,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-idleRight.png",
     {
       frameWidth: 150,
-      frameHeight: 150
+      frameHeight: 164
     }
   );
 
@@ -93,7 +93,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-idleLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 164,
     }
   );
 
@@ -102,7 +102,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-walkRight.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 164,
     }
   );
 
@@ -111,7 +111,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-walkLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 164,
     }
   );
 
@@ -120,7 +120,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-riseRight.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 164,
     }
   );
   
@@ -129,7 +129,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-riseLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 164,
     }
   );
 
@@ -138,7 +138,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-fallRight.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 164,
     }
   );
   
@@ -147,7 +147,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-fallLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 164,
     }
   );
 
@@ -156,7 +156,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-runRight.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 163,
     }
   );
 
@@ -165,7 +165,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-runLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 150,
+      frameHeight: 163,
     }
   );
 
@@ -222,7 +222,7 @@ mainGame.create = function () {
   // The player and its settings
   player = this.physics.add.sprite(100, 450, "MK-idleRight").setScale(0.65);
   player.setSize(90, 110, true);
-  player.setOffset(25, 26, true);
+  player.setOffset(30, 40, true);
 
   //Player physics properties.
   player.setCollideWorldBounds(false);
@@ -281,7 +281,7 @@ mainGame.create = function () {
       start: 0,
       end: 5,
     }),
-    frameRate: 8,
+    frameRate: 11,
     repeat: -1,
   });
 
@@ -291,7 +291,7 @@ mainGame.create = function () {
       start: 0,
       end: 5,
     }),
-    frameRate: 8,
+    frameRate: 11,
     repeat: -1,
   });
 
@@ -341,7 +341,7 @@ mainGame.create = function () {
       start: 0,
       end: 5,
     }),
-    frameRate: 13,
+    frameRate: 16,
     repeat: -1,
   });
 
@@ -351,7 +351,7 @@ mainGame.create = function () {
       start: 0,
       end: 5,
     }),
-    frameRate: 13,
+    frameRate: 16,
     repeat: -1,
   });
 
@@ -392,32 +392,41 @@ mainGame.update = function () {
 
     //ANDAR E CORRER INÍCIO
     if (keyD.isDown) {
-      player.setSize(90, 110, true);
-      player.setOffset(25, 26, true);
+
       last_direction = "R";
 
       if (is_running === false) {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.setVelocityX(115);
         player.anims.play("MK-walkRight", true);
       } else {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.setVelocityX(350);
         player.anims.play("MK-runRight", true);
       }
 
     } else if (keyA.isDown) {
-      player.setSize(90, 110, true);
-      player.setOffset(38, 26, true);
+
       last_direction = "L";
 
       if (is_running === false) {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.setVelocityX(-115);
         player.anims.play("MK-walkLeft", true);
       } else {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.setVelocityX(-350);
         player.anims.play("MK-runLeft", true);
       }
     } else {
       player.setVelocityX(0);
+      player.setSize(90, 110, true);
+      player.setOffset(30, 40, true);
+      
     }
   
     //ANDAR E CORRER FIM
