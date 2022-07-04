@@ -3,7 +3,7 @@ var mainGame = new Phaser.Scene("Main Game");
 //Declaração de objetos
 var player;
 var platforms;
-var skull;
+var babayaga; //BICHO PAPÃO!!
 var fullScreen_button;
 
 var playerX;
@@ -37,7 +37,10 @@ var jumpTune = 0; //
 var last_direction = "R"; //Verifica qual a última direção que o jogador se moveu
 var is_running = false;
 //Declarando teclas do jogo
-let keyP;
+
+var babayaga;
+var justHit; //Se o jogador acabou de acertar o bicho
+var justHitCooldown; //Cooldown para poder acertar de novo
 
 //Cavaleiro
 let keyA;
@@ -46,6 +49,7 @@ let keyD;
 let keyW;
 let keyJ;
 let keyK;
+var keyP;
 
 //Ações Mago
 let keyNum0;
@@ -169,6 +173,16 @@ mainGame.preload = function () {
     }
   );
 
+  //Inimigo
+  this.load.spritesheet(
+    "bichopapao",
+    "assets/spritesheets/bichopapao.png",
+    {
+      frameWidth: 150,
+      frameHeight: 150
+    }
+  );
+
   cursors = this.input.keyboard.createCursorKeys();
 
 };
@@ -230,6 +244,7 @@ mainGame.create = function () {
 
   //Now let's create some ledges
   platforms.create(1500, 500, "ground").setScale(5).refreshBody();
+;
 
   this.cameras.main.startFollow(player);
 
@@ -252,6 +267,19 @@ mainGame.create = function () {
     },
     this
   );
+  
+  //Inimigo!
+  babayaga = this.physics.add.sprite(600, 75, "bichopapao");
+  babayaga.setCollideWorldBounds(true);
+  babayaga.setSize(130, 130, true);
+  this.physics.add.collider(babayaga, platforms)
+
+  this.physics.add.overlap(babayaga, player, function (babayaga, player) {
+    if (justHit === false) {
+      babayaga.destroy();
+      justHit = true;
+    }
+  });
 
   //ANIMAÇÕES MAGEKNIGHT
 
@@ -350,6 +378,16 @@ mainGame.create = function () {
     frames: this.anims.generateFrameNumbers("MK-runLeft", {
       start: 0,
       end: 5,
+    }),
+    frameRate: 16,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "bichopapao",
+    frames: this.anims.generateFrameNumbers("bichopapao", {
+      start: 0,
+      end: 4,
     }),
     frameRate: 16,
     repeat: -1,
@@ -477,6 +515,8 @@ mainGame.update = function () {
       }
     }
   }
+
+  babayaga.anims.play("bichopapao", true);
 };
 
   export { mainGame };
