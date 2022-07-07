@@ -30,12 +30,16 @@ var SFX_SpellCast;
 var SFX_Step;
 
 var airSpeed = 0; //Aceleração no ar
-
+ 
 var jumpTimer = 0; //Tempo no ar
 var jumpTune = 0; //
 
 var last_direction = "R"; //Verifica qual a última direção que o jogador se moveu
-var is_running = false;
+var MK_isRunning = false;
+var MK_isAttacking = false;
+var MK_justAttacked = false;
+var MK_attackCooldown = 0;
+
 //Declarando teclas do jogo
 
 var babayaga;
@@ -173,6 +177,24 @@ mainGame.preload = function () {
     }
   );
 
+  this.load.spritesheet(
+    "MK-sideatkRight",
+    "assets/spritesheets/mageknight/MK-sideatkRight.png",
+    {
+      frameWidth: 500,
+      frameHeight: 164,
+    }
+  );
+
+  this.load.spritesheet(
+    "MK-sideatkLeft",
+    "assets/spritesheets/mageknight/MK-sideatkLeft.png",
+    {
+      frameWidth: 500,
+      frameHeight: 164,
+    }
+  );
+
   //Inimigo
   this.load.spritesheet(
     "bichopapao",
@@ -233,6 +255,15 @@ mainGame.create = function () {
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
   platforms.create(400, 568, "ground").setScale(2).refreshBody();
 
+  //Now let's create some ledges
+  platforms.create(1500, 500, "ground").setScale(5).refreshBody();
+
+  //Inimigo!
+  babayaga = this.physics.add.sprite(600, 75, "bichopapao");
+  babayaga.setCollideWorldBounds(true);
+  babayaga.setSize(130, 130, true);
+  this.physics.add.collider(babayaga, platforms)
+
   // The player and its settings
   player = this.physics.add.sprite(100, 450, "MK-idleRight").setScale(0.65);
   player.setSize(90, 110, true);
@@ -241,10 +272,6 @@ mainGame.create = function () {
   //Player physics properties.
   player.setCollideWorldBounds(false);
   this.physics.add.collider(player, platforms);
-
-  //Now let's create some ledges
-  platforms.create(1500, 500, "ground").setScale(5).refreshBody();
-;
 
   this.cameras.main.startFollow(player);
 
@@ -267,12 +294,6 @@ mainGame.create = function () {
     },
     this
   );
-  
-  //Inimigo!
-  babayaga = this.physics.add.sprite(600, 75, "bichopapao");
-  babayaga.setCollideWorldBounds(true);
-  babayaga.setSize(130, 130, true);
-  this.physics.add.collider(babayaga, platforms)
 
   this.physics.add.overlap(babayaga, player, function (babayaga, player) {
     if (justHit === false) {
@@ -384,6 +405,26 @@ mainGame.create = function () {
   });
 
   this.anims.create({
+    key: "MK-sideatkRight",
+    frames: this.anims.generateFrameNumbers("MK-sideatkRight", {
+      start: 0,
+      end: 2,
+    }),
+    frameRate: 12,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "MK-sideatkLeft",
+    frames: this.anims.generateFrameNumbers("MK-sideatkLeft", {
+      start: 0,
+      end: 2,
+    }),
+    frameRate: 12,
+    repeat: -1,
+  });
+
+  this.anims.create({
     key: "bichopapao",
     frames: this.anims.generateFrameNumbers("bichopapao", {
       start: 0,
@@ -422,18 +463,32 @@ mainGame.update = function () {
   if (player.body.touching.down) {
     //SE ESTÁ NO CHÃO
     if (cursors.shift.isDown) {
-      is_running = true;
+      MK_isRunning = true;
     }
     else {
-      is_running = false;
+      MK_isRunning = false;
     };
 
+    //Ataque lateral no chão
+    if (keyJ.isDown) {
+      MK_isAttacking = true
+      if (last_direction === "R") {
+        player.setSize(250, 110, true);
+        player.setOffset(200, 40, true);
+        player.anims.play("MK-sideatkRight", true)
+      }
+      else if (last_direction === "L") {
+        player.setSize(250, 110, true);
+        player.setOffset(50, 40, true);
+        player.anims.play("MK-sideatkLeft", true)
+      }
+    }
     //ANDAR E CORRER INÍCIO
     if (keyD.isDown) {
 
       last_direction = "R";
 
-      if (is_running === false) {
+      if (MK_isRunning === false) {
         player.setSize(90, 110, true);
         player.setOffset(30, 40, true);
         player.setVelocityX(115);
@@ -449,7 +504,7 @@ mainGame.update = function () {
 
       last_direction = "L";
 
-      if (is_running === false) {
+      if (MK_isRunning === false) {
         player.setSize(90, 110, true);
         player.setOffset(30, 40, true);
         player.setVelocityX(-115);
@@ -462,20 +517,21 @@ mainGame.update = function () {
       }
     } else {
       player.setVelocityX(0);
-      player.setSize(90, 110, true);
-      player.setOffset(30, 40, true);
-      
     }
   
     //ANDAR E CORRER FIM
 
     //PARADO INÍCIO
-    if (player.body.velocity.x === 0) {
+    if (player.body.velocity.x === 0 && MK_isAttacking === false) {
       if (last_direction === "R") {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.anims.play("MK-idleRight", true);
       }
 
       if (last_direction === "L") {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.anims.play("MK-idleLeft", true);
       }
     }
@@ -486,14 +542,22 @@ mainGame.update = function () {
 
     if (last_direction === "R") {
       if (player.body.velocity.y < 0) {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.anims.play("MK-riseRight", true);
       } else if (player.body.velocity.y > 0) {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.anims.play("MK-fallRight", true);
       }
     } else if (last_direction === "L") {
       if (player.body.velocity.y < 0) {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.anims.play("MK-riseLeft", true);
       } else if (player.body.velocity.y > 0) {
+        player.setSize(90, 110, true);
+        player.setOffset(30, 40, true);
         player.anims.play("MK-fallLeft", true);
       }
     }
