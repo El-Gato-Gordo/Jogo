@@ -178,20 +178,20 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
-    "MK-sideatkRight",
-    "assets/spritesheets/mageknight/MK-sideatkRight.png",
+    "MK-GsideatkRight",
+    "assets/spritesheets/mageknight/MK-GsideatkRight.png",
     {
-      frameWidth: 500,
-      frameHeight: 164,
+      frameWidth: 308,
+      frameHeight: 163,
     }
   );
 
   this.load.spritesheet(
-    "MK-sideatkLeft",
-    "assets/spritesheets/mageknight/MK-sideatkLeft.png",
+    "MK-GsideatkLeft",
+    "assets/spritesheets/mageknight/MK-GsideatkLeft.png",
     {
-      frameWidth: 500,
-      frameHeight: 164,
+      frameWidth: 308,
+      frameHeight: 163,
     }
   );
 
@@ -405,20 +405,20 @@ mainGame.create = function () {
   });
 
   this.anims.create({
-    key: "MK-sideatkRight",
-    frames: this.anims.generateFrameNumbers("MK-sideatkRight", {
+    key: "MK-GsideatkRight",
+    frames: this.anims.generateFrameNumbers("MK-GsideatkRight", {
       start: 0,
-      end: 2,
+      end: 3,
     }),
     frameRate: 12,
     repeat: -1,
   });
 
   this.anims.create({
-    key: "MK-sideatkLeft",
-    frames: this.anims.generateFrameNumbers("MK-sideatkLeft", {
+    key: "MK-GsideatkLeft",
+    frames: this.anims.generateFrameNumbers("MK-GsideatkLeft", {
       start: 0,
-      end: 2,
+      end: 3,
     }),
     frameRate: 12,
     repeat: -1,
@@ -473,14 +473,14 @@ mainGame.update = function () {
     if (keyJ.isDown) {
       MK_isAttacking = true
       if (last_direction === "R") {
-        player.setSize(250, 110, true);
-        player.setOffset(200, 40, true);
-        player.anims.play("MK-sideatkRight", true)
+        //player.setSize(250, 110, true);
+        //player.setOffset(200, 40, true);
+        player.anims.play("MK-GsideatkRight", true)
       }
       else if (last_direction === "L") {
-        player.setSize(250, 110, true);
-        player.setOffset(50, 40, true);
-        player.anims.play("MK-sideatkLeft", true)
+        //player.setSize(250, 110, true);
+        //player.setOffset(50, 40, true);
+        player.anims.play("MK-GsideatkLeft", true)
       }
     }
     //ANDAR E CORRER INÍCIO
