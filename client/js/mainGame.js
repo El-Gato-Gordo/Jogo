@@ -92,7 +92,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-idleRight.png",
     {
       frameWidth: 150,
-      frameHeight: 164
+      frameHeight: 250,
     }
   );
 
@@ -101,7 +101,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-idleLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 164,
+      frameHeight: 250,
     }
   );
 
@@ -110,7 +110,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-walkRight.png",
     {
       frameWidth: 150,
-      frameHeight: 164,
+      frameHeight: 250,
     }
   );
 
@@ -119,7 +119,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-walkLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 164,
+      frameHeight: 250,
     }
   );
 
@@ -128,7 +128,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-riseRight.png",
     {
       frameWidth: 150,
-      frameHeight: 164,
+      frameHeight: 250,
     }
   );
   
@@ -137,7 +137,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-riseLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 164,
+      frameHeight: 250,
     }
   );
 
@@ -146,7 +146,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-fallRight.png",
     {
       frameWidth: 150,
-      frameHeight: 164,
+      frameHeight: 250,
     }
   );
   
@@ -155,7 +155,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-fallLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 164,
+      frameHeight: 250,
     }
   );
 
@@ -164,7 +164,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-runRight.png",
     {
       frameWidth: 150,
-      frameHeight: 163,
+      frameHeight: 250,
     }
   );
 
@@ -173,7 +173,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-runLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 163,
+      frameHeight: 250,
     }
   );
 
@@ -182,7 +182,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-GsideatkRight.png",
     {
       frameWidth: 308,
-      frameHeight: 163,
+      frameHeight: 250,
     }
   );
 
@@ -191,7 +191,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-GsideatkLeft.png",
     {
       frameWidth: 308,
-      frameHeight: 163,
+      frameHeight: 250,
     }
   );
 
@@ -473,13 +473,13 @@ mainGame.update = function () {
     if (keyJ.isDown) {
       MK_isAttacking = true
       if (last_direction === "R") {
-        //player.setSize(250, 110, true);
-        //player.setOffset(200, 40, true);
+        player.setSize(150, 110, true);
+        player.setOffset(150, 40, true);
         player.anims.play("MK-GsideatkRight", true)
       }
       else if (last_direction === "L") {
-        //player.setSize(250, 110, true);
-        //player.setOffset(50, 40, true);
+        player.setSize(150, 110, true);
+        player.setOffset(8, 40, true);
         player.anims.play("MK-GsideatkLeft", true)
       }
     }
