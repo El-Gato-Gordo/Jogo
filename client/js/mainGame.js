@@ -30,7 +30,7 @@ var SFX_SpellCast;
 var SFX_Step;
 
 var airSpeed = 0; //Aceleração no ar
- 
+
 var jumpTimer = 0; //Tempo no ar
 var jumpTune = 0; //
 
@@ -92,7 +92,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-idleRight.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 164
     }
   );
 
@@ -101,7 +101,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-idleLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 164,
     }
   );
 
@@ -110,7 +110,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-walkRight.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 164,
     }
   );
 
@@ -119,7 +119,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-walkLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 164,
     }
   );
 
@@ -128,16 +128,16 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-riseRight.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 164,
     }
   );
-  
+
   this.load.spritesheet(
     "MK-riseLeft",
     "assets/spritesheets/mageknight/MK-riseLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 164,
     }
   );
 
@@ -146,16 +146,16 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-fallRight.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 164,
     }
   );
-  
+
   this.load.spritesheet(
     "MK-fallLeft",
     "assets/spritesheets/mageknight/MK-fallLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 164,
     }
   );
 
@@ -164,7 +164,7 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-runRight.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 163,
     }
   );
 
@@ -173,25 +173,25 @@ mainGame.preload = function () {
     "assets/spritesheets/mageknight/MK-runLeft.png",
     {
       frameWidth: 150,
-      frameHeight: 250,
+      frameHeight: 163,
     }
   );
 
   this.load.spritesheet(
-    "MK-GsideatkRight",
-    "assets/spritesheets/mageknight/MK-GsideatkRight.png",
+    "MK-sideatkRight",
+    "assets/spritesheets/mageknight/MK-sideatkRight.png",
     {
-      frameWidth: 308,
-      frameHeight: 250,
+      frameWidth: 500,
+      frameHeight: 164,
     }
   );
 
   this.load.spritesheet(
-    "MK-GsideatkLeft",
-    "assets/spritesheets/mageknight/MK-GsideatkLeft.png",
+    "MK-sideatkLeft",
+    "assets/spritesheets/mageknight/MK-sideatkLeft.png",
     {
-      frameWidth: 308,
-      frameHeight: 250,
+      frameWidth: 500,
+      frameHeight: 164,
     }
   );
 
@@ -405,20 +405,20 @@ mainGame.create = function () {
   });
 
   this.anims.create({
-    key: "MK-GsideatkRight",
-    frames: this.anims.generateFrameNumbers("MK-GsideatkRight", {
+    key: "MK-sideatkRight",
+    frames: this.anims.generateFrameNumbers("MK-sideatkRight", {
       start: 0,
-      end: 3,
+      end: 2,
     }),
     frameRate: 12,
     repeat: -1,
   });
 
   this.anims.create({
-    key: "MK-GsideatkLeft",
-    frames: this.anims.generateFrameNumbers("MK-GsideatkLeft", {
+    key: "MK-sideatkLeft",
+    frames: this.anims.generateFrameNumbers("MK-sideatkLeft", {
       start: 0,
-      end: 3,
+      end: 2,
     }),
     frameRate: 12,
     repeat: -1,
@@ -438,7 +438,7 @@ mainGame.create = function () {
 
 //UPDATE
 mainGame.update = function () {
-  
+
   //PULAR INÍCIO
 
   if (keyW.isDown) {
@@ -473,14 +473,14 @@ mainGame.update = function () {
     if (keyJ.isDown) {
       MK_isAttacking = true
       if (last_direction === "R") {
-        player.setSize(150, 110, true);
-        player.setOffset(150, 40, true);
-        player.anims.play("MK-GsideatkRight", true)
+        player.setSize(250, 110, true);
+        player.setOffset(200, 40, true);
+        player.anims.play("MK-sideatkRight", true)
       }
       else if (last_direction === "L") {
-        player.setSize(150, 110, true);
-        player.setOffset(8, 40, true);
-        player.anims.play("MK-GsideatkLeft", true)
+        player.setSize(250, 110, true);
+        player.setOffset(50, 40, true);
+        player.anims.play("MK-sideatkLeft", true)
       }
     }
     //ANDAR E CORRER INÍCIO
@@ -518,7 +518,7 @@ mainGame.update = function () {
     } else {
       player.setVelocityX(0);
     }
-  
+
     //ANDAR E CORRER FIM
 
     //PARADO INÍCIO
@@ -565,9 +565,9 @@ mainGame.update = function () {
     if (keyD.isDown && player.body.velocity.x <= 200) {
       airSpeed = player.body.velocity.x + 5;
       player.setVelocityX(airSpeed);
-       if (player.body.velocity.x > 0) {
-         last_direction = "R";
-       }
+      if (player.body.velocity.x > 0) {
+        last_direction = "R";
+      }
     }
 
     //Define a aceleração do jogador no ar, para que não se movimente livremente fora do chão [ESQUERDA]
@@ -583,4 +583,4 @@ mainGame.update = function () {
   babayaga.anims.play("bichopapao", true);
 };
 
-  export { mainGame };
+export { mainGame };
