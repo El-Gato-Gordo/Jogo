@@ -36,15 +36,33 @@ var jumpTune = 0; //
 
 var last_direction = "R"; //Verifica qual a última direção que o jogador se moveu
 var MK_isRunning = false;
+
 var MK_isAttacking = false;
-var MK_justAttacked = false;
+var MK_attackDuration = 0;
+var MK_canAttack = true;
 var MK_attackCooldown = 0;
 
-//Declarando teclas do jogo
+var MK_isEvading = false;
+var MK_evadeDuration = 0;
+var MK_justEvaded = false;
+var MK_evadeCooldown = 0;
+
+var MK_isCasting = false;
+var MK_justCasted = false;
+var MK_castCooldown = 0;
+
+var MK_isParrying = false;
+var MK_parryDuration = 0;
+var MK_justParried = false;
+var MK_parryCooldown = 0;
+
 
 var babayaga;
-var justHit; //Se o jogador acabou de acertar o bicho
-var justHitCooldown; //Cooldown para poder acertar de novo
+var EYE_justHit; //Se o jogador acabou de acertar o bicho
+var EYE_hitCooldown; //Cooldown para poder acertar de novo
+var EYE_healthPower = 100;
+
+//Declarando teclas do jogo
 
 //Cavaleiro
 let keyA;
@@ -195,6 +213,23 @@ mainGame.preload = function () {
     }
   );
 
+  this.load.spritesheet(
+    "MK-AsideatkRight",
+    "assets/spritesheets/mageknight/MK-AsideatkRight.png",
+    {
+      frameWidth: 616,
+      frameHeight: 500,
+    }
+  );
+
+  this.load.spritesheet(
+    "MK-AsideatkLeft",
+    "assets/spritesheets/mageknight/MK-AsideatkLeft.png",
+    {
+      frameWidth: 616,
+      frameHeight: 500,
+    }
+  );
   //Inimigo
   this.load.spritesheet(
     "bichopapao",
@@ -296,10 +331,13 @@ mainGame.create = function () {
   );
 
   this.physics.add.overlap(babayaga, player, function (babayaga, player) {
-    if (justHit === false) {
-      babayaga.destroy();
-      justHit = true;
+    if (MK_isAttacking === true && EYE_justHit === false) {
+      EYE_healthPower = EYE_healthPower - 1;
+      babayaga.tint = 0xff0000
+      EYE_justHit = true;
+      EYE_hitCooldown = 15;
     }
+
   });
 
   //ANIMAÇÕES MAGEKNIGHT
@@ -405,22 +443,42 @@ mainGame.create = function () {
   });
 
   this.anims.create({
-    key: "MK-sideatkRight",
-    frames: this.anims.generateFrameNumbers("MK-sideatkRight", {
+    key: "MK-GsideatkRight",
+    frames: this.anims.generateFrameNumbers("MK-GsideatkRight", {
       start: 0,
-      end: 2,
+      end: 3,
     }),
-    frameRate: 12,
+    frameRate: 18,
     repeat: -1,
   });
 
   this.anims.create({
-    key: "MK-sideatkLeft",
-    frames: this.anims.generateFrameNumbers("MK-sideatkLeft", {
+    key: "MK-GsideatkLeft",
+    frames: this.anims.generateFrameNumbers("MK-GsideatkLeft", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 18,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "MK-AsideatkRight",
+    frames: this.anims.generateFrameNumbers("MK-AsideatkRight", {
       start: 0,
       end: 2,
     }),
-    frameRate: 12,
+    frameRate: 15,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "MK-AsideatkLeft",
+    frames: this.anims.generateFrameNumbers("MK-AsideatkLeft", {
+      start: 0,
+      end: 2,
+    }),
+    frameRate: 15,
     repeat: -1,
   });
 
@@ -460,6 +518,32 @@ mainGame.update = function () {
 
   //PULAR FIM
 
+  if (EYE_healthPower <= 96) {
+    babayaga.setVelocityY(-500);
+  }
+  //Ataques Laterais
+  if (keyJ.isDown && MK_isEvading === false && MK_isAttacking === false && MK_canAttack === true) {
+    MK_isAttacking = true
+  }
+
+  if (MK_isAttacking === false && MK_canAttack === false) {
+    MK_attackCooldown = MK_attackCooldown - 1
+    if (MK_attackCooldown <= 0) {
+      MK_canAttack = true;
+      MK_attackDuration = 0;
+    }
+  }
+
+  if (EYE_justHit === true) {
+    EYE_hitCooldown = EYE_hitCooldown - 1
+    if (EYE_hitCooldown <= 8) {
+      babayaga.tint = 0xffffff
+    }
+    if (EYE_hitCooldown <= 0) {
+      EYE_justHit = false;
+    }
+  }
+  
   if (player.body.touching.down) {
     //SE ESTÁ NO CHÃO
     if (cursors.shift.isDown) {
@@ -469,49 +553,54 @@ mainGame.update = function () {
       MK_isRunning = false;
     };
 
-    //Ataque lateral no chão
-    if (keyJ.isDown) {
-      MK_isAttacking = true
+    if (MK_isAttacking === true) {
       if (last_direction === "R") {
-        //player.setSize(500, 110, true);
-        //player.setOffset(200, 40, true);
-        player.anims.play("MK-sideatkRight", true)
-      }
+        player.setSize(400, 250, true);
+        player.setOffset(207, 250, false);
+        player.anims.play("MK-GsideatkRight", true)
+      } 
       else if (last_direction === "L") {
-        //player.setSize(500, 110, true);
-        //player.setOffset(50, 40, true);
-        player.anims.play("MK-sideatkLeft", true)
+        player.setSize(400, 250, true);
+        player.setOffset(9, 250, false);
+        player.anims.play("MK-GsideatkLeft", true)
+      }
+      MK_attackDuration = MK_attackDuration + 1;
+      if (MK_attackDuration >= 18) {
+        MK_isAttacking = false;
+        MK_canAttack = false;
+        MK_attackCooldown = 10;
       }
     }
+
     //ANDAR E CORRER INÍCIO
-    if (keyD.isDown) {
+    if (keyD.isDown && MK_isAttacking === false && MK_isEvading === false) {
 
       last_direction = "R";
 
       if (MK_isRunning === false) {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.setVelocityX(115);
         player.anims.play("MK-walkRight", true);
       } else {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.setVelocityX(350);
         player.anims.play("MK-runRight", true);
       }
 
-    } else if (keyA.isDown) {
+    } else if (keyA.isDown && MK_isAttacking === false && MK_isEvading === false) {
 
       last_direction = "L";
 
       if (MK_isRunning === false) {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.setVelocityX(-115);
         player.anims.play("MK-walkLeft", true);
       } else {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.setVelocityX(-350);
         player.anims.play("MK-runLeft", true);
       }
@@ -524,14 +613,14 @@ mainGame.update = function () {
     //PARADO INÍCIO
     if (player.body.velocity.x === 0 && MK_isAttacking === false) {
       if (last_direction === "R") {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.anims.play("MK-idleRight", true);
       }
 
       if (last_direction === "L") {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.anims.play("MK-idleLeft", true);
       }
     }
@@ -540,24 +629,43 @@ mainGame.update = function () {
   } else {
     //SE ESTÁ NO AR
 
-    if (last_direction === "R") {
+    if (MK_isAttacking === true) {
+      if (last_direction === "R") {
+        player.setSize(400, 450, true);
+        player.setOffset(207, 50, false);
+        player.anims.play("MK-AsideatkRight", true)
+      }
+      else if (last_direction === "L") {
+        player.setSize(400, 450, true);
+        player.setOffset(9, 50, false);
+        player.anims.play("MK-AsideatkLeft", true)
+      }
+      MK_attackDuration = MK_attackDuration + 1;
+      if (MK_attackDuration >= 16) {
+        MK_isAttacking = false;
+        MK_canAttack = false;
+        MK_attackCooldown = 10;
+      }
+    }
+
+    if (last_direction === "R" && MK_isAttacking === false && MK_isEvading === false) {
       if (player.body.velocity.y < 0) {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.anims.play("MK-riseRight", true);
       } else if (player.body.velocity.y > 0) {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.anims.play("MK-fallRight", true);
       }
-    } else if (last_direction === "L") {
+    } else if (last_direction === "L" && MK_isAttacking === false && MK_isEvading === false) {
       if (player.body.velocity.y < 0) {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.anims.play("MK-riseLeft", true);
       } else if (player.body.velocity.y > 0) {
-        //player.setSize(90, 110, true);
-        //player.setOffset(30, 40, true);
+        player.setSize(200, 250, true);
+        player.setOffset(207, 250, false);
         player.anims.play("MK-fallLeft", true);
       }
     }
