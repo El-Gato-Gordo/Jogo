@@ -81,7 +81,7 @@ mainGame.preload = function () {
     "assets/hud/fullScreen_button.png",
     {
       frameWidth: 128,
-      frameHeight: 128
+      frameHeight: 128,
     }
   );
 
@@ -91,8 +91,8 @@ mainGame.preload = function () {
     "MK-idleRight",
     "assets/spritesheets/mageknight/MK-idleRight.png",
     {
-      frameWidth: 150,
-      frameHeight: 164
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -100,8 +100,8 @@ mainGame.preload = function () {
     "MK-idleLeft",
     "assets/spritesheets/mageknight/MK-idleLeft.png",
     {
-      frameWidth: 150,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -109,8 +109,8 @@ mainGame.preload = function () {
     "MK-walkRight",
     "assets/spritesheets/mageknight/MK-walkRight.png",
     {
-      frameWidth: 150,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -118,8 +118,8 @@ mainGame.preload = function () {
     "MK-walkLeft",
     "assets/spritesheets/mageknight/MK-walkLeft.png",
     {
-      frameWidth: 150,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -127,8 +127,8 @@ mainGame.preload = function () {
     "MK-riseRight",
     "assets/spritesheets/mageknight/MK-riseRight.png",
     {
-      frameWidth: 150,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -136,8 +136,8 @@ mainGame.preload = function () {
     "MK-riseLeft",
     "assets/spritesheets/mageknight/MK-riseLeft.png",
     {
-      frameWidth: 150,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -145,8 +145,8 @@ mainGame.preload = function () {
     "MK-fallRight",
     "assets/spritesheets/mageknight/MK-fallRight.png",
     {
-      frameWidth: 150,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -154,8 +154,8 @@ mainGame.preload = function () {
     "MK-fallLeft",
     "assets/spritesheets/mageknight/MK-fallLeft.png",
     {
-      frameWidth: 150,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -163,8 +163,8 @@ mainGame.preload = function () {
     "MK-runRight",
     "assets/spritesheets/mageknight/MK-runRight.png",
     {
-      frameWidth: 150,
-      frameHeight: 163,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -172,26 +172,26 @@ mainGame.preload = function () {
     "MK-runLeft",
     "assets/spritesheets/mageknight/MK-runLeft.png",
     {
-      frameWidth: 150,
-      frameHeight: 163,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
   this.load.spritesheet(
-    "MK-sideatkRight",
-    "assets/spritesheets/mageknight/MK-sideatkRight.png",
+    "MK-GsideatkRight",
+    "assets/spritesheets/mageknight/MK-GsideatkRight.png",
     {
-      frameWidth: 500,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
   this.load.spritesheet(
-    "MK-sideatkLeft",
-    "assets/spritesheets/mageknight/MK-sideatkLeft.png",
+    "MK-GsideatkLeft",
+    "assets/spritesheets/mageknight/MK-GsideatkLeft.png",
     {
-      frameWidth: 500,
-      frameHeight: 164,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -265,9 +265,9 @@ mainGame.create = function () {
   this.physics.add.collider(babayaga, platforms)
 
   // The player and its settings
-  player = this.physics.add.sprite(100, 450, "MK-idleRight").setScale(0.65);
-  player.setSize(90, 110, true);
-  player.setOffset(30, 40, true);
+  player = this.physics.add.sprite(100, 400, "MK-idleRight").setScale(0.40);
+  player.setSize(200, 250, true);
+  player.setOffset(207, 250, false);
 
   //Player physics properties.
   player.setCollideWorldBounds(false);
@@ -473,13 +473,13 @@ mainGame.update = function () {
     if (keyJ.isDown) {
       MK_isAttacking = true
       if (last_direction === "R") {
-        player.setSize(250, 110, true);
-        player.setOffset(200, 40, true);
+        //player.setSize(500, 110, true);
+        //player.setOffset(200, 40, true);
         player.anims.play("MK-sideatkRight", true)
       }
       else if (last_direction === "L") {
-        player.setSize(250, 110, true);
-        player.setOffset(50, 40, true);
+        //player.setSize(500, 110, true);
+        //player.setOffset(50, 40, true);
         player.anims.play("MK-sideatkLeft", true)
       }
     }
@@ -489,13 +489,13 @@ mainGame.update = function () {
       last_direction = "R";
 
       if (MK_isRunning === false) {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.setVelocityX(115);
         player.anims.play("MK-walkRight", true);
       } else {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.setVelocityX(350);
         player.anims.play("MK-runRight", true);
       }
@@ -505,13 +505,13 @@ mainGame.update = function () {
       last_direction = "L";
 
       if (MK_isRunning === false) {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.setVelocityX(-115);
         player.anims.play("MK-walkLeft", true);
       } else {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.setVelocityX(-350);
         player.anims.play("MK-runLeft", true);
       }
@@ -524,14 +524,14 @@ mainGame.update = function () {
     //PARADO INÍCIO
     if (player.body.velocity.x === 0 && MK_isAttacking === false) {
       if (last_direction === "R") {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.anims.play("MK-idleRight", true);
       }
 
       if (last_direction === "L") {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.anims.play("MK-idleLeft", true);
       }
     }
@@ -542,22 +542,22 @@ mainGame.update = function () {
 
     if (last_direction === "R") {
       if (player.body.velocity.y < 0) {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.anims.play("MK-riseRight", true);
       } else if (player.body.velocity.y > 0) {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.anims.play("MK-fallRight", true);
       }
     } else if (last_direction === "L") {
       if (player.body.velocity.y < 0) {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.anims.play("MK-riseLeft", true);
       } else if (player.body.velocity.y > 0) {
-        player.setSize(90, 110, true);
-        player.setOffset(30, 40, true);
+        //player.setSize(90, 110, true);
+        //player.setOffset(30, 40, true);
         player.anims.play("MK-fallLeft", true);
       }
     }
