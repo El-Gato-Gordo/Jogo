@@ -20,6 +20,9 @@ var pmn = 3; //Define Mana do Mago
 
 var wasJumping = false; //Serve para tocar o som de aterrisagem, assim muda a variável e toca o som
 
+var MK_onGround = false;
+var MK_overlapBoss = false;
+
 var SFX_Land;
 var SFX_knightHit;
 var SFX_swordHit;
@@ -315,7 +318,9 @@ mainGame.create = function () {
 
   //Player physics properties.
   player.setCollideWorldBounds(false);
-  this.physics.add.collider(player, platforms);
+  this.physics.add.collider(player, platforms, function () {
+    MK_onGround = true
+  });
 
   this.cameras.main.startFollow(player);
 
@@ -340,15 +345,15 @@ mainGame.create = function () {
   );
 
   this.physics.add.overlap(babayaga, player, function () {
+    MK_overlapBoss = true;
+    
     if (MK_isAttacking === true && EYE_justHit === false) {
     SFX_swordHit.play()
     EYE_healthPower = EYE_healthPower - 1;
     babayaga.tint = 0xff0000
     EYE_justHit = true;
     EYE_hitCooldown = 25;
-    }
-    console.log("overlapping")
-  }, null, this);
+    }}, null, this);
 
   //SONS
   SFX_Land = this.sound.add("SFX_Land", { loop: false });
@@ -517,12 +522,17 @@ mainGame.create = function () {
 //UPDATE
 mainGame.update = function () {
 
-  //PULAR INÍCIO
+  if (player.body.touching.down === false) {
+    MK_onGround = false;
+  }
+  MK_overlapBoss = false;
 
-  if (keyW.isDown) {
+  //PULAR INÍCIO
+  if (keyW.isDown && MK_isAttacking === false) {
+  
     if (jumpTimer === 0 && player.body.touching.down) {
       //jumpTimer verifica o tempo que o jogador está no ar
-
+      
       player.setVelocityY(-350); //Altura inicial do salto
       jumpTimer = 1; //Inicia o jumpTimer
     } else if (jumpTimer > 0 && jumpTimer <= 20) {
@@ -548,6 +558,11 @@ mainGame.update = function () {
   }
 
   if (MK_isAttacking === false && MK_canAttack === false) {
+    if (wasJumping === true && MK_onGround === true) {
+      MK_canAttack = true;
+      MK_attackCooldown = 0;
+      MK_attackDuration = 0;
+    }
     MK_attackCooldown = MK_attackCooldown - 1
     if (MK_attackCooldown <= 0) {
       MK_canAttack = true;
@@ -566,7 +581,7 @@ mainGame.update = function () {
   }
 
     //SE ESTÁ NO CHÃO
-  if (player.body.touching.down) {
+  if (player.body.touching.down && MK_onGround === true && MK_overlapBoss === false) {
 
     if (wasJumping === true) {
       SFX_Land.play();
@@ -654,6 +669,7 @@ mainGame.update = function () {
 
     //PARADO FIM
   } else {
+
     //SE ESTÁ NO AR
     wasJumping = true;
     if (MK_isAttacking === true) {
@@ -668,10 +684,13 @@ mainGame.update = function () {
         player.anims.play("MK-AsideatkLeft", true)
       }
       MK_attackDuration = MK_attackDuration + 1;
+      if (MK_attackDuration <= 5) {
+        player.setVelocityY(-150)
+      }
       if (MK_attackDuration >= 16) {
         MK_isAttacking = false;
         MK_canAttack = false;
-        MK_attackCooldown = 10;
+        MK_attackCooldown = 100;
       }
     }
 
