@@ -19,15 +19,15 @@ var php = 5; //Define HP do Cavaleiro e Mago
 var pmn = 3; //Define Mana do Mago
 
 var wasJumping = false; //Serve para tocar o som de aterrisagem, assim muda a variável e toca o som
-var SFX_Hit;
-var SFX_HitGround;
-var SFX_HoverButton;
-var SFX_Jump;
+
 var SFX_Land;
-var SFX_Parry;
-var SFX_ParryHit;
-var SFX_SpellCast;
-var SFX_Step;
+var SFX_knightHit;
+var SFX_swordHit;
+var SFX_swordSwing;
+var SFX_mageParry; 
+var SFX_mageDeflected; 
+var SFX_mageLeap;
+var SFX_mageFireball;
 
 var airSpeed = 0; //Aceleração no ar
 
@@ -57,8 +57,8 @@ var MK_justParried = false;
 var MK_parryCooldown = 0;
 
 
-var babayaga;
-var EYE_justHit; //Se o jogador acabou de acertar o bicho
+//var babayaga;
+var EYE_justHit = false; //Se o jogador acabou de acertar o bicho
 var EYE_hitCooldown; //Cooldown para poder acertar de novo
 var EYE_healthPower = 100;
 
@@ -92,6 +92,15 @@ mainGame.preload = function () {
 
   //Tileset e personagens
   this.load.image("ground", "assets/images/platform.png");
+
+  this.load.audio("SFX_Land", ["assets/sfx/SFX_Land.wav"]);
+  this.load.audio("SFX_swordHit", ["assets/sfx/SFX_swordHit.wav"]);
+  this.load.audio("SFX_swordSwing", ["assets/sfx/SFX_swordSwing.wav"]);
+  this.load.audio("SFX_knightHit", ["assets/sfx/SFX_knightHit.wav"]);
+  this.load.audio("SFX_mageFireball", ["assets/sfx/SFX_mageFireball.wav"]);
+  this.load.audio("SFX_mageLeap", ["assets/sfx/SFX_mageLeap.wav"]);
+  this.load.audio("SFX_mageParry", ["assets/sfx/SFX_mageParry.wav"]);
+  this.load.audio("SFX_mageDeflected", ["assets/sfx/SFX_mageDeflected.wav"]);
 
 
   this.load.spritesheet(
@@ -297,7 +306,7 @@ mainGame.create = function () {
   babayaga = this.physics.add.sprite(600, 75, "bichopapao");
   babayaga.setCollideWorldBounds(true);
   babayaga.setSize(130, 130, true);
-  this.physics.add.collider(babayaga, platforms)
+  this.physics.add.collider(babayaga, platforms, null, null, this)
 
   // The player and its settings
   player = this.physics.add.sprite(100, 400, "MK-idleRight").setScale(0.40);
@@ -330,18 +339,29 @@ mainGame.create = function () {
     this
   );
 
-  this.physics.add.overlap(babayaga, player, function (babayaga, player) {
+  this.physics.add.overlap(babayaga, player, function () {
     if (MK_isAttacking === true && EYE_justHit === false) {
-      EYE_healthPower = EYE_healthPower - 1;
-      babayaga.tint = 0xff0000
-      EYE_justHit = true;
-      EYE_hitCooldown = 15;
+    SFX_swordHit.play()
+    EYE_healthPower = EYE_healthPower - 1;
+    babayaga.tint = 0xff0000
+    EYE_justHit = true;
+    EYE_hitCooldown = 25;
     }
+    console.log("overlapping")
+  }, null, this);
 
-  });
+  //SONS
+  SFX_Land = this.sound.add("SFX_Land", { loop: false });
+  SFX_knightHit = this.sound.add("SFX_knightHit", { loop: false });
+  SFX_swordHit = this.sound.add("SFX_swordHit", { loop: false });
+  SFX_swordSwing = this.sound.add("SFX_swordSwing", { loop: false });
+  SFX_mageParry = this.sound.add("SFX_mageParry", { loop: false });
+  SFX_mageDeflected = this.sound.add("SFX_mageDeflected", { loop: false });
+  SFX_mageLeap = this.sound.add("SFX_mageLeap", { loop: false });
+  SFX_mageFireball = this.sound.add("SFX_mageFireball", { loop: false });
+
 
   //ANIMAÇÕES MAGEKNIGHT
-
   this.anims.create({
     key: "MK-idleRight",
     frames: this.anims.generateFrameNumbers("MK-idleRight", {
@@ -524,6 +544,7 @@ mainGame.update = function () {
   //Ataques Laterais
   if (keyJ.isDown && MK_isEvading === false && MK_isAttacking === false && MK_canAttack === true) {
     MK_isAttacking = true
+    SFX_swordSwing.play()
   }
 
   if (MK_isAttacking === false && MK_canAttack === false) {
@@ -543,9 +564,15 @@ mainGame.update = function () {
       EYE_justHit = false;
     }
   }
-  
-  if (player.body.touching.down) {
+
     //SE ESTÁ NO CHÃO
+  if (player.body.touching.down) {
+
+    if (wasJumping === true) {
+      SFX_Land.play();
+      wasJumping = false;
+    }
+
     if (cursors.shift.isDown) {
       MK_isRunning = true;
     }
@@ -558,7 +585,7 @@ mainGame.update = function () {
         player.setSize(400, 250, true);
         player.setOffset(207, 250, false);
         player.anims.play("MK-GsideatkRight", true)
-      } 
+      }
       else if (last_direction === "L") {
         player.setSize(400, 250, true);
         player.setOffset(9, 250, false);
@@ -628,7 +655,7 @@ mainGame.update = function () {
     //PARADO FIM
   } else {
     //SE ESTÁ NO AR
-
+    wasJumping = true;
     if (MK_isAttacking === true) {
       if (last_direction === "R") {
         player.setSize(400, 450, true);
