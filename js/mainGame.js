@@ -294,7 +294,7 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
-    "VFX_invisibleThing",
+    "VFX_goInvisible",
     "./assets/spritesheets/vfx/goInvisible.png",
     {
       frameWidth: 32,
