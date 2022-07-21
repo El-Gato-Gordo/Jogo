@@ -119,24 +119,24 @@ var sala;
 //PRELOAD
 mainGame.preload = function () {
   //Plano de fundo
-  this.load.image("sky", "assets/images/sky.png");
+  this.load.image("sky", "./assets/images/sky.png");
 
   //Tileset e personagens
-  this.load.image("ground", "assets/images/platform.png");
+  this.load.image("ground", "./assets/images/platform.png");
 
-  this.load.audio("SFX_Land", ["assets/sfx/SFX_Land.wav"]);
-  this.load.audio("SFX_swordHit", ["assets/sfx/SFX_swordHit.wav"]);
-  this.load.audio("SFX_swordSwing", ["assets/sfx/SFX_swordSwing.wav"]);
-  this.load.audio("SFX_knightHit", ["assets/sfx/SFX_knightHit.wav"]);
-  this.load.audio("SFX_mageFireball", ["assets/sfx/SFX_mageFireball.wav"]);
-  this.load.audio("SFX_mageLeap", ["assets/sfx/SFX_mageLeap.wav"]);
-  this.load.audio("SFX_mageParry", ["assets/sfx/SFX_mageParry.wav"]);
-  this.load.audio("SFX_mageDeflected", ["assets/sfx/SFX_mageDeflected.wav"]);
+  this.load.audio("SFX_Land", ["./assets/sfx/SFX_Land.wav"]);
+  this.load.audio("SFX_swordHit", ["./assets/sfx/SFX_swordHit.wav"]);
+  this.load.audio("SFX_swordSwing", ["./assets/sfx/SFX_swordSwing.wav"]);
+  this.load.audio("SFX_knightHit", ["./assets/sfx/SFX_knightHit.wav"]);
+  this.load.audio("SFX_mageFireball", ["./assets/sfx/SFX_mageFireball.wav"]);
+  this.load.audio("SFX_mageLeap", ["./assets/sfx/SFX_mageLeap.wav"]);
+  this.load.audio("SFX_mageParry", ["./assets/sfx/SFX_mageParry.wav"]);
+  this.load.audio("SFX_mageDeflected", ["./assets/sfx/SFX_mageDeflected.wav"]);
 
 
   this.load.spritesheet(
     "fullScreen_button",
-    "assets/hud/fullScreen_button.png",
+    "./assets/hud/fullScreen_button.png",
     {
       frameWidth: 128,
       frameHeight: 128,
@@ -147,7 +147,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-idleRight",
-    "assets/spritesheets/mageknight/MK-idleRight.png",
+    "./assets/spritesheets/mageknight/MK-idleRight.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -156,7 +156,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-idleLeft",
-    "assets/spritesheets/mageknight/MK-idleLeft.png",
+    "./assets/spritesheets/mageknight/MK-idleLeft.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -165,7 +165,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-walkRight",
-    "assets/spritesheets/mageknight/MK-walkRight.png",
+    "./assets/spritesheets/mageknight/MK-walkRight.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -174,7 +174,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-walkLeft",
-    "assets/spritesheets/mageknight/MK-walkLeft.png",
+    "./assets/spritesheets/mageknight/MK-walkLeft.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -183,7 +183,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-riseRight",
-    "assets/spritesheets/mageknight/MK-riseRight.png",
+    "./assets/spritesheets/mageknight/MK-riseRight.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -192,7 +192,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-riseLeft",
-    "assets/spritesheets/mageknight/MK-riseLeft.png",
+    "./assets/spritesheets/mageknight/MK-riseLeft.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -201,7 +201,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-fallRight",
-    "assets/spritesheets/mageknight/MK-fallRight.png",
+    "./assets/spritesheets/mageknight/MK-fallRight.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -210,7 +210,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-fallLeft",
-    "assets/spritesheets/mageknight/MK-fallLeft.png",
+    "./assets/spritesheets/mageknight/MK-fallLeft.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -219,7 +219,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-runRight",
-    "assets/spritesheets/mageknight/MK-runRight.png",
+    "./assets/spritesheets/mageknight/MK-runRight.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -228,7 +228,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-runLeft",
-    "assets/spritesheets/mageknight/MK-runLeft.png",
+    "./assets/spritesheets/mageknight/MK-runLeft.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -237,7 +237,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-GsideatkRight",
-    "assets/spritesheets/mageknight/MK-GsideatkRight.png",
+    "./assets/spritesheets/mageknight/MK-GsideatkRight.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -246,7 +246,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-GsideatkLeft",
-    "assets/spritesheets/mageknight/MK-GsideatkLeft.png",
+    "./assets/spritesheets/mageknight/MK-GsideatkLeft.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -255,7 +255,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-AsideatkRight",
-    "assets/spritesheets/mageknight/MK-AsideatkRight.png",
+    "./assets/spritesheets/mageknight/MK-AsideatkRight.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -264,7 +264,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "MK-AsideatkLeft",
-    "assets/spritesheets/mageknight/MK-AsideatkLeft.png",
+    "./assets/spritesheets/mageknight/MK-AsideatkLeft.png",
     {
       frameWidth: 616,
       frameHeight: 500,
@@ -275,7 +275,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "bichopapao",
-    "assets/spritesheets/bichopapao.png",
+    "./assets/spritesheets/bichopapao.png",
     {
       frameWidth: 150,
       frameHeight: 150
@@ -286,7 +286,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "VFX_mageParry",
-    "assets/spritesheets/vfx/VFX_mageParry.png",
+    "./assets/spritesheets/vfx/VFX_mageParry.png",
     {
       frameWidth: 616,
       frameHeight: 528,
@@ -295,7 +295,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "VFX_invisibleThing",
-    "assets/spritesheets/vfx/VFX_invisibleThing.png",
+    "./assets/spritesheets/vfx/VFX_invisibleThing.png",
     {
       frameWidth: 32,
       frameHeight: 32,
