@@ -1,7 +1,6 @@
 //Importar cenas
 import { pressStart } from "./pressStart.js";
 import { mainMenu } from "./mainMenu.js";
-import { firstLevel } from "./firstLevel.js";
 import { gameOver } from "./gameOver.js";
 import { endingScene } from "./endingScene.js";
 import { mainGame } from "./mainGame.js";
