@@ -706,7 +706,7 @@ mainGame.create = function () {
 
   this.anims.create({
     key: "VFX_goInvisible",
-    frames: this.anims.generateFrameNumbers("VFX_invisibleThing", {
+    frames: this.anims.generateFrameNumbers("VFX_goInvisible", {
       start: 0,
       end: 7,
     }),
