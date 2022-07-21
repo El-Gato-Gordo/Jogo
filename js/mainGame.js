@@ -295,7 +295,7 @@ mainGame.preload = function () {
 
   this.load.spritesheet(
     "VFX_invisibleThing",
-    "./assets/spritesheets/vfx/VFX_invisibleThing.png",
+    "./assets/spritesheets/vfx/goInvisible.png",
     {
       frameWidth: 32,
       frameHeight: 32,
@@ -706,7 +706,7 @@ mainGame.create = function () {
 
   this.anims.create({
     key: "VFX_goInvisible",
-    frames: this.anims.generateFrameNumbers("VFX_goInvisible", {
+    frames: this.anims.generateFrameNumbers("VFX_invisibleThing", {
       start: 0,
       end: 7,
     }),
