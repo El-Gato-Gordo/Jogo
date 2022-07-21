@@ -32,6 +32,10 @@ var SFX_mageDeflected;
 var SFX_mageLeap;
 var SFX_mageFireball;
 
+var VFX_yOffset = 0;
+
+var vfx_mageParry;
+
 var airSpeed = 0; //Aceleração no ar
 
 var jumpTimer = 0; //Tempo no ar
@@ -58,6 +62,7 @@ var MK_isParrying = false;
 var MK_parryDuration = 0;
 var MK_justParried = false;
 var MK_parryCooldown = 0;
+var MK_canParry = true;
 
 
 //var babayaga;
@@ -242,7 +247,9 @@ mainGame.preload = function () {
       frameHeight: 500,
     }
   );
+
   //Inimigo
+
   this.load.spritesheet(
     "bichopapao",
     "assets/spritesheets/bichopapao.png",
@@ -251,6 +258,27 @@ mainGame.preload = function () {
       frameHeight: 150
     }
   );
+
+  //Efeitos Visuais
+
+  this.load.spritesheet(
+    "VFX_mageParry",
+    "assets/spritesheets/vfx/VFX_mageParry.png",
+    {
+      frameWidth: 616,
+      frameHeight: 528,
+    }
+  );
+
+  this.load.spritesheet(
+    "VFX_invisibleThing",
+    "assets/spritesheets/vfx/VFX_invisibleThing.png",
+    {
+      frameWidth: 32,
+      frameHeight: 32,
+    }
+  );
+
 
   cursors = this.input.keyboard.createCursorKeys();
 
@@ -323,6 +351,8 @@ mainGame.create = function () {
   });
 
   this.cameras.main.startFollow(player);
+
+  vfx_mageParry = this.physics.add.staticSprite(0, 0, "VFX_invisibleThing").setScale(0.30)
 
   fullScreen_button = this.physics.add
     .staticSprite(760, 40, "fullScreen_button")
@@ -507,6 +537,7 @@ mainGame.create = function () {
     repeat: -1,
   });
 
+  //Animações Inimigo
   this.anims.create({
     key: "bichopapao",
     frames: this.anims.generateFrameNumbers("bichopapao", {
@@ -517,10 +548,56 @@ mainGame.create = function () {
     repeat: -1,
   });
 
+  //Animações de Efeitos Visuais
+
+  this.anims.create({
+    key: "VFX_mageParry",
+    frames: this.anims.generateFrameNumbers("VFX_mageParry", {
+      start: 0,
+      end: 7,
+    }),
+    frameRate: 20,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "VFX_goInvisible",
+    frames: this.anims.generateFrameNumbers("VFX_goInvisible", {
+      start: 0,
+      end: 7,
+    }),
+    frameRate: 1,
+    repeat: 0
+  })
 };
 
 //UPDATE
 mainGame.update = function () {
+
+  if (MK_isParrying === true) {
+    MK_parryDuration = MK_parryDuration + 1;
+    if (MK_parryDuration <= 10) {
+      VFX_yOffset = player.y + 55
+      vfx_mageParry.setPosition(player.x, VFX_yOffset);
+      vfx_mageParry.anims.play("VFX_mageParry", false)
+    }
+
+    if (MK_parryDuration >= 18) {
+      MK_isParrying = false;
+      MK_canParry = false;
+      MK_parryCooldown = 30;
+
+    }
+  }
+
+  if (MK_isParrying === false && MK_canParry === false) {
+    
+    MK_parryCooldown = MK_parryCooldown - 1
+    if (MK_parryCooldown <= 0) {
+      MK_canParry = true;
+      MK_parryDuration = 0;
+    }
+  }
 
   if (player.body.touching.down === false) {
     MK_onGround = false;
@@ -550,6 +627,12 @@ mainGame.update = function () {
 
   if (EYE_healthPower <= 96) {
     babayaga.setVelocityY(-500);
+  }
+
+  //Aparo de Ataques
+  
+  if (keyNum0.isDown && MK_isParrying === false && MK_canParry === true) {
+    MK_isParrying = true;
   }
   //Ataques Laterais
   if (keyJ.isDown && MK_isEvading === false && MK_isAttacking === false && MK_canAttack === true) {
