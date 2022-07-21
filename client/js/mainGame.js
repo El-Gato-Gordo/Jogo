@@ -93,6 +93,29 @@ let keyDown;
 let keyRight;
 let keyLeft;
 
+//Hospedagem e MP
+var jogador;
+var socket;
+var ice_servers = {
+  iceServers: [
+    {
+      urls: "stun:ifsc.cloud",
+    },
+    {
+      urls: "turns:ifsc.cloud",
+      username: "etorresini",
+      credential: "matrix",
+    },
+  ],
+};
+
+var localConnection;
+var remoteConnection;
+var midias;
+const audio = document.querySelector("audio");
+var sala;
+
+
 //PRELOAD
 mainGame.preload = function () {
   //Plano de fundo
@@ -286,6 +309,127 @@ mainGame.preload = function () {
 
 //CREATE
 mainGame.create = function () {
+
+  //Conexão do servidor
+  socket = io("https://mage0knight.herokuapp.com/");
+
+  var mensagem = this.add.text(10, 10, "Sala para entrar:", {
+    font: "32px Courier",
+    fill: "#ffffff",
+  });
+
+  var mensagemEntrada = this.add.text(10, 50, "", {
+    font: "32px Courier",
+    fill: "#ffff00",
+  });
+
+  this.input.keyboard.on("keydown", function (event) {
+    if (event.keyCode === 8 && mensagemEntrada.text.length > 0) {
+      mensagemEntrada.text = mensagemEntrada.text.substr(
+        0,
+        mensagemEntrada.text.length - 1
+      );
+    } else if (
+      event.keyCode === 32 ||
+      (event.keyCode >= 48 && event.keyCode < 90)
+    ) {
+      mensagemEntrada.text += event.key;
+    } else if (event.keyCode === 13) {
+      sala = mensagemEntrada.text;
+      console.log("Pedido de entrada na sala %s.", sala);
+      socket.emit("entrar-na-sala", sala);
+      mensagem.destroy();
+      mensagemEntrada.destroy();
+    }
+  });
+
+  socket.on("jogadores", (jogadores) => {
+    if (jogadores.primeiro === socket.id) {
+      // Define jogador como o primeiro
+      jogador = 1;
+
+      navigator.mediaDevices
+        .getUserMedia({ video: false, audio: true })
+        .then((stream) => {
+          midias = stream;
+        })
+        .catch((error) => console.log(error));
+      
+    } else if (jogadores.segundo === socket.id) {
+      // Define jogador como o segundo
+      jogador = 2;
+
+      navigator.mediaDevices
+        .getUserMedia({ video: false, audio: true })
+        .then((stream) => {
+          midias = stream;
+          localConnection = new RTCPeerConnection(ice_servers);
+          midias
+            .getTracks()
+            .forEach((track) => localConnection.addTrack(track, midias));
+          localConnection.onicecandidate = ({ candidate }) => {
+            candidate && socket.emit("candidate", sala, candidate);
+          };
+
+          console.log(midias);
+          localConnection.ontrack = ({ streams: [midias] }) => {
+            audio.srcObject = midias;
+          };
+
+          localConnection
+            .createOffer()
+            .then((offer) => localConnection.setLocalDescription(offer))
+            .then(() => {
+              socket.emit("offer", sala, localConnection.localDescription);
+            });
+        })
+        .catch((error) => console.log(error));
+    }
+
+    // Os dois jogadores estão conectados
+    console.log(jogadores);
+    if (jogadores.primeiro !== undefined && jogadores.segundo !== undefined) {
+      // Contagem regressiva em segundos (1.000 milissegundos)
+      timer = 60;
+      timedEvent = time.addEvent({
+        delay: 1000,
+        callback: countdown,
+        callbackScope: this,
+        loop: true,
+      });
+    }
+  });
+
+  socket.on("offer", (socketId, description) => {
+    remoteConnection = new RTCPeerConnection(ice_servers);
+    midias
+      .getTracks()
+      .forEach((track) => remoteConnection.addTrack(track, midias));
+    remoteConnection.onicecandidate = ({ candidate }) => {
+      candidate && socket.emit("candidate", socketId, candidate);
+    };
+    remoteConnection.ontrack = ({ streams: [midias] }) => {
+      audio.srcObject = midias;
+    };
+    remoteConnection
+      .setRemoteDescription(description)
+      .then(() => remoteConnection.createAnswer())
+      .then((answer) => remoteConnection.setLocalDescription(answer))
+      .then(() => {
+        socket.emit("answer", socketId, remoteConnection.localDescription);
+      });
+  });
+
+  socket.on("answer", (description) => {
+    localConnection.setRemoteDescription(description);
+  });
+
+  socket.on("candidate", (candidate) => {
+    const conn = localConnection || remoteConnection;
+    conn.addIceCandidate(new RTCIceCandidate(candidate));
+  });
+
+  
   this.cameras.main.setBounds(0, -150, 1000, 800);
 
   //Criando as teclas
@@ -580,6 +724,7 @@ mainGame.update = function () {
       VFX_yOffset = player.y + 55
       vfx_mageParry.setPosition(player.x, VFX_yOffset);
       vfx_mageParry.anims.play("VFX_mageParry", false)
+      SFX_mageParry.play();
     }
 
     if (MK_parryDuration >= 18) {

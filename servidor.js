@@ -3,30 +3,25 @@ const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
   cors: {
-    origins: [
-      "https://mageknight.ifsc.cloud",
-      "https://*gitpod.io"
-    ],
+    origins: ["https://mageknight.ifsc.cloud"],
   },
 });
-
 const PORT = process.env.PORT || 3000;
-var jogadores = {
-  primeiro: undefined,
-  segundo: undefined, //indefinido pois ninguém está conectado
-};
 
+// Disparar evento quando jogador entrar na partida
 io.on("connection", (socket) => {
   // Aguardar pelo jogador enviar o nome da sala
   socket.on("entrar-na-sala", (sala) => {
     socket.join(sala);
     var jogadores = {};
-    if (io.sockets.adapter.rooms.get(sala).size === 1) { // 1 jogador
+    if (io.sockets.adapter.rooms.get(sala).size === 1) {
+      // 1 jogador
       jogadores = {
         primeiro: socket.id,
         segundo: undefined,
       };
-    } else if (io.sockets.adapter.rooms.get(sala).size === 2) { // 2 jogadores
+    } else if (io.sockets.adapter.rooms.get(sala).size === 2) {
+      // 2 jogadores
       let [primeiro] = io.sockets.adapter.rooms.get(sala);
       jogadores = {
         primeiro: primeiro,
@@ -62,6 +57,5 @@ io.on("connection", (socket) => {
   });
 });
 
-app.use(express.static("./client"));
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}!`));
-
+// Abrir porta para HTTPS/WSS
+server.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
