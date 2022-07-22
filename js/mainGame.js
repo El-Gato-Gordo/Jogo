@@ -102,6 +102,8 @@ var BUTTON_UP;
 var BUTTON_RIGHT;
 var BUTTON_LEFT;
 
+var playersOnline = false;
+
 
 //Declarando teclas do jogo
 
@@ -606,6 +608,8 @@ mainGame.create = function () {
         callbackScope: this,
         loop: true,
       });
+      playersOnline = true;
+
     }
   });
 
@@ -1192,286 +1196,287 @@ mainGame.create = function () {
 //UPDATE
 mainGame.update = function () {
 
-  if (MK_isParrying === true) {
-    MK_parryDuration = MK_parryDuration + 1;
-    if (MK_parryDuration <= 10) {
-      VFX_yOffset = player.y + 55
-      vfx_mageParry.setPosition(player.x, VFX_yOffset);
-      vfx_mageParry.anims.play("VFX_mageParry", false)
-      SFX_mageParry.play();
+  if (playersOnline === true) {
+    if (MK_isParrying === true) {
+      MK_parryDuration = MK_parryDuration + 1;
+      if (MK_parryDuration <= 10) {
+        VFX_yOffset = player.y + 55
+        vfx_mageParry.setPosition(player.x, VFX_yOffset);
+        vfx_mageParry.anims.play("VFX_mageParry", false)
+        SFX_mageParry.play();
+      }
+
+      if (MK_parryDuration >= 18) {
+        MK_isParrying = false;
+        MK_canParry = false;
+        MK_parryCooldown = 30;
+
+      }
     }
 
-    if (MK_parryDuration >= 18) {
-      MK_isParrying = false;
-      MK_canParry = false;
-      MK_parryCooldown = 30;
-
-    }
-  }
-
-  if (MK_isParrying === false && MK_canParry === false) {
+    if (MK_isParrying === false && MK_canParry === false) {
     
-    MK_parryCooldown = MK_parryCooldown - 1
-    if (MK_parryCooldown <= 0) {
-      MK_canParry = true;
-      MK_parryDuration = 0;
+      MK_parryCooldown = MK_parryCooldown - 1
+      if (MK_parryCooldown <= 0) {
+        MK_canParry = true;
+        MK_parryDuration = 0;
+      }
     }
-  }
 
-  if (player.body.touching.down === false) {
-    MK_onGround = false;
-  }
-  MK_overlapBoss = false;
+    if (player.body.touching.down === false) {
+      MK_onGround = false;
+    }
+    MK_overlapBoss = false;
 
-  //PULAR INÍCIO
-  if (UP_isPressed && MK_isAttacking === false && jogador === 1) {
+    //PULAR INÍCIO
+    if (UP_isPressed && MK_isAttacking === false && jogador === 1) {
   
-    if (jumpTimer === 0 && player.body.touching.down) {
-      //jumpTimer verifica o tempo que o jogador está no ar
+      if (jumpTimer === 0 && player.body.touching.down) {
+        //jumpTimer verifica o tempo que o jogador está no ar
       
-      player.setVelocityY(-350); //Altura inicial do salto
-      jumpTimer = 1; //Inicia o jumpTimer
-    } else if (jumpTimer > 0 && jumpTimer <= 20) {
-      //Enquanto o jumpTimer estiver entre 1 e 20, vai adicionar 1 ao jumpTimer e à cada verificação vai alterar a velocidade do Y
+        player.setVelocityY(-350); //Altura inicial do salto
+        jumpTimer = 1; //Inicia o jumpTimer
+      } else if (jumpTimer > 0 && jumpTimer <= 20) {
+        //Enquanto o jumpTimer estiver entre 1 e 20, vai adicionar 1 ao jumpTimer e à cada verificação vai alterar a velocidade do Y
 
-      jumpTimer = jumpTimer + 1;
-      jumpTune = -350 + jumpTimer * 4; //Assim, a cada jumpTimer, a velocidade será diminuida por um fator 4 em relação ao timer, tudo isso se segurar o W e o time for menor que 20
-      player.setVelocityY(jumpTune);
-    }
-  } else {
-    jumpTimer = 0;
-  }
-
-  //PULAR FIM
-
-  if (EYE_healthPower <= 96) {
-    eye.setVelocityY(-500);
-  }
-
-  //Aparo de Ataques
-  
-  if (CIRCLE_isPressed && MK_isParrying === false && MK_canParry === true && jogador === 2) {
-    MK_isParrying = true;
-  }
-  //Ataques Laterais
-  if (CIRCLE_isPressed && MK_isEvading === false && MK_isAttacking === false && MK_canAttack === true && jogador === 1 ) {
-    MK_isAttacking = true
-    SFX_swordSwing.play()
-  }
-
-  if (MK_isAttacking === false && MK_canAttack === false) {
-    if (wasJumping === true && MK_onGround === true) {
-      MK_canAttack = true;
-      MK_attackCooldown = 0;
-      MK_attackDuration = 0;
-    }
-    MK_attackCooldown = MK_attackCooldown - 1
-    if (MK_attackCooldown <= 0) {
-      MK_canAttack = true;
-      MK_attackDuration = 0;
-    }
-  }
-
-  if (EYE_justHit === true) {
-    EYE_hitCooldown = EYE_hitCooldown - 1
-    if (EYE_hitCooldown <= 8) {
-      eye.tint = 0xffffff
-    }
-    if (EYE_hitCooldown <= 0) {
-      EYE_justHit = false;
-    }
-  }
-
-    //SE ESTÁ NO CHÃO
-  if (player.body.touching.down && MK_onGround === true && MK_overlapBoss === false) {
-
-    if (wasJumping === true) {
-      SFX_Land.play();
-      wasJumping = false;
-    }
-
-    if (cursors.shift.isDown) {
-      MK_isRunning = true;
-    }
-    else {
-      MK_isRunning = false;
-    };
-
-    if (MK_isAttacking === true) {
-      if (last_direction === "R") {
-        player.setSize(400, 250, true);
-        player.setOffset(207, 250, false);
-        player.anims.play("MK-GsideatkRight", true)
-      }
-      else if (last_direction === "L") {
-        player.setSize(400, 250, true);
-        player.setOffset(9, 250, false);
-        player.anims.play("MK-GsideatkLeft", true)
-      }
-      MK_attackDuration = MK_attackDuration + 1;
-      if (MK_attackDuration >= 10) {
-        MK_isAttacking = false;
-        MK_canAttack = false;
-        MK_attackCooldown = 10;
-      }
-    }
-
-    //ANDAR E CORRER INÍCIO
-    if (RIGHT_isPressed && MK_isAttacking === false && MK_isEvading === false && jogador === 1) {
-
-      last_direction = "R";
-
-      if (MK_isRunning === false) {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.setVelocityX(115);
-        player.anims.play("MK-walkRight", true);
-      } else {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.setVelocityX(350);
-        player.anims.play("MK-runRight", true);
-      }
-
-    } else if (LEFT_isPressed && MK_isAttacking === false && MK_isEvading === false && jogador === 1) {
-
-      last_direction = "L";
-
-      if (MK_isRunning === false) {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.setVelocityX(-115);
-        player.anims.play("MK-walkLeft", true);
-      } else {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.setVelocityX(-350);
-        player.anims.play("MK-runLeft", true);
+        jumpTimer = jumpTimer + 1;
+        jumpTune = -350 + jumpTimer * 4; //Assim, a cada jumpTimer, a velocidade será diminuida por um fator 4 em relação ao timer, tudo isso se segurar o W e o time for menor que 20
+        player.setVelocityY(jumpTune);
       }
     } else {
-      player.setVelocityX(0);
+      jumpTimer = 0;
     }
 
-    //ANDAR E CORRER FIM
+    //PULAR FIM
 
-    //PARADO INÍCIO
-    if (player.body.velocity.x === 0 && MK_isAttacking === false) {
-      if (last_direction === "R") {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.anims.play("MK-idleRight", true);
-      }
-
-      if (last_direction === "L") {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.anims.play("MK-idleLeft", true);
-      }
+    if (EYE_healthPower <= 96) {
+      eye.setVelocityY(-500);
     }
 
-    //PARADO FIM
-  } else {
+    //Aparo de Ataques
+  
+    if (CIRCLE_isPressed && MK_isParrying === false && MK_canParry === true && jogador === 2) {
+      MK_isParrying = true;
+    }
+    //Ataques Laterais
+    if (CIRCLE_isPressed && MK_isEvading === false && MK_isAttacking === false && MK_canAttack === true && jogador === 1) {
+      MK_isAttacking = true
+      SFX_swordSwing.play()
+    }
 
-    //SE ESTÁ NO AR
-    wasJumping = true;
-    if (MK_isAttacking === true) {
-      if (last_direction === "R") {
-        player.setSize(400, 450, true);
-        player.setOffset(207, 50, false);
-        player.anims.play("MK-AsideatkRight", true)
+    if (MK_isAttacking === false && MK_canAttack === false) {
+      if (wasJumping === true && MK_onGround === true) {
+        MK_canAttack = true;
+        MK_attackCooldown = 0;
+        MK_attackDuration = 0;
       }
-      else if (last_direction === "L") {
-        player.setSize(400, 450, true);
-        player.setOffset(9, 50, false);
-        player.anims.play("MK-AsideatkLeft", true)
-      }
-      MK_attackDuration = MK_attackDuration + 1;
-      if (MK_attackDuration <= 5) {
-        player.setVelocityY(-150)
-      }
-      if (MK_attackDuration >= 16) {
-        MK_isAttacking = false;
-        MK_canAttack = false;
-        MK_attackCooldown = 100;
+      MK_attackCooldown = MK_attackCooldown - 1
+      if (MK_attackCooldown <= 0) {
+        MK_canAttack = true;
+        MK_attackDuration = 0;
       }
     }
 
-    if (last_direction === "R" && MK_isAttacking === false && MK_isEvading === false) {
-      if (player.body.velocity.y < 0) {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.anims.play("MK-riseRight", true);
-      } else if (player.body.velocity.y > 0) {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.anims.play("MK-fallRight", true);
+    if (EYE_justHit === true) {
+      EYE_hitCooldown = EYE_hitCooldown - 1
+      if (EYE_hitCooldown <= 8) {
+        eye.tint = 0xffffff
       }
-    } else if (last_direction === "L" && MK_isAttacking === false && MK_isEvading === false) {
-      if (player.body.velocity.y < 0) {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.anims.play("MK-riseLeft", true);
-      } else if (player.body.velocity.y > 0) {
-        player.setSize(200, 250, true);
-        player.setOffset(207, 250, false);
-        player.anims.play("MK-fallLeft", true);
+      if (EYE_hitCooldown <= 0) {
+        EYE_justHit = false;
       }
     }
 
-    if (keyD.isDown && player.body.velocity.x <= 200) {
-      airSpeed = player.body.velocity.x + 5;
-      player.setVelocityX(airSpeed);
-      if (player.body.velocity.x > 0) {
+    //SE ESTÁ NO CHÃO
+    if (player.body.touching.down && MK_onGround === true && MK_overlapBoss === false) {
+
+      if (wasJumping === true) {
+        SFX_Land.play();
+        wasJumping = false;
+      }
+
+      if (cursors.shift.isDown) {
+        MK_isRunning = true;
+      }
+      else {
+        MK_isRunning = false;
+      };
+
+      if (MK_isAttacking === true) {
+        if (last_direction === "R") {
+          player.setSize(400, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-GsideatkRight", true)
+        }
+        else if (last_direction === "L") {
+          player.setSize(400, 250, true);
+          player.setOffset(9, 250, false);
+          player.anims.play("MK-GsideatkLeft", true)
+        }
+        MK_attackDuration = MK_attackDuration + 1;
+        if (MK_attackDuration >= 10) {
+          MK_isAttacking = false;
+          MK_canAttack = false;
+          MK_attackCooldown = 10;
+        }
+      }
+
+      //ANDAR E CORRER INÍCIO
+      if (RIGHT_isPressed && MK_isAttacking === false && MK_isEvading === false && jogador === 1) {
+
         last_direction = "R";
+
+        if (MK_isRunning === false) {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.setVelocityX(115);
+          player.anims.play("MK-walkRight", true);
+        } else {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.setVelocityX(350);
+          player.anims.play("MK-runRight", true);
+        }
+
+      } else if (LEFT_isPressed && MK_isAttacking === false && MK_isEvading === false && jogador === 1) {
+
+        last_direction = "L";
+
+        if (MK_isRunning === false) {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.setVelocityX(-115);
+          player.anims.play("MK-walkLeft", true);
+        } else {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.setVelocityX(-350);
+          player.anims.play("MK-runLeft", true);
+        }
+      } else {
+        player.setVelocityX(0);
+      }
+
+      //ANDAR E CORRER FIM
+
+      //PARADO INÍCIO
+      if (player.body.velocity.x === 0 && MK_isAttacking === false) {
+        if (last_direction === "R") {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-idleRight", true);
+        }
+
+        if (last_direction === "L") {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-idleLeft", true);
+        }
+      }
+
+      //PARADO FIM
+    } else {
+
+      //SE ESTÁ NO AR
+      wasJumping = true;
+      if (MK_isAttacking === true) {
+        if (last_direction === "R") {
+          player.setSize(400, 450, true);
+          player.setOffset(207, 50, false);
+          player.anims.play("MK-AsideatkRight", true)
+        }
+        else if (last_direction === "L") {
+          player.setSize(400, 450, true);
+          player.setOffset(9, 50, false);
+          player.anims.play("MK-AsideatkLeft", true)
+        }
+        MK_attackDuration = MK_attackDuration + 1;
+        if (MK_attackDuration <= 5) {
+          player.setVelocityY(-150)
+        }
+        if (MK_attackDuration >= 16) {
+          MK_isAttacking = false;
+          MK_canAttack = false;
+          MK_attackCooldown = 100;
+        }
+      }
+
+      if (last_direction === "R" && MK_isAttacking === false && MK_isEvading === false) {
+        if (player.body.velocity.y < 0) {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-riseRight", true);
+        } else if (player.body.velocity.y > 0) {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-fallRight", true);
+        }
+      } else if (last_direction === "L" && MK_isAttacking === false && MK_isEvading === false) {
+        if (player.body.velocity.y < 0) {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-riseLeft", true);
+        } else if (player.body.velocity.y > 0) {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-fallLeft", true);
+        }
+      }
+
+      if (keyD.isDown && player.body.velocity.x <= 200) {
+        airSpeed = player.body.velocity.x + 5;
+        player.setVelocityX(airSpeed);
+        if (player.body.velocity.x > 0) {
+          last_direction = "R";
+        }
+      }
+
+      //Define a aceleração do jogador no ar, para que não se movimente livremente fora do chão [ESQUERDA]
+      if (keyA.isDown && player.body.velocity.x >= -200) {
+        airSpeed = player.body.velocity.x - 5;
+        player.setVelocityX(airSpeed);
+        if (player.body.velocity.x < 0) {
+          last_direction = "L"
+        }
+      }
+    }
+  
+    //Loop do Boss
+
+
+    if (EYE_isAwakened === false) {
+      EYE_awakeningDuration = EYE_awakeningDuration + 1
+
+      if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 25) {
+        eye.anims.play("EYE_heAwakens", true);
+      }
+
+      if (EYE_awakeningDuration > 25 && EYE_awakeningDuration <= 45) {
+
+        eye.setVelocityX(-70)
+        eye.setVelocityY(-70)
+        eye.anims.play("EYE_idleFLoat", true)
+
+      }
+
+      if (EYE_awakeningDuration > 45) {
+        EYE_isAwakened = true;
       }
     }
 
-    //Define a aceleração do jogador no ar, para que não se movimente livremente fora do chão [ESQUERDA]
-    if (keyA.isDown && player.body.velocity.x >= -200) {
-      airSpeed = player.body.velocity.x - 5;
-      player.setVelocityX(airSpeed);
-      if (player.body.velocity.x < 0) {
-        last_direction = "L"
+  
+    if (EYE_isAwakened === true && EYE_isDead === false) {
+
+      EYE_cycleValue = EYE_cycleValue + 1
+
+      if (EYE_isActing === false) {
+        eye.setVelocityX(0)
+        eye.setVelocityY(0)
+        eye.anims.play("EYE_idleFloat", true);
       }
+
     }
   }
-  
-  //Loop do Boss
-
-
-  if (EYE_isAwakened === false) {
-    EYE_awakeningDuration = EYE_awakeningDuration + 1
-
-    if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 25) {
-      eye.anims.play("EYE_heAwakens", true);
-    }
-
-    if (EYE_awakeningDuration > 25 && EYE_awakeningDuration <= 45) {
-
-      eye.setVelocityX(-70)
-      eye.setVelocityY(-70)
-      eye.anims.play("EYE_idleFLoat", true)
-
-    }
-
-    if (EYE_awakeningDuration > 45) {
-      EYE_isAwakened = true;
-    }
-  }
-
-  
-  if (EYE_isAwakened === true && EYE_isDead === false) {
-
-    EYE_cycleValue = EYE_cycleValue + 1
-
-    if (EYE_isActing === false) {
-      eye.setVelocityX(0)
-      eye.setVelocityY(0)
-      eye.anims.play("EYE_idleFloat", true);
-    }
-
-  }
-
   };
 
 export { mainGame };
