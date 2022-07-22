@@ -738,12 +738,14 @@ mainGame.create = function () {
   BUTTON_CIRCLE = this.physics.add
     .staticSprite(740, 495, "BUTTON_CIRCLE")
     .setScale(0.7)
+    .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
 
   BUTTON_SQUARE = this.physics.add
     .staticSprite(690, 550, "BUTTON_SQUARE")
     .setScale(0.7)
+    .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
   
@@ -751,6 +753,7 @@ mainGame.create = function () {
   BUTTON_LEFT = this.physics.add
     .staticSprite(50, 550, "BUTTON_LEFT")
     .setScale(0.7)
+    .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
 
@@ -758,6 +761,7 @@ mainGame.create = function () {
   BUTTON_RIGHT = this.physics.add
     .staticSprite(150, 550, "BUTTON_RIGHT")
     .setScale(0.7)
+    .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
 
@@ -765,6 +769,7 @@ mainGame.create = function () {
   BUTTON_UP = this.physics.add
     .staticSprite(100, 500, "BUTTON_UP")
     .setScale(0.7)
+    .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
 
@@ -772,6 +777,8 @@ mainGame.create = function () {
     "pointerover",
     function () {
       RIGHT_isPressed = true;
+      MK_isRunning = true;
+
     }
   )
 
@@ -779,6 +786,8 @@ mainGame.create = function () {
     "pointerover",
     function () {
       LEFT_isPressed = true;
+      MK_isRunning = true;
+
     },
     this
   )
@@ -812,6 +821,7 @@ mainGame.create = function () {
     "pointerout",
     function () {
       RIGHT_isPressed = false;
+      MK_isRunning = false;
     },
     this
   )
@@ -827,6 +837,8 @@ mainGame.create = function () {
     "pointerout",
     function () {
       LEFT_isPressed = false;
+      MK_isRunning = false;
+
     },
     this
   )
