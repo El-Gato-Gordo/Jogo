@@ -144,7 +144,6 @@ var ice_servers = {
   ],
 };
 
-var timer;
 var localConnection;
 var remoteConnection;
 var midias;
@@ -601,14 +600,7 @@ mainGame.create = function () {
     // Os dois jogadores estão conectados
     console.log(jogadores);
     if (jogadores.primeiro !== undefined && jogadores.segundo !== undefined) {
-      // Contagem regressiva em segundos (1.000 milissegundos)
-      timer = 60;
-      timedEvent = time.addEvent({
-        delay: 1000,
-        callback: countdown,
-        callbackScope: this,
-        loop: true,
-      });
+
       playersOnline = true;
 
     }
