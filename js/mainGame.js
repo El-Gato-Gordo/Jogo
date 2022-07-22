@@ -521,7 +521,9 @@ mainGame.create = function () {
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
-  var mensagem = this.add.text(10, 10, "Sala para entrar:", {
+  sala = 1
+  socket.emit("entrar-na-sala", sala);
+/*  var mensagem = this.add.text(10, 10, "Sala para entrar:", {
     font: "32px Courier",
     fill: "#ffffff",
   });
@@ -545,12 +547,11 @@ mainGame.create = function () {
     } else if (event.keyCode === 13) {
       sala = mensagemEntrada.text;
       console.log("Pedido de entrada na sala %s.", sala);
-      socket.emit("entrar-na-sala", sala);
       mensagem.destroy();
       mensagemEntrada.destroy();
     }
   });
-
+*/
   socket.on("jogadores", (jogadores) => {
     if (jogadores.primeiro === socket.id) {
       // Define jogador como o primeiro
@@ -614,7 +615,7 @@ mainGame.create = function () {
       .getTracks()
       .forEach((track) => remoteConnection.addTrack(track, midias));
     remoteConnection.onicecandidate = ({ candidate }) => {
-      candidate && socket.emit("candidate", socketId, candidate);
+      candidate && socket.emit("candidate", sala, candidate);
     };
     remoteConnection.ontrack = ({ streams: [midias] }) => {
       audio.srcObject = midias;
@@ -624,7 +625,7 @@ mainGame.create = function () {
       .then(() => remoteConnection.createAnswer())
       .then((answer) => remoteConnection.setLocalDescription(answer))
       .then(() => {
-        socket.emit("answer", socketId, remoteConnection.localDescription);
+        socket.emit("answer", sala, remoteConnection.localDescription);
       });
   });
 
@@ -763,31 +764,15 @@ mainGame.create = function () {
     .setInteractive()
     .setScrollFactor(0);
 
-  
-  BUTTON_UP.on(
-    "pointerup",
-    function () {
-      UP_isPressed = true;
-      if (this.scale.isFullscreen) {
-        fullScreen_button.setFrame(0);
-        this.scale.stopFullscreen();
-      } else {
-        fullScreen_button.setFrame(1);
-        this.scale.startFullscreen();
-      }
-    },
-    this
-  );
-
   BUTTON_RIGHT.on(
-    "pointerup",
+    "pointerover",
     function () {
       RIGHT_isPressed = true;
     }
   )
 
   BUTTON_LEFT.on(
-    "pointerup",
+    "pointerover",
     function () {
       LEFT_isPressed = true;
     },
@@ -795,7 +780,7 @@ mainGame.create = function () {
   )
   
   BUTTON_CIRCLE.on(
-    "pointerup",
+    "pointerover",
     function () {
       CIRCLE_isPressed = true;
     },
@@ -803,7 +788,7 @@ mainGame.create = function () {
   )
 
   BUTTON_SQUARE.on(
-    "pointerup",
+    "pointerover",
     function () {
       SQUARE_isPressed = true;
     },
@@ -811,7 +796,7 @@ mainGame.create = function () {
   )
 
   BUTTON_UP.on(
-    "pointerup",
+    "pointerover",
     function () {
       UP_isPressed = true;
     },
