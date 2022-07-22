@@ -3,7 +3,7 @@ var mainGame = new Phaser.Scene("Main Game");
 //Declaração de objetos
 var player;
 var platforms;
-var babayaga; //BICHO PAPÃO!!
+var eye; //BICHO PAPÃO!!
 var fullScreen_button;
 
 var playerX;
@@ -65,10 +65,15 @@ var MK_parryCooldown = 0;
 var MK_canParry = true;
 
 
-//var babayaga;
+//Olhão!!
+
 var EYE_justHit = false; //Se o jogador acabou de acertar o bicho
 var EYE_hitCooldown; //Cooldown para poder acertar de novo
 var EYE_healthPower = 100;
+
+var EYE_isAwakened = false;
+var PROJECTILE_electricOrb
+var PROJECTILE_mageSpell
 
 //Declarando teclas do jogo
 
@@ -278,7 +283,54 @@ mainGame.preload = function () {
     "./assets/spritesheets/bichopapao.png",
     {
       frameWidth: 150,
-      frameHeight: 150
+      frameHeight: 150,
+    }
+  );
+
+  //Olhão Louco
+
+  this.load.spritesheet(
+    "EYE_electricCharge",
+    "./assets/spritesheets/eye/EYE_electricCharge.png",
+    {
+      frameWidth: 600,
+      frameHeight: 600,
+    }
+  );
+
+  this.load.spritesheet(
+    "EYE_electricDash",
+    "./assets/spritesheets/eye/EYE_electricDash.png",
+    {
+      frameWidth: 600,
+      frameHeight: 600,
+    }
+  );
+
+  this.load.spritesheet(
+    "EYE_heAwakens",
+    "./assets/spritesheets/eye/EYE_heAwakens.png",
+    {
+      frameWidth: 600,
+      frameHeight: 600,
+    }
+  );
+
+  this.load.spritesheet(
+    "EYE_idleFloat",
+    "./assets/spritesheets/eye/EYE_idleFloat.png",
+    {
+      frameWidth: 600,
+      frameHeight: 600,
+    }
+  );
+
+  this.load.spritesheet(
+    "EYE_slainDead",
+    "./assets/spritesheets/eye/EYE_slainDead.png",
+    {
+      frameWidth: 600,
+      frameHeight: 600,
     }
   );
 
@@ -302,6 +354,97 @@ mainGame.preload = function () {
     }
   );
 
+  //Projéteis
+
+  this.load.spritesheet(
+    "PROJECTILES_spellDown",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellDown.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
+
+  this.load.spritesheet(
+    "PROJECTILES_spellUp",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellUp.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
+
+  this.load.spritesheet(
+    "PROJECTILES_spellRight",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellRight.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
+
+  this.load.spritesheet(
+    "PROJECTILES_spellLeft",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellLeft.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
+
+  this.load.spritesheet(
+    "PROJECTILES_spellLeftDown",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellLeftDown.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
+
+    this.load.spritesheet(
+    "PROJECTILES_spellLeftUp",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellLeftUp.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
+
+  this.load.spritesheet(
+    "PROJECTILES_spellRightUp",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellRightUp.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
+
+  this.load.spritesheet(
+    "PROJECTILES_spellRightDown",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellRightDown.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
+
+  this.load.spritesheet(
+    "PROJECTILES_blastOrb",
+    "./assets/spritesheets/projectiles/PROJECTILES_blastOrb.png",
+    {
+      frameWidth: 1200,
+      frameHeight: 1200,
+    }
+  );
+
+  this.load.spritesheet(
+    "PROJECTILES_blastImpact",
+    "./assets/spritesheets/projectiles/PROJECTILES_blastImpact.png",
+    {
+      frameWidth: 1200,
+      frameHeight: 1200,
+    }
+  );
 
   cursors = this.input.keyboard.createCursorKeys();
 
@@ -472,16 +615,13 @@ mainGame.create = function () {
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  platforms.create(400, 568, "ground").setScale(2).refreshBody();
-
-  //Now let's create some ledges
-  platforms.create(1500, 500, "ground").setScale(5).refreshBody();
+  platforms.create(400, 638, "ground").setScale(2).refreshBody();
 
   //Inimigo!
-  babayaga = this.physics.add.sprite(600, 75, "bichopapao");
-  babayaga.setCollideWorldBounds(true);
-  babayaga.setSize(130, 130, true);
-  this.physics.add.collider(babayaga, platforms, null, null, this)
+  eye = this.physics.add.sprite(600, 75, "bichopapao");
+  eye.setCollideWorldBounds(true);
+  eye.setSize(130, 130, true);
+  this.physics.add.collider(eye, platforms, null, null, this)
 
   // The player and its settings
   player = this.physics.add.sprite(100, 400, "MK-idleRight").setScale(0.40);
@@ -518,13 +658,13 @@ mainGame.create = function () {
     this
   );
 
-  this.physics.add.overlap(babayaga, player, function () {
+  this.physics.add.overlap(eye, player, function () {
     MK_overlapBoss = true;
     
     if (MK_isAttacking === true && EYE_justHit === false) {
     SFX_swordHit.play()
     EYE_healthPower = EYE_healthPower - 1;
-    babayaga.tint = 0xff0000
+    eye.tint = 0xff0000
     EYE_justHit = true;
     EYE_hitCooldown = 25;
     }}, null, this);
@@ -692,6 +832,59 @@ mainGame.create = function () {
     repeat: -1,
   });
 
+  //Animações do Olhão Louco!
+
+  this.anims.create({
+    key: "electricCharge",
+    frames: this.anims.generateFrameNumbers("electricCharge", {
+      start: 0,
+      end: 1,
+    }),
+    frameRate: 16,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "electricDash",
+    frames: this.anims.generateFrameNumbers("electricDash", {
+      start: 0,
+      end: 1,
+    }),
+    frameRate: 16,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "EYE_heAwakens",
+    frames: this.anims.generateFrameNumbers("EYE_heAwakens", {
+      start: 0,
+      end: 25,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "EYE_idleFloat",
+    frames: this.anims.generateFrameNumbers("EYE_idleFloat", {
+      start: 0,
+      end: 15,
+    }),
+    frameRate: 16,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "EYE_slainDead",
+    frames: this.anims.generateFrameNumbers("EYE_slainDead", {
+      start: 0,
+      end: 9,
+    }),
+    frameRate: 16,
+    repeat: -1,
+  });
+  
+
   //Animações de Efeitos Visuais
 
   this.anims.create({
@@ -713,7 +906,112 @@ mainGame.create = function () {
     frameRate: 1,
     repeat: 0
   })
+
+  //Animações dos Projéteis
+
+  this.anims.create({
+    key: "PROJECTILES_blastOrb",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_blastOrb", {
+      start: 0,
+      end: 1,
+    }),
+    frameRate: 20,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_blastImpact",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_blastImpact", {
+      start: 0,
+      end: 7,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_spellDown",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellDown", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_spellUp",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellUp", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_spellRight",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellRight", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_spellLeft",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellLeft", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_spellRightUp",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellRightUp", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_spellRightDown",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellRightDown", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_spellLeftUp",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellLeftUp", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+  this.anims.create({
+    key: "PROJECTILES_spellLeftDown",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellLeftDown", {
+      start: 0,
+      end: 3,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
+
+
 };
+
 
 //UPDATE
 mainGame.update = function () {
@@ -771,7 +1069,7 @@ mainGame.update = function () {
   //PULAR FIM
 
   if (EYE_healthPower <= 96) {
-    babayaga.setVelocityY(-500);
+    eye.setVelocityY(-500);
   }
 
   //Aparo de Ataques
@@ -801,7 +1099,7 @@ mainGame.update = function () {
   if (EYE_justHit === true) {
     EYE_hitCooldown = EYE_hitCooldown - 1
     if (EYE_hitCooldown <= 8) {
-      babayaga.tint = 0xffffff
+      eye.tint = 0xffffff
     }
     if (EYE_hitCooldown <= 0) {
       EYE_justHit = false;
@@ -961,8 +1259,12 @@ mainGame.update = function () {
       }
     }
   }
+  
+  //Loop do Boss
+  if (EYE_isAwakened === true) {
+    eye.anims.play("EYE_idleFloat", true);
+  }
 
-  babayaga.anims.play("bichopapao", true);
-};
+  };
 
 export { mainGame };
