@@ -1264,18 +1264,18 @@ mainGame.update = function () {
     eye.anims.play("EYE_heAwakens", true)
   }
   
-    if (EYE_awakeningDuration >= 110) {
-      EYE_isAwakened = true;
+    if (EYE_awakeningDuration >= 100) {
       EYE_moveDurationX = 0;
       EYE_moveDurationY = 0;
 
       if (EYE_moveDurationX <= 25 && EYE_moveDurationY <= 25) {
         EYE_moveDurationX = EYE_moveDurationX + 1
         EYE_moveDurationY = EYE_moveDurationY + 1
-        eye.setVelocityX(-50)
-        eye.setVelocityY(-55)
+        eye.setVelocityX(-70)
+        eye.setVelocityY(-75)
       }
       else {
+        EYE_isAwakened = true;
         eye.setVelocityX(0)
         eye.setVelocityY(0)
         EYE_awakeningDuration = 0;
@@ -1284,7 +1284,10 @@ mainGame.update = function () {
     }
   
   if (EYE_isAwakened === true && EYE_isDead === false) {
+
     if (EYE_isActing === false) {
+      eye.setVelocityX(0)
+      eye.setVelocityY(0)
       eye.anims.play("EYE_idleFloat", true);
     }
   }
