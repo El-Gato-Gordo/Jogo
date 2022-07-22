@@ -1300,13 +1300,6 @@ mainGame.update = function () {
         wasJumping = false;
       }
 
-      if (cursors.shift.isDown) {
-        MK_isRunning = true;
-      }
-      else {
-        MK_isRunning = false;
-      };
-
       if (MK_isAttacking === true) {
         if (last_direction === "R") {
           player.setSize(400, 250, true);
