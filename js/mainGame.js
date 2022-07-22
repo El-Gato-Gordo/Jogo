@@ -1394,7 +1394,7 @@ mainGame.update = function () {
 
       //PARADO INÍCIO
       if (player.body.velocity.x === 0 && MK_isAttacking === false) {
-        if (last_direction === "R" && SQUARE_isPressed === false && jogador === 1) {
+        if (last_direction === "R" && UP_isPressed === false && jogador === 1) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleRight", true);
