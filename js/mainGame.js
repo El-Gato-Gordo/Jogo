@@ -369,8 +369,8 @@ mainGame.preload = function () {
     "EYE_electricCharge",
     "./assets/spritesheets/eye/EYE_electricCharge.png",
     {
-      frameWidth: 600,
-      frameHeight: 600,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
@@ -378,8 +378,8 @@ mainGame.preload = function () {
     "EYE_electricDash",
     "./assets/spritesheets/eye/EYE_electricDash.png",
     {
-      frameWidth: 600,
-      frameHeight: 600,
+      frameWidth: 616,
+      frameHeight: 500,
     }
   );
 
