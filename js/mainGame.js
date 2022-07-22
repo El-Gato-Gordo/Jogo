@@ -731,35 +731,35 @@ mainGame.create = function () {
   //Controles
 
   BUTTON_CIRCLE = this.physics.add
-    .staticSprite(750, 500, "BUTTON_CIRCLE")
-    .setScale(1)
+    .staticSprite(755, 495, "BUTTON_CIRCLE")
+    .setScale(0.7)
     .setInteractive()
     .setScrollFactor(0);
 
   BUTTON_SQUARE = this.physics.add
     .staticSprite(700, 550, "BUTTON_SQUARE")
-    .setScale(1)
+    .setScale(0.7)
     .setInteractive()
     .setScrollFactor(0);
   
 
   BUTTON_LEFT = this.physics.add
     .staticSprite(50, 550, "BUTTON_LEFT")
-    .setScale(1)
+    .setScale(0.7)
     .setInteractive()
     .setScrollFactor(0);
 
 
   BUTTON_RIGHT = this.physics.add
     .staticSprite(150, 550, "BUTTON_RIGHT")
-    .setScale(1)
+    .setScale(0.7)
     .setInteractive()
     .setScrollFactor(0);
 
 
   BUTTON_UP = this.physics.add
     .staticSprite(100, 500, "BUTTON_UP")
-    .setScale(1)
+    .setScale(0.7)
     .setInteractive()
     .setScrollFactor(0);
 
@@ -768,6 +768,13 @@ mainGame.create = function () {
     "pointerup",
     function () {
       UP_isPressed = true;
+      if (this.scale.isFullscreen) {
+        fullScreen_button.setFrame(0);
+        this.scale.stopFullscreen();
+      } else {
+        fullScreen_button.setFrame(1);
+        this.scale.startFullscreen();
+      }
     }
   )
 
