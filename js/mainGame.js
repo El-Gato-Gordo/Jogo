@@ -144,6 +144,7 @@ var ice_servers = {
   ],
 };
 
+var timer;
 var localConnection;
 var remoteConnection;
 var midias;
