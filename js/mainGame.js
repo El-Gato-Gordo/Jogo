@@ -731,13 +731,13 @@ mainGame.create = function () {
   //Controles
 
   BUTTON_CIRCLE = this.physics.add
-    .staticSprite(755, 495, "BUTTON_CIRCLE")
+    .staticSprite(740, 495, "BUTTON_CIRCLE")
     .setScale(0.7)
     .setInteractive()
     .setScrollFactor(0);
 
   BUTTON_SQUARE = this.physics.add
-    .staticSprite(700, 550, "BUTTON_SQUARE")
+    .staticSprite(690, 550, "BUTTON_SQUARE")
     .setScale(0.7)
     .setInteractive()
     .setScrollFactor(0);
