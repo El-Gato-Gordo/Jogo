@@ -1458,13 +1458,11 @@ mainGame.update = function () {
 
       if (EYE_awakeningDuration > 200 && EYE_awakeningDuration <= 225) {
 
-        eye.setVelocityX(-70)
-        eye.setVelocityY(-70)
         eye.anims.play("EYE_idleFLoat", true)
 
       }
 
-      if (EYE_awakeningDuration > 45) {
+      if (EYE_awakeningDuration > 200) {
         EYE_isAwakened = true;
       }
     }
