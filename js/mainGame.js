@@ -78,6 +78,13 @@ var EYE_actionChoice = 0;
 var EYE_isDead = false;
 var EYE_isDying = 0
 
+var EYE_awakeningDuration = 0;
+var EYE_dyingDuration = 0;
+
+var EYE_actionDuration = 0;
+var EYE_moveDurationX = 0;
+var EYE_moveDurationY = 0;
+
 var PROJECTILE_electricOrb;
 var PROJECTILE_eyeCurse;
 var PROJECTILE_mageSpell;
@@ -349,15 +356,6 @@ mainGame.preload = function () {
     {
       frameWidth: 616,
       frameHeight: 528,
-    }
-  );
-
-  this.load.spritesheet(
-    "VFX_goInvisible",
-    "./assets/spritesheets/vfx/goInvisible.png",
-    {
-      frameWidth: 32,
-      frameHeight: 32,
     }
   );
 
@@ -905,15 +903,6 @@ mainGame.create = function () {
     repeat: 0,
   });
 
-  this.anims.create({
-    key: "VFX_goInvisible",
-    frames: this.anims.generateFrameNumbers("VFX_goInvisible", {
-      start: 0,
-      end: 7,
-    }),
-    frameRate: 1,
-    repeat: 0
-  })
 
   //Animações dos Projéteis
 
@@ -1271,8 +1260,27 @@ mainGame.update = function () {
   //Loop do Boss
 
   if (EYE_isAwakened === false) {
-    eye.anims.play("EYE_heAwakens", false)
+    EYE_awakeningDuration = EYE_awakeningDuration + 1
+    eye.anims.play("EYE_heAwakens", true)
   }
+  
+    if (EYE_awakeningDuration >= 200) {
+      EYE_isAwakened = true;
+      EYE_moveDurationX = 0;
+      EYE_moveDurationY = 0;
+
+      if (EYE_moveDurationX <= 30 && EYE_moveDurationY <= 30) {
+        EYE_moveDurationX = EYE_moveDurationX + 1
+        EYE_moveDurationY = EYE_moveDurationY + 1
+        eye.setVelocityX(-20)
+        eye.setVelocityY(-20)
+      }
+      else {
+        EYE_awakeningDuration = 0;
+      }
+
+    }
+  
   if (EYE_isAwakened === true && EYE_isDead === false) {
     if (EYE_isActing === false) {
       eye.anims.play("EYE_idleFloat", true);
