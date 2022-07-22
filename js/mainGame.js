@@ -1266,7 +1266,7 @@ mainGame.update = function () {
     }
   }
   
-    if (EYE_awakeningDuration >= 100 && EYE_isAwakened === false) {
+    if (EYE_awakeningDuration = 100 && EYE_isAwakened === false) {
       EYE_moveDurationX = 0;
       EYE_moveDurationY = 0;
 
