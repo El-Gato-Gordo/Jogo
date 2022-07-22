@@ -622,10 +622,10 @@ mainGame.create = function () {
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  platforms.create(400, 638, "MAP_floor")
+  platforms.create(400, 528, "MAP_floor")
 
   //Inimigo!
-  eye = this.physics.add.sprite(600, 75, "EYE_idleFloat");
+  eye = this.physics.add.sprite(600, 75, "EYE_idleFloat").setAllowGravity(false);
   eye.setCollideWorldBounds(true);
   eye.setSize(130, 130, true);
   this.physics.add.collider(eye, platforms, null, null, this)
@@ -1271,7 +1271,6 @@ mainGame.update = function () {
   if (EYE_isAwakened === true && EYE_isDead === false) {
     if (EYE_isActing === false) {
       eye.anims.play("EYE_idleFloat", true);
-   
     }
   }
 
