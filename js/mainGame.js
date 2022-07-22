@@ -1207,12 +1207,6 @@ mainGame.create = function () {
 //UPDATE
 mainGame.update = function () {
 
-  UP_isPressed = false;
-  RIGHT_isPressed = false;
-  LEFT_isPressed = false;
-  CIRCLE_isPressed = false;
-  SQUARE_isPressed = false;
-
   if (MK_isParrying === true) {
     MK_parryDuration = MK_parryDuration + 1;
     if (MK_parryDuration <= 10) {
