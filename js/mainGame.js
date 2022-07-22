@@ -72,8 +72,15 @@ var EYE_hitCooldown; //Cooldown para poder acertar de novo
 var EYE_healthPower = 100;
 
 var EYE_isAwakened = false;
-var PROJECTILE_electricOrb
-var PROJECTILE_mageSpell
+var EYE_cycleValue = 0;
+var EYE_isActing = false;
+var EYE_actionChoice = 0;
+var EYE_isDead = false;
+var EYE_isDying = 0
+
+var PROJECTILE_electricOrb;
+var PROJECTILE_eyeCurse;
+var PROJECTILE_mageSpell;
 
 //Declarando teclas do jogo
 
@@ -124,10 +131,10 @@ var sala;
 //PRELOAD
 mainGame.preload = function () {
   //Plano de fundo
-  this.load.image("sky", "./assets/images/sky.png");
+  this.load.image("MAP_background", "./assets/background/MAP_background.png");
 
   //Tileset e personagens
-  this.load.image("ground", "./assets/images/platform.png");
+  this.load.image("MAP_floor", "./assets/background/MAP_floor.png");
 
   this.load.audio("SFX_Land", ["./assets/sfx/SFX_Land.wav"]);
   this.load.audio("SFX_swordHit", ["./assets/sfx/SFX_swordHit.wav"]);
@@ -573,7 +580,7 @@ mainGame.create = function () {
   });
 
   
-  this.cameras.main.setBounds(0, -150, 1000, 800);
+  //this.cameras.main.setBounds(0, -150, 1000, 800);
 
   //Criando as teclas
 
@@ -608,17 +615,17 @@ mainGame.create = function () {
   keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT); // LEFT
 
   //  A simple background for our game
-  this.add.image(400, 300, "sky").setScale(8);
+  this.add.image(400, 300, "MAP_background");
 
   //  The platforms group contains the ground and the 2 ledges we can jump on
   platforms = this.physics.add.staticGroup();
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  platforms.create(400, 638, "ground").setScale(2).refreshBody();
+  platforms.create(400, 638, "MAP_floor")
 
   //Inimigo!
-  eye = this.physics.add.sprite(600, 75, "bichopapao");
+  eye = this.physics.add.sprite(600, 75, "EYE_idleFloat");
   eye.setCollideWorldBounds(true);
   eye.setSize(130, 130, true);
   this.physics.add.collider(eye, platforms, null, null, this)
@@ -634,7 +641,7 @@ mainGame.create = function () {
     MK_onGround = true
   });
 
-  this.cameras.main.startFollow(player);
+  //this.cameras.main.startFollow(player);
 
   vfx_mageParry = this.physics.add.staticSprite(0, 0, "VFX_invisibleThing").setScale(0.30)
 
@@ -1261,8 +1268,11 @@ mainGame.update = function () {
   }
   
   //Loop do Boss
-  if (EYE_isAwakened === true) {
-    eye.anims.play("EYE_idleFloat", true);
+  if (EYE_isAwakened === true && EYE_isDead === false) {
+    if (EYE_isActing === false) {
+      eye.anims.play("EYE_idleFloat", true);
+   
+    }
   }
 
   };
