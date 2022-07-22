@@ -1469,9 +1469,14 @@ mainGame.update = function () {
         eye.anims.play("EYE_idleFloat", true);
 
         if (EYE_cycleValue >= 0 && EYE_cycleValue <= 20) {
-          eye.setVelocityX(-70)
-          eye.setVelocityY(-70)
+          eye.setVelocityX(-320)
+          eye.setVelocityY(-320)
         }
+
+        if (EYE_cycleValue > 20 && EYE_cycleValue <= 30) {
+          eye.setVelocityX(-300)
+        }
+
       }
 
     }
