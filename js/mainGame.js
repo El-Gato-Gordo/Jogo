@@ -711,7 +711,7 @@ mainGame.create = function () {
   player.setOffset(207, 250, false);
 
   //Player physics properties.
-  player.setCollideWorldBounds(false);
+  player.setCollideWorldBounds(true);
   this.physics.add.collider(player, platforms, function () {
     MK_onGround = true
   });
@@ -1252,7 +1252,7 @@ mainGame.update = function () {
       if (MK_parryDuration >= 18) {
         MK_isParrying = false;
         MK_canParry = false;
-        MK_parryCooldown = 30;
+        MK_parryCooldown = 100;
 
       }
     }
@@ -1272,7 +1272,7 @@ mainGame.update = function () {
     MK_overlapBoss = false;
 
     //PULAR INÍCIO
-    if (SQUARE_isPressed && MK_isAttacking === false && jogador === 1) {
+    if (SQUARE_isPressed === false && MK_isAttacking === false && jogador === 1) {
   
       if (jumpTimer === 0 && player.body.touching.down) {
         //jumpTimer verifica o tempo que o jogador está no ar
@@ -1518,12 +1518,12 @@ mainGame.update = function () {
         eye.setVelocityY(0)
         eye.anims.play("EYE_idleFloat", true);
 
-        if (EYE_cycleValue >= 0 && EYE_cycleValue <= 20) {
-          eye.setVelocityX(-320)
-          eye.setVelocityY(-320)
+        if (EYE_cycleValue >= 0 && EYE_cycleValue <= 30) {
+          eye.setVelocityX(-350)
+          eye.setVelocityY(-350)
         }
 
-        if (EYE_cycleValue > 20 && EYE_cycleValue <= 30) {
+        if (EYE_cycleValue > 30 && EYE_cycleValue <= 50) {
           eye.setVelocityX(-300)
         }
 
