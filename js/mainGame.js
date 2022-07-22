@@ -1272,7 +1272,7 @@ mainGame.update = function () {
     MK_overlapBoss = false;
 
     //PULAR INÍCIO
-    if (CIRCLE_isPressed && MK_isAttacking === false && jogador === 1) {
+    if (SQUARE_isPressed && MK_isAttacking === false && jogador === 1) {
   
       if (jumpTimer === 0 && player.body.touching.down) {
         //jumpTimer verifica o tempo que o jogador está no ar
@@ -1394,7 +1394,7 @@ mainGame.update = function () {
 
       //PARADO INÍCIO
       if (player.body.velocity.x === 0 && MK_isAttacking === false) {
-        if (last_direction === "R" && CIRCLE_isPressed === false && jogador === 1) {
+        if (last_direction === "R" && SQUARE_isPressed === false && jogador === 1) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleRight", true);
@@ -1406,7 +1406,7 @@ mainGame.update = function () {
           player.anims.play("MK-lookupRight", true);
         }
 
-        if (last_direction === "L" && CIRCLE_isPressed === false && jogador === 1) {
+        if (last_direction === "L" && UP_isPressed === false && jogador === 1) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleLeft", true);
