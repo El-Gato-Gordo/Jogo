@@ -681,7 +681,7 @@ mainGame.create = function () {
   platforms.create(400, 565, "MAP_floor")
 
   //Inimigo!
-  eye = this.physics.add.sprite(600, 400, "EYE_idleFloat").setImmovable(true)
+  eye = this.physics.add.sprite(600, 400, "EYE_heAwakens").setImmovable(true)
   eye.body.setAllowGravity(false);
   eye.setCollideWorldBounds(true);
   eye.setSize(130, 130, true);
@@ -1442,11 +1442,11 @@ mainGame.update = function () {
     if (EYE_isAwakened === false) {
       EYE_awakeningDuration = EYE_awakeningDuration + 1
 
-      if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 100) {
+      if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 95) {
         eye.anims.play("EYE_heAwakens", true);
       }
 
-      if (EYE_awakeningDuration > 100 && EYE_awakeningDuration <= 125) {
+      if (EYE_awakeningDuration > 95 && EYE_awakeningDuration <= 120) {
 
         eye.setVelocityX(-75)
         eye.setVelocityY(-75)
@@ -1454,7 +1454,7 @@ mainGame.update = function () {
 
       }
 
-      if (EYE_awakeningDuration > 100) {
+      if (EYE_awakeningDuration > 95) {
         EYE_isAwakened = true;
       }
     }
@@ -1462,12 +1462,16 @@ mainGame.update = function () {
   
     if (EYE_isAwakened === true && EYE_isDead === false) {
 
-      EYE_cycleValue = EYE_cycleValue + 1
-
       if (EYE_isActing === false) {
+        EYE_cycleValue = EYE_cycleValue + 1
         eye.setVelocityX(0)
         eye.setVelocityY(0)
         eye.anims.play("EYE_idleFloat", true);
+
+        if (EYE_cycleValue >= 0 && EYE_cycleValue <= 20) {
+          eye.setVelocityX(-70)
+          eye.setVelocityY(-70)
+        }
       }
 
     }
