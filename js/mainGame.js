@@ -90,11 +90,11 @@ var PROJECTILE_electricOrb;
 var PROJECTILE_eyeCurse;
 var PROJECTILE_mageSpell;
 
-var UP_isPressed;
-var RIGHT_isPressed;
-var LEFT_isPressed;
-var CIRCLE_isPressed;
-var SQUARE_isPressed;
+var UP_isPressed = false;
+var RIGHT_isPressed = false;
+var LEFT_isPressed = false;
+var CIRCLE_isPressed = false;
+var SQUARE_isPressed = false;
 
 var BUTTON_CIRCLE;
 var BUTTON_SQUARE;
