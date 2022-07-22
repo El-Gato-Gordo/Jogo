@@ -1276,11 +1276,11 @@ mainGame.update = function () {
         eye.setVelocityX(-70)
         eye.setVelocityY(-75)
       }
-      else {
-        EYE_isAwakened = true;
+      
+      if (EYE_moveDurationX > 25 && EYE_moveDurationY > 25) {
         eye.setVelocityX(0)
         eye.setVelocityY(0)
- 
+        EYE_isAwakened = true;
       }
 
     }
