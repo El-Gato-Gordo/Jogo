@@ -1309,10 +1309,10 @@ mainGame.update = function () {
         player.anims.play("MK-GsideatkLeft", true)
       }
       MK_attackDuration = MK_attackDuration + 1;
-      if (MK_attackDuration >= 18) {
+      if (MK_attackDuration >= 10) {
         MK_isAttacking = false;
         MK_canAttack = false;
-        MK_attackCooldown = 5;
+        MK_attackCooldown = 10;
       }
     }
 
