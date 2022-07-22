@@ -89,6 +89,19 @@ var PROJECTILE_electricOrb;
 var PROJECTILE_eyeCurse;
 var PROJECTILE_mageSpell;
 
+var UP_isPressed;
+var RIGHT_isPressed;
+var LEFT_isPressed;
+var CIRCLE_isPressed;
+var SQUARE_isPressed;
+
+var BUTTON_CIRCLE;
+var BUTTON_SQUARE;
+var BUTTON_UP;
+var BUTTON_RIGHT;
+var BUTTON_LEFT;
+
+
 //Declarando teclas do jogo
 
 //Cavaleiro
@@ -161,6 +174,52 @@ mainGame.preload = function () {
       frameHeight: 128,
     }
   );
+
+  this.load.spritesheet(
+    "BUTTON_CIRCLE",
+    "./assets/hud/BUTTON_CIRCLE.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+  this.load.spritesheet(
+    "BUTTON_SQUARE",
+    "./assets/hud/BUTTON_SQUARE.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+  this.load.spritesheet(
+    "BUTTON_LEFT",
+    "./assets/hud/BUTTON_LEFT.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+  this.load.spritesheet(
+    "BUTTON_RIGHT",
+    "./assets/hud/BUTTON_RIGHT.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+  this.load.spritesheet(
+    "BUTTON_UP",
+    "./assets/hud/BUTTON_UP.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
 
   //Cavaleiro e Mago
 
@@ -640,6 +699,9 @@ mainGame.create = function () {
     MK_onGround = true
   });
 
+
+  //Toque de tela:
+  pointer = this.input.addPointer(1);
   //this.cameras.main.startFollow(player);
 
   vfx_mageParry = this.physics.add.staticSprite(0, 0, "VFX_invisibleThing").setScale(0.30)
@@ -664,6 +726,79 @@ mainGame.create = function () {
     this
   );
 
+
+  //Controles
+
+  BUTTON_CIRCLE = this.physics.add
+    .staticSprite(750, 500, "BUTTON_CIRCLE")
+    .setScale(0.7)
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_SQUARE = this.physics.add
+    .staticSprite(700, 550, "BUTTON_SQUARE")
+    .setScale(0.7)
+    .setInteractive()
+    .setScrollFactor(0);
+  
+
+  BUTTON_LEFT = this.physics.add
+    .staticSprite(50, 550, "BUTTON_LEFT")
+    .setScale(0.7)
+    .setInteractive()
+    .setScrollFactor(0);
+
+
+  BUTTON_RIGHT = this.physics.add
+    .staticSprite(150, 550, "BUTTON_RIGHT")
+    .setScale(0.7)
+    .setInteractive()
+    .setScrollFactor(0);
+
+
+  BUTTON_UP = this.physics.add
+    .staticSprite(100, 500, "BUTTON_UP")
+    .setScale(0.7)
+    .setInteractive()
+    .setScrollFactor(0);
+
+  
+  BUTTON_UP.on(
+    "pointerup",
+    function () {
+      UP_isPressed = true;
+    }
+  )
+
+  BUTTON_RIGHT.on(
+    "pointerup",
+    function () {
+      RIGHT_isPressed = true;
+    }
+  )
+
+  BUTTON_LEFT.on(
+    "pointerup",
+    function () {
+      LEFT_isPressed = true;
+    }
+  )
+  
+  BUTTON_CIRCLE.on(
+    "pointerup",
+    function () {
+      CIRCLE_isPressed = true;
+    }
+  )
+
+  BUTTON_SQUARE.on(
+    "pointerup",
+    function () {
+      SQUARE_isPressed = true;
+    }
+  )
+
+  
   this.physics.add.overlap(eye, player, function () {
     MK_overlapBoss = true;
     
@@ -1013,6 +1148,12 @@ mainGame.create = function () {
 //UPDATE
 mainGame.update = function () {
 
+  UP_isPressed = false;
+  RIGHT_isPressed = false;
+  LEFT_isPressed = false;
+  CIRCLE_isPressed = false;
+  SQUARE_isPressed = false;
+
   if (MK_isParrying === true) {
     MK_parryDuration = MK_parryDuration + 1;
     if (MK_parryDuration <= 10) {
@@ -1045,7 +1186,7 @@ mainGame.update = function () {
   MK_overlapBoss = false;
 
   //PULAR INÍCIO
-  if (keyW.isDown && MK_isAttacking === false) {
+  if (UP_isPressed && MK_isAttacking === false && jogador === 1) {
   
     if (jumpTimer === 0 && player.body.touching.down) {
       //jumpTimer verifica o tempo que o jogador está no ar
@@ -1071,11 +1212,11 @@ mainGame.update = function () {
 
   //Aparo de Ataques
   
-  if (keyNum0.isDown && MK_isParrying === false && MK_canParry === true) {
+  if (CIRCLE_isPressed && MK_isParrying === false && MK_canParry === true && jogador === 2) {
     MK_isParrying = true;
   }
   //Ataques Laterais
-  if (keyJ.isDown && MK_isEvading === false && MK_isAttacking === false && MK_canAttack === true) {
+  if (CIRCLE_isPressed && MK_isEvading === false && MK_isAttacking === false && MK_canAttack === true && jogador === 1 ) {
     MK_isAttacking = true
     SFX_swordSwing.play()
   }
@@ -1138,7 +1279,7 @@ mainGame.update = function () {
     }
 
     //ANDAR E CORRER INÍCIO
-    if (keyD.isDown && MK_isAttacking === false && MK_isEvading === false) {
+    if (RIGHT_isPressed && MK_isAttacking === false && MK_isEvading === false && jogador === 1) {
 
       last_direction = "R";
 
@@ -1154,7 +1295,7 @@ mainGame.update = function () {
         player.anims.play("MK-runRight", true);
       }
 
-    } else if (keyA.isDown && MK_isAttacking === false && MK_isEvading === false) {
+    } else if (LEFT_isPressed && MK_isAttacking === false && MK_isEvading === false && jogador === 1) {
 
       last_direction = "L";
 
