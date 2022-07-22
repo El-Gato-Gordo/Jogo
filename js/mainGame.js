@@ -1269,21 +1269,23 @@ mainGame.update = function () {
     if (EYE_awakeningDuration = 100 && EYE_isAwakened === false) {
       EYE_moveDurationX = 0;
       EYE_moveDurationY = 0;
-
+  }
+  
       if (EYE_moveDurationX <= 25 && EYE_moveDurationY <= 25) {
         EYE_moveDurationX = EYE_moveDurationX + 1
         EYE_moveDurationY = EYE_moveDurationY + 1
         eye.setVelocityX(-70)
         eye.setVelocityY(-75)
       }
-      
-      if (EYE_moveDurationX > 25 && EYE_moveDurationY > 25) {
+      else {
+
+        EYE_isAwakened = true;
         eye.setVelocityX(0)
         eye.setVelocityY(0)
-        EYE_isAwakened = true;
+ 
       }
 
-    }
+
   
   if (EYE_isAwakened === true && EYE_isDead === false) {
 
