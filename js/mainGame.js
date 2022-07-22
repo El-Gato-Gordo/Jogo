@@ -64,6 +64,7 @@ var MK_justParried = false;
 var MK_parryCooldown = 0;
 var MK_canParry = true;
 
+var pointer;
 
 //Olhão!!
 
