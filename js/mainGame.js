@@ -1254,9 +1254,6 @@ mainGame.update = function () {
 
     //PULAR FIM
 
-    if (EYE_healthPower <= 96) {
-      eye.setVelocityY(-500);
-    }
 
     //Aparo de Ataques
   
@@ -1445,11 +1442,11 @@ mainGame.update = function () {
     if (EYE_isAwakened === false) {
       EYE_awakeningDuration = EYE_awakeningDuration + 1
 
-      if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 300) {
+      if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 100) {
         eye.anims.play("EYE_heAwakens", true);
       }
 
-      if (EYE_awakeningDuration > 300 && EYE_awakeningDuration <= 325) {
+      if (EYE_awakeningDuration > 100 && EYE_awakeningDuration <= 125) {
 
         eye.setVelocityX(-75)
         eye.setVelocityY(-75)
@@ -1457,7 +1454,7 @@ mainGame.update = function () {
 
       }
 
-      if (EYE_awakeningDuration > 300) {
+      if (EYE_awakeningDuration > 100) {
         EYE_isAwakened = true;
       }
     }
