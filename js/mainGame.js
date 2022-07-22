@@ -1520,11 +1520,11 @@ mainGame.update = function () {
 
         if (EYE_cycleValue >= 0 && EYE_cycleValue <= 30) {
           eye.setVelocityX(-350)
-          eye.setVelocityY(-350)
+          eye.setVelocityY(-400)
         }
 
         if (EYE_cycleValue > 30 && EYE_cycleValue <= 50) {
-          eye.setVelocityX(-300)
+          eye.setVelocityX(-100)
         }
 
       }
