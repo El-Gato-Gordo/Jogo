@@ -1266,12 +1266,12 @@ mainGame.update = function () {
     }
   }
   
-    if (EYE_awakeningDuration = 100 && EYE_isAwakened === false) {
+    if (EYE_awakeningDuration === 100 && EYE_isAwakened === false) {
       EYE_moveDurationX = 0;
       EYE_moveDurationY = 0;
   }
   
-      if (EYE_moveDurationX <= 25 && EYE_moveDurationY <= 25) {
+      if (EYE_moveDurationX <= 25 && EYE_moveDurationY <= 25 && EYE_awakeningDuration > 100) {
         EYE_moveDurationX = EYE_moveDurationX + 1
         EYE_moveDurationY = EYE_moveDurationY + 1
         eye.setVelocityX(-70)
