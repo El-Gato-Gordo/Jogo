@@ -64,7 +64,7 @@ var MK_justParried = false;
 var MK_parryCooldown = 0;
 var MK_canParry = true;
 
-//var pointer;
+var pointer;
 
 //Olhão!!
 
@@ -700,7 +700,7 @@ mainGame.create = function () {
 
 
   //Toque de tela:
-  //pointer = this.input.addPointer(1);
+  pointer = this.input.addPointer(1);
   //this.cameras.main.startFollow(player);
 
   vfx_mageParry = this.physics.add.staticSprite(0, 0, "VFX_invisibleThing").setScale(0.30)
@@ -1452,17 +1452,19 @@ mainGame.update = function () {
     if (EYE_isAwakened === false) {
       EYE_awakeningDuration = EYE_awakeningDuration + 1
 
-      if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 200) {
+      if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 300) {
         eye.anims.play("EYE_heAwakens", true);
       }
 
-      if (EYE_awakeningDuration > 200 && EYE_awakeningDuration <= 225) {
+      if (EYE_awakeningDuration > 300 && EYE_awakeningDuration <= 325) {
 
+        eye.setVelocityX(-75)
+        eye.setVelocityY(-75)
         eye.anims.play("EYE_idleFLoat", true)
 
       }
 
-      if (EYE_awakeningDuration > 200) {
+      if (EYE_awakeningDuration > 300) {
         EYE_isAwakened = true;
       }
     }
