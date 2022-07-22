@@ -1264,18 +1264,20 @@ mainGame.update = function () {
     eye.anims.play("EYE_heAwakens", true)
   }
   
-    if (EYE_awakeningDuration >= 200) {
+    if (EYE_awakeningDuration >= 110) {
       EYE_isAwakened = true;
       EYE_moveDurationX = 0;
       EYE_moveDurationY = 0;
 
-      if (EYE_moveDurationX <= 30 && EYE_moveDurationY <= 30) {
+      if (EYE_moveDurationX <= 25 && EYE_moveDurationY <= 25) {
         EYE_moveDurationX = EYE_moveDurationX + 1
         EYE_moveDurationY = EYE_moveDurationY + 1
-        eye.setVelocityX(-20)
-        eye.setVelocityY(-20)
+        eye.setVelocityX(-50)
+        eye.setVelocityY(-55)
       }
       else {
+        eye.setVelocityX(0)
+        eye.setVelocityY(0)
         EYE_awakeningDuration = 0;
       }
 
