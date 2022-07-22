@@ -1312,7 +1312,7 @@ mainGame.update = function () {
       if (MK_attackDuration >= 18) {
         MK_isAttacking = false;
         MK_canAttack = false;
-        MK_attackCooldown = 10;
+        MK_attackCooldown = 5;
       }
     }
 
@@ -1438,41 +1438,38 @@ mainGame.update = function () {
   
   //Loop do Boss
 
+
   if (EYE_isAwakened === false) {
     EYE_awakeningDuration = EYE_awakeningDuration + 1
-    if (EYE_awakeningDuration < 100) {
-      eye.anims.play("EYE_heAwakens", true)
+
+    if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 25) {
+      eye.anims.play("EYE_heAwakens", true);
+    }
+
+    if (EYE_awakeningDuration > 25 && EYE_awakeningDuration <= 45) {
+
+      eye.setVelocityX(-70)
+      eye.setVelocityY(-70)
+      eye.anims.play("EYE_idleFLoat", true)
+
+    }
+
+    if (EYE_awakeningDuration > 45) {
+      EYE_isAwakened = true;
     }
   }
-  
-    if (EYE_awakeningDuration === 100 && EYE_isAwakened === false) {
-      EYE_moveDurationX = 0;
-      EYE_moveDurationY = 0;
-  }
-  
-      if (EYE_moveDurationX <= 25 && EYE_moveDurationY <= 25 && EYE_awakeningDuration > 100) {
-        EYE_moveDurationX = EYE_moveDurationX + 1
-        EYE_moveDurationY = EYE_moveDurationY + 1
-        eye.setVelocityX(-70)
-        eye.setVelocityY(-75)
-      }
-      else {
-
-        EYE_isAwakened = true;
-        eye.setVelocityX(0)
-        eye.setVelocityY(0)
- 
-      }
-
 
   
   if (EYE_isAwakened === true && EYE_isDead === false) {
+
+    EYE_cycleValue = EYE_cycleValue + 1
 
     if (EYE_isActing === false) {
       eye.setVelocityX(0)
       eye.setVelocityY(0)
       eye.anims.play("EYE_idleFloat", true);
     }
+
   }
 
   };
