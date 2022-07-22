@@ -64,7 +64,7 @@ var MK_justParried = false;
 var MK_parryCooldown = 0;
 var MK_canParry = true;
 
-var pointer;
+//var pointer;
 
 //Olhão!!
 
@@ -702,7 +702,7 @@ mainGame.create = function () {
 
 
   //Toque de tela:
-  pointer = this.input.addPointer(1);
+  //pointer = this.input.addPointer(1);
   //this.cameras.main.startFollow(player);
 
   vfx_mageParry = this.physics.add.staticSprite(0, 0, "VFX_invisibleThing").setScale(0.30)
