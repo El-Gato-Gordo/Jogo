@@ -622,10 +622,10 @@ mainGame.create = function () {
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  platforms.create(400, 550, "MAP_floor")
+  platforms.create(400, 565, "MAP_floor")
 
   //Inimigo!
-  eye = this.physics.add.sprite(600, 75, "EYE_idleFloat").setImmovable(true)
+  eye = this.physics.add.sprite(600, 400, "EYE_idleFloat").setImmovable(true)
   eye.body.setAllowGravity(false);
   eye.setCollideWorldBounds(true);
   eye.setSize(130, 130, true);
@@ -843,8 +843,8 @@ mainGame.create = function () {
   //Animações do Olhão Louco!
 
   this.anims.create({
-    key: "electricCharge",
-    frames: this.anims.generateFrameNumbers("electricCharge", {
+    key: "EYE_electricCharge",
+    frames: this.anims.generateFrameNumbers("EYE_electricCharge", {
       start: 0,
       end: 1,
     }),
@@ -853,8 +853,8 @@ mainGame.create = function () {
   });
 
   this.anims.create({
-    key: "electricDash",
-    frames: this.anims.generateFrameNumbers("electricDash", {
+    key: "EYE_electricDash",
+    frames: this.anims.generateFrameNumbers("EYE_electricDash", {
       start: 0,
       end: 1,
     }),
@@ -1269,6 +1269,10 @@ mainGame.update = function () {
   }
   
   //Loop do Boss
+
+  if (EYE_isAwakened === false) {
+    eye.anims.play("EYE_heAwakens", false)
+  }
   if (EYE_isAwakened === true && EYE_isDead === false) {
     if (EYE_isActing === false) {
       eye.anims.play("EYE_idleFloat", true);
