@@ -775,8 +775,9 @@ mainGame.create = function () {
         fullScreen_button.setFrame(1);
         this.scale.startFullscreen();
       }
-    }
-  )
+    },
+    this
+  );
 
   BUTTON_RIGHT.on(
     "pointerup",
@@ -789,24 +790,74 @@ mainGame.create = function () {
     "pointerup",
     function () {
       LEFT_isPressed = true;
-    }
+    },
+    this
   )
   
   BUTTON_CIRCLE.on(
     "pointerup",
     function () {
       CIRCLE_isPressed = true;
-    }
+    },
+    this
   )
 
   BUTTON_SQUARE.on(
     "pointerup",
     function () {
       SQUARE_isPressed = true;
-    }
+    },
+    this
   )
 
-  
+  BUTTON_UP.on(
+    "pointerup",
+    function () {
+      UP_isPressed = true;
+    },
+    this
+  );
+
+  //Sem apertar
+  BUTTON_RIGHT.on(
+    "pointerout",
+    function () {
+      RIGHT_isPressed = false;
+    },
+    this
+  )
+
+  BUTTON_UP.on(
+    "pointerout",
+    function () {
+      UP_isPressed = false;
+    },
+    this
+  )
+  BUTTON_LEFT.on(
+    "pointerout",
+    function () {
+      LEFT_isPressed = false;
+    },
+    this
+  )
+
+  BUTTON_CIRCLE.on(
+    "pointerout",
+    function () {
+      CIRCLE_isPressed = false;
+    },
+    this
+  )
+
+  BUTTON_SQUARE.on(
+    "pointerout",
+    function () {
+      SQUARE_isPressed = false;
+    },
+    this
+  )
+
   this.physics.add.overlap(eye, player, function () {
     MK_overlapBoss = true;
     
