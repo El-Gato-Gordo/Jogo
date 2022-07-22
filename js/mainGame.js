@@ -245,6 +245,24 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
+    "MK-lookupRight",
+    "./assets/spritesheets/mageknight/MK-lookupRight.png",
+    {
+      frameWidth: 616,
+      frameHeight: 500,
+    }
+  );
+
+    this.load.spritesheet(
+      "MK-lookupLeft",
+      "./assets/spritesheets/mageknight/MK-lookupLeft.png",
+      {
+        frameWidth: 616,
+        frameHeight: 500,
+      }
+  );
+  
+  this.load.spritesheet(
     "MK-walkRight",
     "./assets/spritesheets/mageknight/MK-walkRight.png",
     {
@@ -896,6 +914,26 @@ mainGame.create = function () {
   });
 
   this.anims.create({
+    key: "MK-lookupRight",
+    frames: this.anims.generateFrameNumbers("MK-lookupRight", {
+      start: 0,
+      end: 7,
+    }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
+   this.anims.create({
+     key: "MK-lookupLeft",
+     frames: this.anims.generateFrameNumbers("MK-lookupLeft", {
+       start: 0,
+       end: 7,
+     }),
+     frameRate: 10,
+     repeat: -1,
+   });
+  
+  this.anims.create({
     key: "MK-walkRight",
     frames: this.anims.generateFrameNumbers("MK-walkRight", {
       start: 0,
@@ -1234,7 +1272,7 @@ mainGame.update = function () {
     MK_overlapBoss = false;
 
     //PULAR INÍCIO
-    if (UP_isPressed && MK_isAttacking === false && jogador === 1) {
+    if (CIRCLE_isPressed && MK_isAttacking === false && jogador === 1) {
   
       if (jumpTimer === 0 && player.body.touching.down) {
         //jumpTimer verifica o tempo que o jogador está no ar
@@ -1309,7 +1347,7 @@ mainGame.update = function () {
           player.anims.play("MK-GsideatkLeft", true)
         }
         MK_attackDuration = MK_attackDuration + 1;
-        if (MK_attackDuration >= 10) {
+        if (MK_attackDuration >= 13) {
           MK_isAttacking = false;
           MK_canAttack = false;
           MK_attackCooldown = 10;
@@ -1356,16 +1394,28 @@ mainGame.update = function () {
 
       //PARADO INÍCIO
       if (player.body.velocity.x === 0 && MK_isAttacking === false) {
-        if (last_direction === "R") {
+        if (last_direction === "R" && CIRCLE_isPressed === false && jogador === 1) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleRight", true);
         }
 
-        if (last_direction === "L") {
+        if (last_direction === "R" && UP_isPressed === true && jogador === 1) {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-lookupRight", true);
+        }
+
+        if (last_direction === "L" && CIRCLE_isPressed === false && jogador === 1) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleLeft", true);
+        }
+
+        if (last_direction === "L" && UP_isPressed === true && jogador === 1) {
+          player.setSize(200, 250, true);
+          player.setOffset(207, 250, false);
+          player.anims.play("MK-lookupLeft", true);
         }
       }
 
