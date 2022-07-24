@@ -62,13 +62,13 @@ mainMenu.create = function () {
         }),
 
         frameRate: 20,
-        repeat: 1,
+        repeat: 0,
     });
 };
 
 mainMenu.update = function () {
     if (logoPlayed === false) {
-        logo.anims.play("logoIntro", true);
+        logo.anims.play("logoIntro", false);
         if (logo.currentFrame === 47) {
             logoPlayed = true;
             logo.setFrame(47);
