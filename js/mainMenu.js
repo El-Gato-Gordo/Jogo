@@ -5,6 +5,7 @@ var fullScreen_button;
 var introAnimDuration = 0;
 var MUSIC_Underground
 
+var play_button;
 var pointer;
 
 mainMenu.preload = function () {
@@ -71,7 +72,7 @@ mainMenu.create = function () {
         "pointerover",
         function () {
             if (introAnimDuration > 150) {
-                play_buton.setFrame(20)
+                play_button.setFrame(20)
                 this.scene.start("Main Game");
             }
         },this
@@ -81,7 +82,7 @@ mainMenu.create = function () {
       "pointerout",
       function () {
         if (introAnimDuration > 150) {
-          play_buton.setFrame(19);
+          play_button.setFrame(19);
         }
       },
       this
