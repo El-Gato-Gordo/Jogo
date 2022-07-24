@@ -90,6 +90,8 @@ mainMenu.create = function () {
         "play_button"
     ).setScale(1).setInteractive().setScrollFactor(0);
 
+  play_button.setSize(130, 130, true);
+  
     play_button.on(
         "pointerover",
         function () {
