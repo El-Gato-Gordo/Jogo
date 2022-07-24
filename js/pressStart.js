@@ -43,23 +43,12 @@ pressStart.create = function () {
     repeat: -1,
   });
 
-  this.anims.create({
-    key: "startButtonGild",
-    frames: this.anims.generateFrameNumbers("startButton", {
-      start: 1,
-      end: 19,
-    }),
-
-    frameRate: 15,
-    repeat: -1,
-  });
 };
 
 pressStart.update = function () {
   background_pressStart.anims.play("backgroundLoop", true);
 
   if (keyENTER.isDown) {
-    startButton.anims.play("startButtonGild", true);
     this.scene.start("Main Menu");
   }
 };
