@@ -3,6 +3,7 @@ var mainMenu = new Phaser.Scene("Main Menu");
 var logo;
 var fullScreen_button;
 var logoPlayed = false;
+var logoAnimDuration = 0;
 
 mainMenu.preload = function () {
 
@@ -67,13 +68,9 @@ mainMenu.create = function () {
 };
 
 mainMenu.update = function () {
-    if (logoPlayed === false) {
+    if (logoAnimDuration <= 120) {
+        logoAnimDuration = logoAnimDuration + 1
         logo.anims.play("logoIntro", false);
-        if (logo.currentFrame === 47) {
-            logoPlayed = true;
-            logo.setFrame(47);
-
-        }
     }
 
 };
