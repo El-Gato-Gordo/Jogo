@@ -41,6 +41,12 @@ mainMenu.preload = function () {
 };
 
 mainMenu.create = function () {
+  
+      background_mainMenu = this.physics.add.staticSprite(
+        400,
+        300,
+        "MAIN_MENU_background"
+      );
 
       pointer = this.input.addPointer(1);
 
@@ -128,11 +134,7 @@ mainMenu.create = function () {
 
     MUSIC_Underground = this.sound.add("MUSIC_Underground", { loop: true });
 
-    background_mainMenu = this.physics.add.staticSprite(
-      400,
-      300,
-      "MAIN_MENU_background"
-    );
+
 
 };
 
@@ -149,7 +151,7 @@ mainMenu.update = function () {
     if (introAnimDuration > 120 && introAnimDuration <= 150) {
         introAnimDuration = introAnimDuration + 1
 
-        play_button.anims.play("playBUttonIntro", false)
+        play_button.anims.play("playButtonIntro", false)
         
     }
 };
