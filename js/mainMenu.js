@@ -91,7 +91,7 @@ mainMenu.create = function () {
     ).setScale(1).setInteractive().setScrollFactor(0);
 
   play_button.setSize(120, 70, true);
-  play_button.setOffset(-30, 0, true);
+  //play_button.setOffset(-30, 0, true);
     play_button.on(
         "pointerover",
         function () {
@@ -172,6 +172,8 @@ mainMenu.update = function () {
         play_button.anims.play("playButtonIntro", false)
         
     }
+      play_button.setSize(120, 70, true);
+
 };
 
 export { mainMenu };
