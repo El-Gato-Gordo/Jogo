@@ -3,7 +3,6 @@ import { mainMenu } from "./mainMenu.js";
 var pressStart = new Phaser.Scene("Press Start");
 var background_pressStart;
 var startButton;
-var keyENTER; //Não funciona, no log se tento verificar a varíavel, diz que não está definida
 
 pressStart.preload = function () {
   this.load.spritesheet(
@@ -49,9 +48,6 @@ pressStart.create = function () {
 pressStart.update = function () {
   background_pressStart.anims.play("backgroundLoop", true);
 
-  if (keyENTER.isDown) {
-    this.scene.start("Main Menu");
-  }
 };
 
 export { pressStart };
