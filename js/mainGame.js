@@ -803,7 +803,8 @@ mainGame.create = function () {
       RIGHT_isPressed = true;
       MK_isRunning = true;
 
-    }
+    },
+    this,
   )
 
   BUTTON_LEFT.on(
@@ -813,7 +814,7 @@ mainGame.create = function () {
       MK_isRunning = true;
 
     },
-    this
+    this,
   )
   
   BUTTON_CIRCLE.on(
@@ -821,7 +822,7 @@ mainGame.create = function () {
     function () {
       CIRCLE_isPressed = true;
     },
-    this
+    this,
   )
 
   BUTTON_SQUARE.on(
@@ -829,7 +830,7 @@ mainGame.create = function () {
     function () {
       SQUARE_isPressed = true;
     },
-    this
+    this,
   )
 
   BUTTON_UP.on(
@@ -837,7 +838,7 @@ mainGame.create = function () {
     function () {
       UP_isPressed = true;
     },
-    this
+    this,
   );
 
   //Sem apertar
@@ -847,7 +848,7 @@ mainGame.create = function () {
       RIGHT_isPressed = false;
       MK_isRunning = false;
     },
-    this
+    this,
   )
 
   BUTTON_UP.on(
@@ -855,7 +856,7 @@ mainGame.create = function () {
     function () {
       UP_isPressed = false;
     },
-    this
+    this,
   )
   BUTTON_LEFT.on(
     "pointerout",
@@ -864,7 +865,7 @@ mainGame.create = function () {
       MK_isRunning = false;
 
     },
-    this
+    this,
   )
 
   BUTTON_CIRCLE.on(
@@ -872,7 +873,7 @@ mainGame.create = function () {
     function () {
       CIRCLE_isPressed = false;
     },
-    this
+    this,
   )
 
   BUTTON_SQUARE.on(
@@ -880,7 +881,7 @@ mainGame.create = function () {
     function () {
       SQUARE_isPressed = false;
     },
-    this
+    this,
   )
 
   this.physics.add.overlap(eye, player, function () {

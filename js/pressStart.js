@@ -32,7 +32,7 @@ pressStart.create = function () {
         this.scene.start("Main Menu");
         
       },
-      this
+      this,
     );
 
   this.anims.create({
