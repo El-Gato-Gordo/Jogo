@@ -36,10 +36,10 @@ pressStart.create = function () {
     key: "backgroundLoop",
     frames: this.anims.generateFrameNumbers("START_SCREEN", {
       start: 0,
-      end: 9,
+      end: 1,
     }),
 
-    frameRate: 10,
+    frameRate: 1,
     repeat: -1,
   });
 
