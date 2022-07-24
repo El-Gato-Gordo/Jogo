@@ -194,6 +194,15 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
+    "BUTTON_INVISIBLE",
+    "./assets/buttons/BUTTON_INVISIBLE.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+  this.load.spritesheet(
     "BUTTON_CIRCLEK",
     "./assets/buttons/BUTTON_CIRCLEK.png",
     {
@@ -276,7 +285,7 @@ this.load.spritesheet(
 
     this.load.spritesheet(
     "BUTTON_ROOM1",
-    "./assets/buttons/ROOM1.png",
+    "./assets/buttons/BUTTON_ROOM1.png",
     {
       frameWidth: 100,
       frameHeight: 100,
@@ -284,35 +293,35 @@ this.load.spritesheet(
   );
 
      this.load.spritesheet(
-    "BUTTON_ROOM2",
-    "./assets/buttons/ROOM2.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+       "BUTTON_ROOM2",
+       "./assets/buttons/BUTTON_ROOM2.png",
+       {
+         frameWidth: 100,
+         frameHeight: 100,
+       }
+     );
 
      this.load.spritesheet(
-    "BUTTON_ROOM3",
-    "./assets/buttons/ROOM3.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+       "BUTTON_ROOM3",
+       "./assets/buttons/BUTTON_ROOM3.png",
+       {
+         frameWidth: 100,
+         frameHeight: 100,
+       }
+     );
 
      this.load.spritesheet(
-    "BUTTON_ROOM4",
-    "./assets/buttons/ROOM4.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+       "BUTTON_ROOM4",
+       "./assets/buttons/BUTTON_ROOM4.png",
+       {
+         frameWidth: 100,
+         frameHeight: 100,
+       }
+     );
 
      this.load.spritesheet(
     "BUTTON_ROOM5",
-    "./assets/buttons/ROOM5.png",
+    "./assets/buttons/BUTTON_ROOM5.png",
     {
       frameWidth: 100,
       frameHeight: 100,
@@ -842,16 +851,15 @@ mainGame.create = function () {
 
   //Controles
 
-  if (jogador === 1) {
     BUTTON_CIRCLE = this.physics.add
-      .staticSprite(740, 495, "BUTTON_CIRCLEK")
+      .staticSprite(740, 495, "BUTTON_INVISIBLE")
       .setScale(0.7)
       .refreshBody()
       .setInteractive()
       .setScrollFactor(0);
 
     BUTTON_SQUARE = this.physics.add
-      .staticSprite(690, 550, "BUTTON_SQUAREK")
+      .staticSprite(690, 550, "BUTTON_INVISIBLE")
       .setScale(0.7)
       .refreshBody()
       .setInteractive()
@@ -859,7 +867,7 @@ mainGame.create = function () {
   
 
     BUTTON_LEFT = this.physics.add
-      .staticSprite(50, 550, "BUTTON_LEFTK")
+      .staticSprite(50, 550, "BUTTON_INVISIBLE")
       .setScale(0.7)
       .refreshBody()
       .setInteractive()
@@ -867,7 +875,7 @@ mainGame.create = function () {
 
 
     BUTTON_RIGHT = this.physics.add
-      .staticSprite(150, 550, "BUTTON_RIGHTK")
+      .staticSprite(150, 550, "BUTTON_INVISIBLE")
       .setScale(0.7)
       .refreshBody()
       .setInteractive()
@@ -875,50 +883,13 @@ mainGame.create = function () {
 
 
     BUTTON_UP = this.physics.add
-      .staticSprite(100, 500, "BUTTON_UPK")
+      .staticSprite(100, 500, "BUTTON_INVISIBLE")
       .setScale(0.7)
       .refreshBody()
       .setInteractive()
       .setScrollFactor(0);
 
-  }
-
-  if (jogador === 2) {
-    BUTTON_CIRCLE = this.physics.add
-      .staticSprite(740, 495, "BUTTON_CIRCLEM")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
-
-    BUTTON_SQUARE = this.physics.add
-      .staticSprite(690, 550, "BUTTON_SQUAREM")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
-
-    BUTTON_LEFT = this.physics.add
-      .staticSprite(50, 550, "BUTTON_LEFTM")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
-
-    BUTTON_RIGHT = this.physics.add
-      .staticSprite(150, 550, "BUTTON_RIGHTM")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
-
-    BUTTON_UP = this.physics.add
-      .staticSprite(100, 500, "BUTTON_UPM")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
-  }
+  
 
   BUTTON_RIGHT.on(
     "pointerover",
@@ -1412,6 +1383,16 @@ mainGame.update = function () {
   //Preparing Loop END
 
   if (playersOnline === true) {
+
+    if (jogador === 1) {
+      if (CIRCLE_isPressed === false) {
+        BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 0)
+      }
+      else {
+        BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 1)
+      }
+
+    }
     MUSIC_preparing1.stop();
     MUSIC_preparing2.stop();
 
