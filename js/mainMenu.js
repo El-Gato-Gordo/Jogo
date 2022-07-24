@@ -10,6 +10,15 @@ var pointer;
 
 mainMenu.preload = function () {
 
+    this.load.spritesheet(
+      "MAIN_MENU_background",
+      "assets/background/MAIN_MENU_background.png",
+      {
+        frameWidth: 800,
+        frameHeight: 600,
+      }
+    );
+    
     this.load.spritesheet("fullScreen_button", "assets/hud/fullScreen_button.png", {
       frameWidth: 128,
       frameHeight: 128,
@@ -20,14 +29,7 @@ mainMenu.preload = function () {
         frameHeight: 600
     });
 
-    this.load.spritesheet(
-      "MAIN_MENU_background",
-      "assets/background/MAIN_MENU_background.png",
-      {
-        frameWidth: 800,
-        frameHeight: 600,
-      }
-    );
+    
 
     this.load.spritesheet("play_button", "assets/hud/play_button.png", {
         frameWidth: 400,
@@ -41,8 +43,7 @@ mainMenu.create = function () {
 
       pointer = this.input.addPointer(1);
 
-       background_mainMenu = this.physics.add
-         .staticSprite(400, 300, "MAIN_MENU_background")
+       
     
     
     fullScreen_button = this.physics.add.staticSprite(
@@ -125,6 +126,12 @@ mainMenu.create = function () {
     });
 
     MUSIC_Underground = this.sound.add("MUSIC_Underground", { loop: true });
+
+    background_mainMenu = this.physics.add.staticSprite(
+      400,
+      300,
+      "MAIN_MENU_background"
+    );
 
 };
 
