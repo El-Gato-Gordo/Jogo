@@ -229,6 +229,15 @@ this.load.spritesheet(
     }
   );
 
+  this.load.spritesheet(
+    "BUTTON_SQUAREM",
+    "./assets/buttons/BUTTON_SQUAREM.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
 this.load.spritesheet(
     "BUTTON_LEFTK",
     "./assets/buttons/BUTTON_LEFTK.png",
@@ -1417,7 +1426,7 @@ mainGame.update = function () {
       }
     }
 
-    if (jogador === 1) {
+    if (jogador === 2) {
       if (CIRCLE_isPressed === false) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEM", 0);
       } else {
