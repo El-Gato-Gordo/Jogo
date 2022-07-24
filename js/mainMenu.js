@@ -85,7 +85,7 @@ mainMenu.create = function () {
     );
 
      play_button = this.physics.add.staticSprite(
-        0,
+        50,
         200,
         "play_button"
     ).setScale(1).setInteractive().setScrollFactor(0);
