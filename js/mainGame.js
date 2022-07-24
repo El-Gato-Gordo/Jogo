@@ -907,7 +907,7 @@ mainGame.create = function () {
 
   MUSIC_preparing1 = this.sound.add("MUSIC_preparing1", { loop: false });
   MUSIC_preparing2 = this.sound.add("MUSIC_preparing2", { loop: true });
-  MUSIC_rusteGate = this.sound.add("MUSIC_rustedGate", { loop: true });
+  MUSIC_rustedGate = this.sound.add("MUSIC_rustedGate", { loop: true });
 
 
 
