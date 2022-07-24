@@ -5,6 +5,8 @@ var fullScreen_button;
 var introAnimDuration = 0;
 var MUSIC_Underground
 
+var pointer;
+
 mainMenu.preload = function () {
 
     this.load.spritesheet("fullScreen_button", "assets/hud/fullScreen_button.png", {
@@ -26,6 +28,8 @@ mainMenu.preload = function () {
 };
 
 mainMenu.create = function () {
+
+      pointer = this.input.addPointer(1);
 
     fullScreen_button = this.physics.add.staticSprite(
         760,

@@ -3,6 +3,7 @@ import { mainMenu } from "./mainMenu.js";
 var pressStart = new Phaser.Scene("Press Start");
 var background_pressStart;
 var startButton;
+var pointer;
 
 pressStart.preload = function () {
   this.load.spritesheet(
@@ -17,6 +18,8 @@ pressStart.preload = function () {
 }
 
 pressStart.create = function () {
+
+    pointer = this.input.addPointer(1);
 
   background_pressStart = this.physics.add
     .staticSprite(400, 300, "START_sCREEN")
