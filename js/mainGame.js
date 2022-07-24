@@ -194,8 +194,35 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
-    "BUTTON_CIRCLE",
-    "./assets/hud/BUTTON_CIRCLE.png",
+    "BUTTON_CIRCLEK",
+    "./assets/buttons/BUTTON_CIRCLEK.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+  
+  this.load.spritesheet(
+    "BUTTON_CIRCLEM",
+    "./assets/buttons/BUTTON_CIRCLEM.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+this.load.spritesheet(
+    "BUTTON_SQUAREK",
+    "./assets/buttons/BUTTON_SQUAREK.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+this.load.spritesheet(
+    "BUTTON_LEFTK",
+    "./assets/buttons/BUTTON_LEFTK.png",
     {
       frameWidth: 100,
       frameHeight: 100,
@@ -203,8 +230,17 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
-    "BUTTON_SQUARE",
-    "./assets/hud/BUTTON_SQUARE.png",
+    "BUTTON_LEFTM",
+    "./assets/buttons/BUTTON_LEFTM.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+this.load.spritesheet(
+    "BUTTON_RIGHTK",
+    "./assets/buttons/BUTTON_RIGHTK.png",
     {
       frameWidth: 100,
       frameHeight: 100,
@@ -212,8 +248,8 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
-    "BUTTON_LEFT",
-    "./assets/hud/BUTTON_LEFT.png",
+    "BUTTON_RIGHTM",
+    "./assets/buttons/BUTTON_RIGHTM.png",
     {
       frameWidth: 100,
       frameHeight: 100,
@@ -221,8 +257,8 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
-    "BUTTON_RIGHT",
-    "./assets/hud/BUTTON_RIGHT.png",
+    "BUTTON_UPK",
+    "./assets/buttons/BUTTON_UPK.png",
     {
       frameWidth: 100,
       frameHeight: 100,
@@ -230,8 +266,53 @@ mainGame.preload = function () {
   );
 
   this.load.spritesheet(
-    "BUTTON_UP",
-    "./assets/hud/BUTTON_UP.png",
+    "BUTTON_UPM",
+    "./assets/buttons/BUTTON_UPM.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+    this.load.spritesheet(
+    "BUTTON_ROOM1",
+    "./assets/buttons/ROOM1.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+     this.load.spritesheet(
+    "BUTTON_ROOM2",
+    "./assets/buttons/ROOM2.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+     this.load.spritesheet(
+    "BUTTON_ROOM3",
+    "./assets/buttons/ROOM3.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+     this.load.spritesheet(
+    "BUTTON_ROOM4",
+    "./assets/buttons/ROOM4.png",
+    {
+      frameWidth: 100,
+      frameHeight: 100,
+    }
+  );
+
+     this.load.spritesheet(
+    "BUTTON_ROOM5",
+    "./assets/buttons/ROOM5.png",
     {
       frameWidth: 100,
       frameHeight: 100,
@@ -761,43 +842,83 @@ mainGame.create = function () {
 
   //Controles
 
-  BUTTON_CIRCLE = this.physics.add
-    .staticSprite(740, 495, "BUTTON_CIRCLE")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
+  if (jogador === 1) {
+    BUTTON_CIRCLE = this.physics.add
+      .staticSprite(740, 495, "BUTTON_CIRCLEK")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
 
-  BUTTON_SQUARE = this.physics.add
-    .staticSprite(690, 550, "BUTTON_SQUARE")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
+    BUTTON_SQUARE = this.physics.add
+      .staticSprite(690, 550, "BUTTON_SQUAREK")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
   
 
-  BUTTON_LEFT = this.physics.add
-    .staticSprite(50, 550, "BUTTON_LEFT")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
+    BUTTON_LEFT = this.physics.add
+      .staticSprite(50, 550, "BUTTON_LEFTK")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
 
 
-  BUTTON_RIGHT = this.physics.add
-    .staticSprite(150, 550, "BUTTON_RIGHT")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
+    BUTTON_RIGHT = this.physics.add
+      .staticSprite(150, 550, "BUTTON_RIGHTK")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
 
 
-  BUTTON_UP = this.physics.add
-    .staticSprite(100, 500, "BUTTON_UP")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
+    BUTTON_UP = this.physics.add
+      .staticSprite(100, 500, "BUTTON_UPK")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
+
+  }
+
+  if (jogador === 2) {
+    BUTTON_CIRCLE = this.physics.add
+      .staticSprite(740, 495, "BUTTON_CIRCLEM")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
+
+    BUTTON_SQUARE = this.physics.add
+      .staticSprite(690, 550, "BUTTON_SQUAREM")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
+
+    BUTTON_LEFT = this.physics.add
+      .staticSprite(50, 550, "BUTTON_LEFTM")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
+
+    BUTTON_RIGHT = this.physics.add
+      .staticSprite(150, 550, "BUTTON_RIGHTM")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
+
+    BUTTON_UP = this.physics.add
+      .staticSprite(100, 500, "BUTTON_UPM")
+      .setScale(0.7)
+      .refreshBody()
+      .setInteractive()
+      .setScrollFactor(0);
+  }
 
   BUTTON_RIGHT.on(
     "pointerover",
@@ -1291,6 +1412,9 @@ mainGame.update = function () {
   //Preparing Loop END
 
   if (playersOnline === true) {
+    MUSIC_preparing1.stop();
+    MUSIC_preparing2.stop();
+
     if (rustedGateLoop === 0) {
       rustedGateLoop = rustedGateLoop + 1
       MUSIC_rustedGate.play();
