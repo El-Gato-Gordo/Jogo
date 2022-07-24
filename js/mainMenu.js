@@ -85,8 +85,8 @@ mainMenu.create = function () {
     );
 
      play_button = this.physics.add.staticSprite(
-        150,
-        200,
+        140,
+        500,
         "play_button"
     ).setScale(1).setInteractive().setScrollFactor(0);
 
@@ -94,7 +94,8 @@ mainMenu.create = function () {
         "pointerover",
         function () {
             if (introAnimDuration > 150) {
-                play_button.setFrame(20)
+              play_button.setFrame(20)
+              MUSIC_Underground.stop()
                 this.scene.start("Main Game");
             }
         },this
