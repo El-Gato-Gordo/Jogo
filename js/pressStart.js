@@ -15,22 +15,23 @@ pressStart.preload = function () {
     }
   );
 
-  this.load.spritesheet("startButton", "assets/hud/start_button.png", {
-    frameWidth: 192,
-    frameHeight: 192,
-  });
-};
+}
 
 pressStart.create = function () {
-  keyENTER = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER); // Enter
 
-  background_pressStart = this.physics.add.staticSprite(
-    400,
-    300,
-    "START_sCREEN"
-  );
-  
-  startButton = this.physics.add.staticSprite(400, 300, "startButton");
+  background_pressStart = this.physics.add
+    .staticSprite(400, 300, "START_sCREEN")
+    .setInteractive()
+    .setScrollFactor(0);
+
+    background_pressStart.on(
+      "pointerover",
+      function () {
+        this.scene.start("Main Menu");
+        
+      },
+      this
+    );
 
   this.anims.create({
     key: "backgroundLoop",

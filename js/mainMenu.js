@@ -3,6 +3,7 @@ var mainMenu = new Phaser.Scene("Main Menu");
 var logo;
 var fullScreen_button;
 var introAnimDuration = 0;
+var MUSIC_Underground
 
 mainMenu.preload = function () {
 
@@ -20,6 +21,8 @@ mainMenu.preload = function () {
         frameWidth: 400,
         frameHeight: 400
     });
+
+     this.load.audio("MUSIC_Underground", ["./assets/music/MUSIC_Underground.wav"]);
 };
 
 mainMenu.create = function () {
@@ -67,17 +70,18 @@ mainMenu.create = function () {
                 play_buton.setFrame(20)
                 this.scene.start("Main Game");
             }
-        }
+        },this
     )
 
     play_button.on(
-        "pointerout",
-        function () {
-            if (introAnimDuration > 150) {
-                play_buton.setFrame(19)
-            }
+      "pointerout",
+      function () {
+        if (introAnimDuration > 150) {
+          play_buton.setFrame(19);
         }
-    )
+      },
+      this
+    );
 
 
     this.anims.create({
@@ -102,9 +106,13 @@ mainMenu.create = function () {
       repeat: 0,
     });
 
+    SFX_Land = this.sound.add("MUSIC_Underground", { loop: true });
+
 };
 
 mainMenu.update = function () {
+
+    MUSIC_Underground.play();
     if (introAnimDuration <= 120) {
         introAnimDuration
             = introAnimDuration

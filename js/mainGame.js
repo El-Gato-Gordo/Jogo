@@ -32,6 +32,10 @@ var SFX_mageDeflected;
 var SFX_mageLeap;
 var SFX_mageFireball;
 
+var MUSIC_preparing1;
+var MUSIC_preparing2;
+var MUSIC_rustedGate;
+
 var VFX_yOffset = 0;
 
 var vfx_mageParry;
@@ -168,6 +172,15 @@ mainGame.preload = function () {
   this.load.audio("SFX_mageParry", ["./assets/sfx/SFX_mageParry.wav"]);
   this.load.audio("SFX_mageDeflected", ["./assets/sfx/SFX_mageDeflected.wav"]);
 
+  this.load.audio("preparing1", [
+      "./assets/music/preparing.wav",
+    ]);
+
+    this.load.audio("preparing2", [
+      "./assets/music/preparing2.wav",
+    ]);
+
+  this.load.audio("MUSIC_rustedGate", ["./assets/music/MUSIC_Rusted_Gate.wav"]);
 
   this.load.spritesheet(
     "fullScreen_button",
@@ -891,6 +904,11 @@ mainGame.create = function () {
   SFX_mageLeap = this.sound.add("SFX_mageLeap", { loop: false });
   SFX_mageFireball = this.sound.add("SFX_mageFireball", { loop: false });
 
+  MUSIC_preparing1 = this.sound.add("MUSIC_preparing1", { loop: false });
+  MUSIC_preparing2 = this.sound.add("MUSIC_preparing2", { loop: true });
+  MUSIC_rusteGate = this.sound.add("MUSIC_rustedGate", { loop: true });
+
+
 
   //ANIMAÇÕES MAGEKNIGHT
   this.anims.create({
@@ -1239,7 +1257,17 @@ mainGame.create = function () {
 //UPDATE
 mainGame.update = function () {
 
+  if (playersOnline === false) {
+    if (preparingCount <= 3480) {
+     MUSIC_preparing1.play()
+    }
+    if (preparingCount > 3480) {
+      MUSIC_preparing2.play();
+    }
+  }
+
   if (playersOnline === true) {
+    MUSIC_rustedGate.play(); 
     if (MK_isParrying === true) {
       MK_parryDuration = MK_parryDuration + 1;
       if (MK_parryDuration <= 10) {
