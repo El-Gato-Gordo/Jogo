@@ -13,6 +13,7 @@ var psc_counter;
 var cursors;
 var gameOver = false;
 var isPaused;
+var rustedGateLoop = 0;
 
 //Declaração de variáveis de estado
 var php = 5; //Define HP do Cavaleiro e Mago
@@ -68,7 +69,7 @@ var MK_justParried = false;
 var MK_parryCooldown = 0;
 var MK_canParry = true;
 
-var preparingCount;
+var preparingCount = 0;
 var pointer;
 
 //Olhão!!
@@ -1261,6 +1262,7 @@ mainGame.update = function () {
 
   //Preparing Loop START
   if (playersOnline === false) {
+
     if (preparingCount === 0) {
      preparingCount = preparingCount + 1
      MUSIC_preparing1.play()
@@ -1273,7 +1275,7 @@ mainGame.update = function () {
 
     if (preparingCount === 3480) {
      preparingCount = preparingCount + 1
-      MUSIC_preparing2.play();
+     MUSIC_preparing2.play();
     }
 
     if (preparingCount > 3480 && preparingCount < 6960) {
@@ -1289,7 +1291,19 @@ mainGame.update = function () {
   //Preparing Loop END
 
   if (playersOnline === true) {
-    MUSIC_rustedGate.play(); 
+    if (rustedGateLoop === 0) {
+      rustedGateLoop = rustedGateLoop + 1
+      MUSIC_rustedGate.play();
+    }
+    
+    if (rustedGateLoop > 0 && rustedGateLoop < 3480) {
+      rustedGateLoop = rustedGateLoop + 1
+    }
+
+    if (rustedGateLoop === 3480) {
+      rustedGateLoop = 0
+    }
+
     if (MK_isParrying === true) {
       MK_parryDuration = MK_parryDuration + 1;
       if (MK_parryDuration <= 10) {
