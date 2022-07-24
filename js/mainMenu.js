@@ -85,10 +85,10 @@ mainMenu.create = function () {
     );
 
      play_button = this.physics.add.staticSprite(
-        400,
-        300,
+        0,
+        200,
         "play_button"
-    ).setScale(0.7).setInteractive().setScrollFactor(0);
+    ).setScale(1).setInteractive().setScrollFactor(0);
 
     play_button.on(
         "pointerover",

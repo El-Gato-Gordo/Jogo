@@ -172,12 +172,12 @@ mainGame.preload = function () {
   this.load.audio("SFX_mageParry", ["./assets/sfx/SFX_mageParry.wav"]);
   this.load.audio("SFX_mageDeflected", ["./assets/sfx/SFX_mageDeflected.wav"]);
 
-  this.load.audio("preparing1", [
-      "./assets/music/preparing.wav",
+  this.load.audio("MUSIC_preparing1", [
+      "./assets/music/MUSIC_preparing1.wav",
     ]);
 
-    this.load.audio("preparing2", [
-      "./assets/music/preparing2.wav",
+    this.load.audio("MUSIC_preparing2", [
+      "./assets/music/MUSIC_preparing2.wav",
     ]);
 
   this.load.audio("MUSIC_rustedGate", ["./assets/music/MUSIC_Rusted_Gate.wav"]);

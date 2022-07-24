@@ -24,7 +24,7 @@ var config = {
     height: 600,
   },
 
-  scene: [mainMenu, mainGame]
+  scene: [pressStart, mainMenu, mainGame]
 };
 
 //pressStart;
