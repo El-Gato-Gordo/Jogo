@@ -2,8 +2,7 @@ var mainMenu = new Phaser.Scene("Main Menu");
 
 var logo;
 var fullScreen_button;
-var logoPlayed = false;
-var logoAnimDuration = 0;
+var introAnimDuration = 0;
 
 mainMenu.preload = function () {
 
@@ -17,9 +16,9 @@ mainMenu.preload = function () {
         frameHeight: 600
     });
 
-    this.load.spritesheet("fullScreen_button", "assets/hud/fullScreen_button.png", {
-        frameWidth: 128,
-        frameHeight: 128
+    this.load.spritesheet("play_button", "assets/hud/play_button.png", {
+        frameWidth: 400,
+        frameHeight: 400
     });
 };
 
@@ -33,7 +32,7 @@ mainMenu.create = function () {
         
     
     fullScreen_button.on(
-        "pointerup",
+        "pointerover",
         function () {
             if (this.scale.isFullscreen) {
     
@@ -55,6 +54,32 @@ mainMenu.create = function () {
         "LOGO_Intro"
     );
 
+     play_button = this.physics.add.staticSprite(
+        400,
+        300,
+        "play_button"
+    ).setScale(0.7).setInteractive().setScrollFactor(0);
+
+    play_button.on(
+        "pointerover",
+        function () {
+            if (introAnimDuration > 150) {
+                play_buton.setFrame(20)
+                this.scene.start("Main Game");
+            }
+        }
+    )
+
+    play_button.on(
+        "pointerout",
+        function () {
+            if (introAnimDuration > 150) {
+                play_buton.setFrame(19)
+            }
+        }
+    )
+
+
     this.anims.create({
         key: "logoIntro",
         frames: this.anims.generateFrameNumbers("LOGO_Intro", {
@@ -65,14 +90,34 @@ mainMenu.create = function () {
         frameRate: 20,
         repeat: 0,
     });
+
+    this.anims.create({
+      key: "playButtonIntro",
+      frames: this.anims.generateFrameNumbers("play_button", {
+        start: 0,
+        end: 18,
+      }),
+
+      frameRate: 24,
+      repeat: 0,
+    });
+
 };
 
 mainMenu.update = function () {
-    if (logoAnimDuration <= 120) {
-        logoAnimDuration = logoAnimDuration + 1
+    if (introAnimDuration <= 120) {
+        introAnimDuration
+            = introAnimDuration
+            + 1
         logo.anims.play("logoIntro", false);
     }
 
+    if (introAnimDuration > 120 && introAnimDuration <= 150) {
+        introAnimDuration = introAnimDuration + 1
+
+        play_button.anims.play("playBUttonIntro", false)
+        
+    }
 };
 
 export { mainMenu };
