@@ -163,7 +163,7 @@ mainMenu.update = function () {
         logo.anims.play("logoIntro", false);
     }
 
-    if (introAnimDuration > 120 && introAnimDuration <= 150) {
+    if (introAnimDuration > 120 && introAnimDuration <= 180) {
         introAnimDuration = introAnimDuration + 1
 
         play_button.anims.play("playButtonIntro", false)
