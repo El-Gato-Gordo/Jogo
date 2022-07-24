@@ -1392,7 +1392,63 @@ mainGame.update = function () {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 1)
       }
 
+      if (SQUARE_isPressed === false) {
+        BUTTON_SQUARE.setTexture("BUTTON_SQUAREK", 0);
+      } else {
+        BUTTON_SQUARE.setTexture("BUTTON_SQUAREK", 1);
+      }
+
+      if (UP_isPressed === false) {
+        BUTTON_UP.setTexture("BUTTON_UPK", 0);
+      } else {
+        BUTTON_UP.setTexture("BUTTON_UPK", 1);
+      }
+
+      if (RIGHT_isPressed === false) {
+        BUTTON_RIGHT.setTexture("BUTTON_RIGHTK", 0);
+      } else {
+        BUTTON_RIGHT.setTexture("BUTTON_RIGHTK", 1);
+      }
+
+      if (LEFT_isPressed === false) {
+        BUTTON_LEFT.setTexture("BUTTON_LEFTK", 0);
+      } else {
+        BUTTON_LEFT.setTexture("BUTTON_LEFTK", 1);
+      }
     }
+
+    if (jogador === 1) {
+      if (CIRCLE_isPressed === false) {
+        BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEM", 0);
+      } else {
+        BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEM", 1);
+      }
+
+      if (SQUARE_isPressed === false) {
+        BUTTON_SQUARE.setTexture("BUTTON_SQUAREM", 0);
+      } else {
+        BUTTON_SQUARE.setTexture("BUTTON_SQUAREM", 1);
+      }
+
+      if (UP_isPressed === false) {
+        BUTTON_UP.setTexture("BUTTON_UPM", 0);
+      } else {
+        BUTTON_UP.setTexture("BUTTON_UPM", 1);
+      }
+
+      if (RIGHT_isPressed === false) {
+        BUTTON_RIGHT.setTexture("BUTTON_RIGHTM", 0);
+      } else {
+        BUTTON_RIGHT.setTexture("BUTTON_RIGHTM", 1);
+      }
+
+      if (LEFT_isPressed === false) {
+        BUTTON_LEFT.setTexture("BUTTON_LEFTM", 0);
+      } else {
+        BUTTON_LEFT.setTexture("BUTTON_LEFTM", 1);
+      }
+    }
+
     MUSIC_preparing1.stop();
     MUSIC_preparing2.stop();
 
