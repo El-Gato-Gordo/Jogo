@@ -7,8 +7,8 @@ var keyENTER; //Não funciona, no log se tento verificar a varíavel, diz que n�
 
 pressStart.preload = function () {
   this.load.spritesheet(
-    "pressStart_bg",
-    "assets/background/pressStart_bg.png",
+    "START_SCREEN",
+    "assets/background/START_SCREEN.png",
     {
       frameWidth: 800,
       frameHeight: 600,
@@ -27,14 +27,14 @@ pressStart.create = function () {
   background_pressStart = this.physics.add.staticSprite(
     400,
     300,
-    "pressStart_bg"
+    "START_sCREEN"
   );
   
   startButton = this.physics.add.staticSprite(400, 300, "startButton");
 
   this.anims.create({
     key: "backgroundLoop",
-    frames: this.anims.generateFrameNumbers("pressStart_bg", {
+    frames: this.anims.generateFrameNumbers("START_SCREEN", {
       start: 0,
       end: 9,
     }),
