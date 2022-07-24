@@ -1258,14 +1258,34 @@ mainGame.create = function () {
 //UPDATE
 mainGame.update = function () {
 
+  //Preparing Loop START
   if (playersOnline === false) {
-    if (preparingCount <= 3480) {
+    if (preparingCount === 0) {
+     preparingCount = preparingCount + 1
      MUSIC_preparing1.play()
     }
-    if (preparingCount > 3480) {
+    if (preparingCount > 0 && preparingCount < 3480)
+    {
+      preparingCount = preparingCount + 1;
+
+     }
+
+    if (preparingCount === 3480) {
+     preparingCount = preparingCount + 1
       MUSIC_preparing2.play();
     }
+
+    if (preparingCount > 3480 && preparingCount < 6960) {
+       preparingCount = preparingCount + 1;
+
+    }
+
+    if (preparingCount === 6960) {
+      preparingCount = 3480
+    }
   }
+
+  //Preparing Loop END
 
   if (playersOnline === true) {
     MUSIC_rustedGate.play(); 

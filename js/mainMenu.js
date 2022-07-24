@@ -8,6 +8,7 @@ var MUSIC_Underground
 var play_button;
 var pointer;
 var background_mainMenu;
+var musicTimer = 0;
 
 mainMenu.preload = function () {
 
@@ -140,7 +141,21 @@ mainMenu.create = function () {
 
 mainMenu.update = function () {
 
-    MUSIC_Underground.play();
+  
+  if (musicTimer === 0) {
+      musicTimer = musicTimer + 1
+      MUSIC_Underground.play();
+  }
+  if (musicTimer > 0 && musicTimer < 3480) {
+    musicTimer = musicTimer + 1
+  } 
+
+  if (musicTimer === 3480) {
+    musicTimer = 0
+  }
+  
+  if (musicTimer)
+  
     if (introAnimDuration <= 120) {
         introAnimDuration
             = introAnimDuration
