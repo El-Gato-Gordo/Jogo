@@ -28,8 +28,8 @@ var SFX_Land;
 var SFX_knightHit;
 var SFX_swordHit;
 var SFX_swordSwing;
-var SFX_mageParry; 
-var SFX_mageDeflected; 
+var SFX_mageParry;
+var SFX_mageDeflected;
 var SFX_mageLeap;
 var SFX_mageFireball;
 
@@ -60,8 +60,14 @@ var MK_justEvaded = false;
 var MK_evadeCooldown = 0;
 
 var MK_isCasting = false;
-var MK_justCasted = false;
+var MK_canCast = true;
+var MK_canLeap = true;
+var MK_hasCast = false;
+var MK_castLeap = false;
 var MK_castCooldown = 0;
+var MK_castDirection = "null"
+var MK_spellBurstDuration = 0
+var MK_spellHasHit = false;
 
 var MK_isParrying = false;
 var MK_parryDuration = 0;
@@ -72,6 +78,7 @@ var MK_canParry = true;
 var preparingCount = 0;
 var pointer;
 
+var mageSpell;
 //Olhão!!
 
 var EYE_justHit = false; //Se o jogador acabou de acertar o bicho
@@ -83,7 +90,7 @@ var EYE_cycleValue = 0;
 var EYE_isActing = false;
 var EYE_actionChoice = 0;
 var EYE_isDead = false;
-var EYE_isDying = 0
+var EYE_isDying = 0;
 
 var EYE_awakeningDuration = 0;
 var EYE_dyingDuration = 0;
@@ -109,7 +116,6 @@ var BUTTON_RIGHT;
 var BUTTON_LEFT;
 
 var playersOnline = false;
-
 
 //Declarando teclas do jogo
 
@@ -156,7 +162,6 @@ var midias;
 const audio = document.querySelector("audio");
 var sala;
 
-
 //PRELOAD
 mainGame.preload = function () {
   //Plano de fundo
@@ -174,13 +179,9 @@ mainGame.preload = function () {
   this.load.audio("SFX_mageParry", ["./assets/sfx/SFX_mageParry.wav"]);
   this.load.audio("SFX_mageDeflected", ["./assets/sfx/SFX_mageDeflected.wav"]);
 
-  this.load.audio("MUSIC_preparing1", [
-      "./assets/music/MUSIC_preparing1.wav",
-    ]);
+  this.load.audio("MUSIC_preparing1", ["./assets/music/MUSIC_preparing1.wav"]);
 
-    this.load.audio("MUSIC_preparing2", [
-      "./assets/music/MUSIC_preparing2.wav",
-    ]);
+  this.load.audio("MUSIC_preparing2", ["./assets/music/MUSIC_preparing2.wav"]);
 
   this.load.audio("MUSIC_rustedGate", ["./assets/music/MUSIC_Rusted_Gate.wav"]);
 
@@ -210,7 +211,7 @@ mainGame.preload = function () {
       frameHeight: 100,
     }
   );
-  
+
   this.load.spritesheet(
     "BUTTON_CIRCLEM",
     "./assets/buttons/BUTTON_CIRCLEM.png",
@@ -220,7 +221,7 @@ mainGame.preload = function () {
     }
   );
 
-this.load.spritesheet(
+  this.load.spritesheet(
     "BUTTON_SQUAREK",
     "./assets/buttons/BUTTON_SQUAREK.png",
     {
@@ -238,105 +239,60 @@ this.load.spritesheet(
     }
   );
 
-this.load.spritesheet(
-    "BUTTON_LEFTK",
-    "./assets/buttons/BUTTON_LEFTK.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+  this.load.spritesheet("BUTTON_LEFTK", "./assets/buttons/BUTTON_LEFTK.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-  this.load.spritesheet(
-    "BUTTON_LEFTM",
-    "./assets/buttons/BUTTON_LEFTM.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+  this.load.spritesheet("BUTTON_LEFTM", "./assets/buttons/BUTTON_LEFTM.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-this.load.spritesheet(
-    "BUTTON_RIGHTK",
-    "./assets/buttons/BUTTON_RIGHTK.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+  this.load.spritesheet("BUTTON_RIGHTK", "./assets/buttons/BUTTON_RIGHTK.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-  this.load.spritesheet(
-    "BUTTON_RIGHTM",
-    "./assets/buttons/BUTTON_RIGHTM.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+  this.load.spritesheet("BUTTON_RIGHTM", "./assets/buttons/BUTTON_RIGHTM.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-  this.load.spritesheet(
-    "BUTTON_UPK",
-    "./assets/buttons/BUTTON_UPK.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+  this.load.spritesheet("BUTTON_UPK", "./assets/buttons/BUTTON_UPK.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-  this.load.spritesheet(
-    "BUTTON_UPM",
-    "./assets/buttons/BUTTON_UPM.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+  this.load.spritesheet("BUTTON_UPM", "./assets/buttons/BUTTON_UPM.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-    this.load.spritesheet(
-    "BUTTON_ROOM1",
-    "./assets/buttons/BUTTON_ROOM1.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
+  this.load.spritesheet("BUTTON_ROOM1", "./assets/buttons/BUTTON_ROOM1.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-     this.load.spritesheet(
-       "BUTTON_ROOM2",
-       "./assets/buttons/BUTTON_ROOM2.png",
-       {
-         frameWidth: 100,
-         frameHeight: 100,
-       }
-     );
+  this.load.spritesheet("BUTTON_ROOM2", "./assets/buttons/BUTTON_ROOM2.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-     this.load.spritesheet(
-       "BUTTON_ROOM3",
-       "./assets/buttons/BUTTON_ROOM3.png",
-       {
-         frameWidth: 100,
-         frameHeight: 100,
-       }
-     );
+  this.load.spritesheet("BUTTON_ROOM3", "./assets/buttons/BUTTON_ROOM3.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-     this.load.spritesheet(
-       "BUTTON_ROOM4",
-       "./assets/buttons/BUTTON_ROOM4.png",
-       {
-         frameWidth: 100,
-         frameHeight: 100,
-       }
-     );
+  this.load.spritesheet("BUTTON_ROOM4", "./assets/buttons/BUTTON_ROOM4.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
-     this.load.spritesheet(
-    "BUTTON_ROOM5",
-    "./assets/buttons/BUTTON_ROOM5.png",
-    {
-      frameWidth: 100,
-      frameHeight: 100,
-    }
-  );
-
+  this.load.spritesheet("BUTTON_ROOM5", "./assets/buttons/BUTTON_ROOM5.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
   //Cavaleiro e Mago
 
@@ -367,15 +323,15 @@ this.load.spritesheet(
     }
   );
 
-    this.load.spritesheet(
-      "MK-lookupLeft",
-      "./assets/spritesheets/mageknight/MK-lookupLeft.png",
-      {
-        frameWidth: 616,
-        frameHeight: 500,
-      }
+  this.load.spritesheet(
+    "MK-lookupLeft",
+    "./assets/spritesheets/mageknight/MK-lookupLeft.png",
+    {
+      frameWidth: 616,
+      frameHeight: 500,
+    }
   );
-  
+
   this.load.spritesheet(
     "MK-walkRight",
     "./assets/spritesheets/mageknight/MK-walkRight.png",
@@ -486,14 +442,10 @@ this.load.spritesheet(
 
   //Inimigo
 
-  this.load.spritesheet(
-    "bichopapao",
-    "./assets/spritesheets/bichopapao.png",
-    {
-      frameWidth: 150,
-      frameHeight: 150,
-    }
-  );
+  this.load.spritesheet("bichopapao", "./assets/spritesheets/bichopapao.png", {
+    frameWidth: 150,
+    frameHeight: 150,
+  });
 
   //Olhão Louco
 
@@ -600,7 +552,7 @@ this.load.spritesheet(
     }
   );
 
-    this.load.spritesheet(
+  this.load.spritesheet(
     "PROJECTILES_spellLeftUp",
     "./assets/spritesheets/projectiles/PROJECTILES_spellLeftUp.png",
     {
@@ -627,6 +579,16 @@ this.load.spritesheet(
     }
   );
 
+    this.load.spritesheet(
+      "PROJECTILES_spellRightDown",
+      "./assets/spritesheets/projectiles/PROJECTILES_spellRightDown.png",
+      {
+        frameWidth: 200,
+        frameHeight: 200,
+      }
+    );
+
+
   this.load.spritesheet(
     "PROJECTILES_blastOrb",
     "./assets/spritesheets/projectiles/PROJECTILES_blastOrb.png",
@@ -646,18 +608,16 @@ this.load.spritesheet(
   );
 
   cursors = this.input.keyboard.createCursorKeys();
-
 };
 
 //CREATE
 mainGame.create = function () {
-
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
-  sala = 1
+  sala = 1;
   socket.emit("entrar-na-sala", sala);
-/*  var mensagem = this.add.text(10, 10, "Sala para entrar:", {
+  /*  var mensagem = this.add.text(10, 10, "Sala para entrar:", {
     font: "32px Courier",
     fill: "#ffffff",
   });
@@ -697,7 +657,6 @@ mainGame.create = function () {
           midias = stream;
         })
         .catch((error) => console.log(error));
-      
     } else if (jogadores.segundo === socket.id) {
       // Define jogador como o segundo
       jogador = 2;
@@ -732,9 +691,7 @@ mainGame.create = function () {
     // Os dois jogadores estão conectados
     console.log(jogadores);
     if (jogadores.primeiro !== undefined && jogadores.segundo !== undefined) {
-
       playersOnline = true;
-
     }
   });
 
@@ -767,7 +724,6 @@ mainGame.create = function () {
     conn.addIceCandidate(new RTCIceCandidate(candidate));
   });
 
-  
   //this.cameras.main.setBounds(0, -150, 1000, 800);
 
   //Criando as teclas
@@ -810,32 +766,75 @@ mainGame.create = function () {
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  platforms.create(400, 565, "MAP_floor")
+  platforms.create(400, 565, "MAP_floor");
 
   //Inimigo!
-  eye = this.physics.add.sprite(600, 400, "EYE_heAwakens").setImmovable(true)
+  eye = this.physics.add.sprite(600, 400, "EYE_heAwakens").setImmovable(true);
   eye.body.setAllowGravity(false);
   eye.setCollideWorldBounds(true);
   eye.setSize(130, 130, true);
-  this.physics.add.collider(eye, platforms, null, null, this)
+  this.physics.add.collider(eye, platforms, null, null, this);
 
   // The player and its settings
-  player = this.physics.add.sprite(100, 400, "MK-idleRight").setScale(0.40);
+  player = this.physics.add.sprite(100, 400, "MK-idleRight").setScale(0.4);
   player.setSize(200, 250, true);
   player.setOffset(207, 250, false);
 
   //Player physics properties.
   player.setCollideWorldBounds(true);
   this.physics.add.collider(player, platforms, function () {
-    MK_onGround = true
+    MK_onGround = true;
   });
-
 
   //Toque de tela:
   pointer = this.input.addPointer(1);
   //this.cameras.main.startFollow(player);
 
-  vfx_mageParry = this.physics.add.staticSprite(0, 0, "VFX_invisibleThing").setScale(0.30)
+  vfx_mageParry = this.physics.add
+    .staticSprite(0, 0, "VFX_invisibleThing")
+    .setScale(0.3);
+
+  //FEITIÇO DO MAGO FINALMENTE
+
+  mageSpell = this.physics.add.sprite(0, 0, "VFX_invisibleThing").setImmovable(true)
+    .setScale(0.5);
+  mageSpell.body.setAllowGravity(false)
+  mageSpell.setCollideWorldBounds(true); //Criar 
+  mageSpell.setSize(60, 60, true);
+
+  this.physics.add.collider(mageSpell, platforms, function () {
+    MK_spellBurstDuration = 0
+    
+    if (MK_spellBurstDuration <= 50) {
+      mageSpell.anims.play("PROJECTILES_spellBurst", true);
+    } else {
+      mageSpell.setFrame(5);
+      mageSpell.x = 0
+      mageSpell.y = 0
+    }
+  },
+null, null, this);
+
+  this.physics.add.collider(
+    mageSpell,
+    eye,
+    function () {
+      MK_spellBurstDuration = 0;
+
+      if (MK_spellBurstDuration <= 50) {
+        mageSpell.anims.play("PROJECTILES_spellBurst", true);
+      } else {
+        MK_spellHasHit = true;
+        mageSpell.setFrame(5);
+        mageSpell.x = 0;
+        mageSpell.y = 0;
+      }
+    },
+    null,
+    null,
+    this
+  );
+  
 
   fullScreen_button = this.physics.add
     .staticSprite(760, 40, "fullScreen_button")
@@ -857,91 +856,83 @@ mainGame.create = function () {
     this
   );
 
-
   //Controles
 
-    BUTTON_CIRCLE = this.physics.add
-      .staticSprite(740, 495, "BUTTON_INVISIBLE")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
+  BUTTON_CIRCLE = this.physics.add
+    .staticSprite(740, 495, "BUTTON_INVISIBLE")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
 
-    BUTTON_SQUARE = this.physics.add
-      .staticSprite(690, 550, "BUTTON_INVISIBLE")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
-  
+  BUTTON_SQUARE = this.physics.add
+    .staticSprite(690, 550, "BUTTON_INVISIBLE")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
 
-    BUTTON_LEFT = this.physics.add
-      .staticSprite(50, 550, "BUTTON_INVISIBLE")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
+  BUTTON_LEFT = this.physics.add
+    .staticSprite(50, 550, "BUTTON_INVISIBLE")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
 
+  BUTTON_RIGHT = this.physics.add
+    .staticSprite(150, 550, "BUTTON_INVISIBLE")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
 
-    BUTTON_RIGHT = this.physics.add
-      .staticSprite(150, 550, "BUTTON_INVISIBLE")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
-
-
-    BUTTON_UP = this.physics.add
-      .staticSprite(100, 500, "BUTTON_INVISIBLE")
-      .setScale(0.7)
-      .refreshBody()
-      .setInteractive()
-      .setScrollFactor(0);
-
-  
+  BUTTON_UP = this.physics.add
+    .staticSprite(100, 500, "BUTTON_INVISIBLE")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
 
   BUTTON_RIGHT.on(
     "pointerover",
     function () {
       RIGHT_isPressed = true;
       MK_isRunning = true;
-
     },
-    this,
-  )
+    this
+  );
 
   BUTTON_LEFT.on(
     "pointerover",
     function () {
       LEFT_isPressed = true;
       MK_isRunning = true;
-
     },
-    this,
-  )
-  
+    this
+  );
+
   BUTTON_CIRCLE.on(
     "pointerover",
     function () {
       CIRCLE_isPressed = true;
     },
-    this,
-  )
+    this
+  );
 
   BUTTON_SQUARE.on(
     "pointerover",
     function () {
       SQUARE_isPressed = true;
     },
-    this,
-  )
+    this
+  );
 
   BUTTON_UP.on(
     "pointerover",
     function () {
       UP_isPressed = true;
     },
-    this,
+    this
   );
 
   //Sem apertar
@@ -951,52 +942,68 @@ mainGame.create = function () {
       RIGHT_isPressed = false;
       MK_isRunning = false;
     },
-    this,
-  )
+    this
+  );
 
   BUTTON_UP.on(
     "pointerout",
     function () {
       UP_isPressed = false;
     },
-    this,
-  )
+    this
+  );
   BUTTON_LEFT.on(
     "pointerout",
     function () {
       LEFT_isPressed = false;
       MK_isRunning = false;
-
     },
-    this,
-  )
+    this
+  );
 
   BUTTON_CIRCLE.on(
     "pointerout",
     function () {
       CIRCLE_isPressed = false;
     },
-    this,
-  )
+    this
+  );
 
   BUTTON_SQUARE.on(
     "pointerout",
     function () {
       SQUARE_isPressed = false;
     },
-    this,
-  )
+    this
+  );
 
-  this.physics.add.overlap(eye, player, function () {
-    MK_overlapBoss = true;
-    
-    if (MK_isAttacking === true && EYE_justHit === false) {
-    SFX_swordHit.play()
-    EYE_healthPower = EYE_healthPower - 1;
-    eye.tint = 0xff0000
-    EYE_justHit = true;
-    EYE_hitCooldown = 25;
-    }}, null, this);
+
+
+  this.physics.add.overlap(
+    eye,
+    player,
+    function () {
+      MK_overlapBoss = true;
+
+      if (MK_isAttacking === true && EYE_justHit === false ) {
+        SFX_swordHit.play();
+        EYE_healthPower = EYE_healthPower - 1;
+        eye.tint = 0xff0000;
+        EYE_justHit = true;
+        EYE_hitCooldown = 20;
+      }
+
+      if (MK_spellHasHit === true) {
+        MK_spellHasHit = false;
+        EYE_healthPower = EYE_healthPower - 1;
+        EYE.tint = 0xff0000;
+        EYE_juustHit = true;
+        EYE_hitCooldown = 20
+      }
+    },
+    null,
+    this
+  );
 
   //SONS
   SFX_Land = this.sound.add("SFX_Land", { loop: false });
@@ -1011,8 +1018,6 @@ mainGame.create = function () {
   MUSIC_preparing1 = this.sound.add("MUSIC_preparing1", { loop: false });
   MUSIC_preparing2 = this.sound.add("MUSIC_preparing2", { loop: true });
   MUSIC_rustedGate = this.sound.add("MUSIC_rustedGate", { loop: true });
-
-
 
   //ANIMAÇÕES MAGEKNIGHT
   this.anims.create({
@@ -1045,16 +1050,16 @@ mainGame.create = function () {
     repeat: -1,
   });
 
-   this.anims.create({
-     key: "MK-lookupLeft",
-     frames: this.anims.generateFrameNumbers("MK-lookupLeft", {
-       start: 0,
-       end: 7,
-     }),
-     frameRate: 10,
-     repeat: -1,
-   });
-  
+  this.anims.create({
+    key: "MK-lookupLeft",
+    frames: this.anims.generateFrameNumbers("MK-lookupLeft", {
+      start: 0,
+      end: 7,
+    }),
+    frameRate: 10,
+    repeat: -1,
+  });
+
   this.anims.create({
     key: "MK-walkRight",
     frames: this.anims.generateFrameNumbers("MK-walkRight", {
@@ -1237,7 +1242,6 @@ mainGame.create = function () {
     frameRate: 16,
     repeat: -1,
   });
-  
 
   //Animações de Efeitos Visuais
 
@@ -1250,7 +1254,6 @@ mainGame.create = function () {
     frameRate: 20,
     repeat: 0,
   });
-
 
   //Animações dos Projéteis
 
@@ -1354,51 +1357,52 @@ mainGame.create = function () {
     repeat: 0,
   });
 
+   this.anims.create({
+     key: "PROJECTILES_spellBurst",
+     frames: this.anims.generateFrameNumbers("PROJECTILES_spellBurst", {
+       start: 0,
+       end: 5,
+     }),
+     frameRate: 16,
+     repeat: 0,
+   });
 
 };
 
-
 //UPDATE
 mainGame.update = function () {
-
   //Preparing Loop START
   if (playersOnline === false) {
-
     if (preparingCount === 0) {
-     preparingCount = preparingCount + 1
-     MUSIC_preparing1.play()
-    }
-    if (preparingCount > 0 && preparingCount < 3480)
-    {
       preparingCount = preparingCount + 1;
-
-     }
+      MUSIC_preparing1.play();
+    }
+    if (preparingCount > 0 && preparingCount < 3480) {
+      preparingCount = preparingCount + 1;
+    }
 
     if (preparingCount === 3480) {
-     preparingCount = preparingCount + 1
-     MUSIC_preparing2.play();
+      preparingCount = preparingCount + 1;
+      MUSIC_preparing2.play();
     }
 
     if (preparingCount > 3480 && preparingCount < 6960) {
-       preparingCount = preparingCount + 1;
-
+      preparingCount = preparingCount + 1;
     }
 
     if (preparingCount === 6960) {
-      preparingCount = 3480
+      preparingCount = 3480;
     }
   }
 
   //Preparing Loop END
 
   if (playersOnline === true) {
-
     if (jogador === 1) {
       if (CIRCLE_isPressed === false) {
-        BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 0)
-      }
-      else {
-        BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 1)
+        BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 0);
+      } else {
+        BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 1);
       }
 
       if (SQUARE_isPressed === false) {
@@ -1462,24 +1466,24 @@ mainGame.update = function () {
     MUSIC_preparing2.stop();
 
     if (rustedGateLoop === 0) {
-      rustedGateLoop = rustedGateLoop + 1
+      rustedGateLoop = rustedGateLoop + 1;
       MUSIC_rustedGate.play();
     }
-    
+
     if (rustedGateLoop > 0 && rustedGateLoop < 3480) {
-      rustedGateLoop = rustedGateLoop + 1
+      rustedGateLoop = rustedGateLoop + 1;
     }
 
     if (rustedGateLoop === 3480) {
-      rustedGateLoop = 0
+      rustedGateLoop = 0;
     }
 
     if (MK_isParrying === true) {
       MK_parryDuration = MK_parryDuration + 1;
       if (MK_parryDuration <= 10) {
-        VFX_yOffset = player.y + 55
+        VFX_yOffset = player.y + 55;
         vfx_mageParry.setPosition(player.x, VFX_yOffset);
-        vfx_mageParry.anims.play("VFX_mageParry", false)
+        vfx_mageParry.anims.play("VFX_mageParry", false);
         SFX_mageParry.play();
       }
 
@@ -1487,13 +1491,11 @@ mainGame.update = function () {
         MK_isParrying = false;
         MK_canParry = false;
         MK_parryCooldown = 100;
-
       }
     }
 
     if (MK_isParrying === false && MK_canParry === false) {
-    
-      MK_parryCooldown = MK_parryCooldown - 1
+      MK_parryCooldown = MK_parryCooldown - 1;
       if (MK_parryCooldown <= 0) {
         MK_canParry = true;
         MK_parryDuration = 0;
@@ -1506,11 +1508,14 @@ mainGame.update = function () {
     MK_overlapBoss = false;
 
     //PULAR INÍCIO
-    if (SQUARE_isPressed === true && MK_isAttacking === false && jogador === 1) {
-  
+    if (
+      SQUARE_isPressed === true &&
+      MK_isAttacking === false &&
+      jogador === 1
+    ) {
       if (jumpTimer === 0 && player.body.touching.down) {
         //jumpTimer verifica o tempo que o jogador está no ar
-      
+
         player.setVelocityY(-350); //Altura inicial do salto
         jumpTimer = 1; //Inicia o jumpTimer
       } else if (jumpTimer > 0 && jumpTimer <= 20) {
@@ -1526,16 +1531,75 @@ mainGame.update = function () {
 
     //PULAR FIM
 
+    if (
+      SQUARE_isPressed &&
+      jogador === 2 &&
+      MK_canCast === true
+    ) {
+      
+      MK_canCast = false;
+      if (UP_isPressed === true || RIGHT_isPressed === true || LEFT_isPressed === true) {
+        MK_hasCast = true;
+
+      }
+      else if (MK_canLeap === true) {
+        MK_castLeap = true
+      }
+    }
+
+    if (MK_castLeap === true) {
+      MK_castLeap = false;
+      MK_canLeap = false;
+      player.setVelocityY(-550) 
+    }
+
+    if (MK_hasCast === true) {
+      MK_isCasting = true
+
+      //FEITIÇO DIREITA >
+      if (
+        RIGHT_isPressed === true &&
+        UP_isPressed === false &&
+        LEFT_isPressed === false
+      )
+
+      {
+
+        MK_castDirection = "R"
+        mageSpell.setTexture("PROJECTILES_spellRight", 0)
+        mageSpell.x = player.x - 5 
+        mageSpell.y = player.y - 15
+
+        
+      }
+
+      if (MK_CastDirection === "R" && MK_spellBurstDuration === 0)
+      {
+        mageSpell.anims.play("PROJECTILES_spellRight", true);
+        mageSpell.setVelocityX(450);
+        }
+    }
 
     //Aparo de Ataques
-  
-    if (CIRCLE_isPressed && MK_isParrying === false && MK_canParry === true && jogador === 2) {
+
+    if (
+      CIRCLE_isPressed &&
+      MK_isParrying === false &&
+      MK_canParry === true &&
+      jogador === 2
+    ) {
       MK_isParrying = true;
     }
     //Ataques Laterais
-    if (CIRCLE_isPressed && MK_isEvading === false && MK_isAttacking === false && MK_canAttack === true && jogador === 1) {
-      MK_isAttacking = true
-      SFX_swordSwing.play()
+    if (
+      CIRCLE_isPressed &&
+      MK_isEvading === false &&
+      MK_isAttacking === false &&
+      MK_canAttack === true &&
+      jogador === 1
+    ) {
+      MK_isAttacking = true;
+      SFX_swordSwing.play();
     }
 
     if (MK_isAttacking === false && MK_canAttack === false) {
@@ -1544,7 +1608,7 @@ mainGame.update = function () {
         MK_attackCooldown = 0;
         MK_attackDuration = 0;
       }
-      MK_attackCooldown = MK_attackCooldown - 1
+      MK_attackCooldown = MK_attackCooldown - 1;
       if (MK_attackCooldown <= 0) {
         MK_canAttack = true;
         MK_attackDuration = 0;
@@ -1552,9 +1616,9 @@ mainGame.update = function () {
     }
 
     if (EYE_justHit === true) {
-      EYE_hitCooldown = EYE_hitCooldown - 1
+      EYE_hitCooldown = EYE_hitCooldown - 1;
       if (EYE_hitCooldown <= 8) {
-        eye.tint = 0xffffff
+        eye.tint = 0xffffff;
       }
       if (EYE_hitCooldown <= 0) {
         EYE_justHit = false;
@@ -1562,10 +1626,14 @@ mainGame.update = function () {
     }
 
     //SE ESTÁ NO CHÃO
-    if (player.body.touching.down && MK_onGround === true && MK_overlapBoss === false) {
-
+    if (
+      player.body.touching.down &&
+      MK_onGround === true &&
+      MK_overlapBoss === false
+    ) {
       if (wasJumping === true) {
         SFX_Land.play();
+        MK_canLeap = true;
         wasJumping = false;
       }
 
@@ -1573,12 +1641,11 @@ mainGame.update = function () {
         if (last_direction === "R") {
           player.setSize(400, 250, true);
           player.setOffset(207, 250, false);
-          player.anims.play("MK-GsideatkRight", true)
-        }
-        else if (last_direction === "L") {
+          player.anims.play("MK-GsideatkRight", true);
+        } else if (last_direction === "L") {
           player.setSize(400, 250, true);
           player.setOffset(9, 250, false);
-          player.anims.play("MK-GsideatkLeft", true)
+          player.anims.play("MK-GsideatkLeft", true);
         }
         MK_attackDuration = MK_attackDuration + 1;
         if (MK_attackDuration >= 13) {
@@ -1589,8 +1656,12 @@ mainGame.update = function () {
       }
 
       //ANDAR E CORRER INÍCIO
-      if (RIGHT_isPressed && MK_isAttacking === false && MK_isEvading === false && jogador === 1) {
-
+      if (
+        RIGHT_isPressed &&
+        MK_isAttacking === false &&
+        MK_isEvading === false &&
+        jogador === 1
+      ) {
         last_direction = "R";
 
         if (MK_isRunning === false) {
@@ -1604,9 +1675,12 @@ mainGame.update = function () {
           player.setVelocityX(350);
           player.anims.play("MK-runRight", true);
         }
-
-      } else if (LEFT_isPressed && MK_isAttacking === false && MK_isEvading === false && jogador === 1) {
-
+      } else if (
+        LEFT_isPressed &&
+        MK_isAttacking === false &&
+        MK_isEvading === false &&
+        jogador === 1
+      ) {
         last_direction = "L";
 
         if (MK_isRunning === false) {
@@ -1655,23 +1729,21 @@ mainGame.update = function () {
 
       //PARADO FIM
     } else {
-
       //SE ESTÁ NO AR
       wasJumping = true;
       if (MK_isAttacking === true) {
         if (last_direction === "R") {
           player.setSize(400, 450, true);
           player.setOffset(207, 50, false);
-          player.anims.play("MK-AsideatkRight", true)
-        }
-        else if (last_direction === "L") {
+          player.anims.play("MK-AsideatkRight", true);
+        } else if (last_direction === "L") {
           player.setSize(400, 450, true);
           player.setOffset(9, 50, false);
-          player.anims.play("MK-AsideatkLeft", true)
+          player.anims.play("MK-AsideatkLeft", true);
         }
         MK_attackDuration = MK_attackDuration + 1;
         if (MK_attackDuration <= 5) {
-          player.setVelocityY(-150)
+          player.setVelocityY(-150);
         }
         if (MK_attackDuration >= 16) {
           MK_isAttacking = false;
@@ -1680,7 +1752,11 @@ mainGame.update = function () {
         }
       }
 
-      if (last_direction === "R" && MK_isAttacking === false && MK_isEvading === false) {
+      if (
+        last_direction === "R" &&
+        MK_isAttacking === false &&
+        MK_isEvading === false
+      ) {
         if (player.body.velocity.y < 0) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
@@ -1690,7 +1766,11 @@ mainGame.update = function () {
           player.setOffset(207, 250, false);
           player.anims.play("MK-fallRight", true);
         }
-      } else if (last_direction === "L" && MK_isAttacking === false && MK_isEvading === false) {
+      } else if (
+        last_direction === "L" &&
+        MK_isAttacking === false &&
+        MK_isEvading === false
+      ) {
         if (player.body.velocity.y < 0) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
@@ -1715,27 +1795,24 @@ mainGame.update = function () {
         airSpeed = player.body.velocity.x - 5;
         player.setVelocityX(airSpeed);
         if (player.body.velocity.x < 0) {
-          last_direction = "L"
+          last_direction = "L";
         }
       }
     }
-  
+
     //Loop do Boss
 
-
     if (EYE_isAwakened === false) {
-      EYE_awakeningDuration = EYE_awakeningDuration + 1
+      EYE_awakeningDuration = EYE_awakeningDuration + 1;
 
       if (EYE_awakeningDuration >= 0 && EYE_awakeningDuration <= 95) {
         eye.anims.play("EYE_heAwakens", true);
       }
 
       if (EYE_awakeningDuration > 95 && EYE_awakeningDuration <= 120) {
-
-        eye.setVelocityX(-75)
-        eye.setVelocityY(-75)
-        eye.anims.play("EYE_idleFLoat", true)
-
+        eye.setVelocityX(-75);
+        eye.setVelocityY(-75);
+        eye.anims.play("EYE_idleFLoat", true);
       }
 
       if (EYE_awakeningDuration > 95) {
@@ -1743,29 +1820,24 @@ mainGame.update = function () {
       }
     }
 
-  
     if (EYE_isAwakened === true && EYE_isDead === false) {
-
       if (EYE_isActing === false) {
-        EYE_cycleValue = EYE_cycleValue + 1
-        eye.setVelocityX(0)
-        eye.setVelocityY(0)
+        EYE_cycleValue = EYE_cycleValue + 1;
+        eye.setVelocityX(0);
+        eye.setVelocityY(0);
         eye.anims.play("EYE_idleFloat", true);
 
         if (EYE_cycleValue >= 0 && EYE_cycleValue <= 30) {
-          eye.setVelocityX(-350)
-          eye.setVelocityY(-400)
+          eye.setVelocityX(-350);
+          eye.setVelocityY(-400);
         }
 
         if (EYE_cycleValue > 30 && EYE_cycleValue <= 50) {
-          eye.setVelocityX(-110)
+          eye.setVelocityX(-110);
         }
-
       }
-
-
     }
   }
-  };
+};
 
 export { mainGame };
