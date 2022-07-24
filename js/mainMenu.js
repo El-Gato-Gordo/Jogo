@@ -7,6 +7,7 @@ var MUSIC_Underground
 
 var play_button;
 var pointer;
+var background_mainMenu;
 
 mainMenu.preload = function () {
 
