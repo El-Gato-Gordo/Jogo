@@ -1272,7 +1272,7 @@ mainGame.update = function () {
     MK_overlapBoss = false;
 
     //PULAR INÍCIO
-    if (SQUARE_isPressed === false && MK_isAttacking === false && jogador === 1) {
+    if (SQUARE_isPressed === true && MK_isAttacking === false && jogador === 1) {
   
       if (jumpTimer === 0 && player.body.touching.down) {
         //jumpTimer verifica o tempo que o jogador está no ar
@@ -1524,10 +1524,11 @@ mainGame.update = function () {
         }
 
         if (EYE_cycleValue > 30 && EYE_cycleValue <= 50) {
-          eye.setVelocityX(-100)
+          eye.setVelocityX(-110)
         }
 
       }
+
 
     }
   }
