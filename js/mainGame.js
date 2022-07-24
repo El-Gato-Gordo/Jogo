@@ -588,6 +588,14 @@ mainGame.preload = function () {
       }
     );
 
+  this.load.spritesheet(
+    "PROJECTILES_spellBurst",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellBurst.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
 
   this.load.spritesheet(
     "PROJECTILES_blastOrb",
