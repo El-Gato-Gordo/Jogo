@@ -1604,7 +1604,9 @@ mainGame.update = function () {
     if (
       SQUARE_isPressed &&
       jogador === 2 &&
-      MK_canCast === true
+      MK_canCast === true || 
+      MK_canCast === true &&
+      keyJ.isDown
     ) {
       
       MK_canCast = false;
