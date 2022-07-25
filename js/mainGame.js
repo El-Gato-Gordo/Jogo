@@ -1631,6 +1631,7 @@ mainGame.update = function () {
     }
 
     if (MK_hasCast === true) {
+      MK_hasCast = false
       MK_isCasting = true
 
       //FEITIÇO DIREITA >
@@ -1648,6 +1649,7 @@ mainGame.update = function () {
 
       if (MK_castDirection === "R" && MK_spellBurstDuration === 0)
       {
+        
         mageSpell.anims.play("PROJECTILES_spellRight", true);
         mageSpell.setVelocityX(450);
         }
