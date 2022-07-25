@@ -780,7 +780,7 @@ mainGame.create = function () {
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  platforms.create(430, 565, "MAP_floor");
+  platforms.create(400, 585, "MAP_floor");
 
   //Inimigo!
   eye = this.physics.add.sprite(600, 400, "EYE_heAwakens").setImmovable(true);
@@ -822,6 +822,9 @@ mainGame.create = function () {
     if (MK_spellBurstDuration <= 50) {
       mageSpell.anims.play("PROJECTILES_spellBurst", true);
     } else {
+      MK_isCasting = false;
+      MK_hasCast = false;
+      MK_castDirection = "null"
       mageSpell.setFrame(5);
       mageSpell.x = 0
       mageSpell.y = 0
@@ -838,6 +841,9 @@ null, null, this);
       if (MK_spellBurstDuration <= 50) {
         mageSpell.anims.play("PROJECTILES_spellBurst", true);
       } else {
+        MK_isCasting = false;
+        MK_hasCast = false;
+        MK_castDirection = "null";
         MK_spellHasHit = true;
         mageSpell.setFrame(5);
         mageSpell.x = 0;
@@ -1604,19 +1610,18 @@ mainGame.update = function () {
     if (
       SQUARE_isPressed &&
       jogador === 2 &&
-      MK_canCast === true || 
       MK_canCast === true &&
-      keyJ.isDown
+      MK_isCasting === false
     ) {
       
       MK_canCast = false;
-      if (UP_isPressed === true || RIGHT_isPressed === true || LEFT_isPressed === true || keyJ.isDown) {
+      //if (UP_isPressed === true || RIGHT_isPressed === true || LEFT_isPressed === true) {
         MK_hasCast = true;
 
-      }
-      else if (MK_canLeap === true) {
-        MK_castLeap = true
-      }
+      //}
+     // else if (MK_canLeap === true) {
+    //    MK_castLeap = true
+    //  }
     }
 
     if (MK_castLeap === true) {
@@ -1629,22 +1634,17 @@ mainGame.update = function () {
       MK_isCasting = true
 
       //FEITIÇO DIREITA >
-      if (
-        RIGHT_isPressed === true &&
-        UP_isPressed === false &&
-        LEFT_isPressed === false ||
-        keyJ.isDown
-      )
-
-      {
+    
+      //if (
+     //   RIGHT_isPressed === true && UP_isPressed === false && LEFT_isPressed === false 
+      //   ) {
 
         MK_castDirection = "R"
         mageSpell.setTexture("PROJECTILES_spellRight", 0)
         mageSpell.x = player.x - 5 
-        mageSpell.y = player.y - 15
+        mageSpell.y = player.y - 5
 
-        
-      }
+     // }
 
       if (MK_castDirection === "R" && MK_spellBurstDuration === 0)
       {
