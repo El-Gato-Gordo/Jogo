@@ -23,6 +23,7 @@ var wasJumping = false; //Serve para tocar o som de aterrisagem, assim muda a va
 
 var MK_onGround = false;
 var MK_overlapBoss = false;
+var roomMessage;
 
 var SFX_Land;
 var SFX_knightHit;
@@ -209,6 +210,15 @@ mainGame.preload = function () {
     {
       frameWidth: 128,
       frameHeight: 128,
+    }
+  );
+
+    this.load.spritesheet(
+    "roomMessage",
+    "./assets/messages/waitPlayer2_MSG.png",
+    {
+      frameWidth: 500,
+      frameHeight: 100,
     }
   );
 
@@ -634,12 +644,8 @@ mainGame.create = function () {
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
-  sala = 1;
   socket.emit("entrar-na-sala", sala);
-  /*  var mensagem = this.add.text(10, 10, "Sala para entrar:", {
-    font: "32px Courier",
-    fill: "#ffffff",
-  });
+
 
   var mensagemEntrada = this.add.text(10, 50, "", {
     font: "32px Courier",
@@ -664,7 +670,6 @@ mainGame.create = function () {
       mensagemEntrada.destroy();
     }
   });
-*/
   socket.on("botao", (botoes)  => {
     knightCirclePress = botoes.knightCirclePress;
     knightSquarePress = botoes.knightSquarePress;
@@ -800,6 +805,11 @@ mainGame.create = function () {
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
   platforms.create(400, 585, "MAP_floor");
+
+  //Mensagem Sala
+
+  roomMessage = this.physics.add.sprite(400, 100, "roomMessage").setImmovable(true);
+  roomMessage.body.setAllowGravity(false);
 
   //Inimigo!
   eye = this.physics.add.sprite(600, 400, "EYE_heAwakens").setImmovable(true);
@@ -1152,6 +1162,18 @@ mainGame.create = function () {
   MUSIC_preparing2 = this.sound.add("MUSIC_preparing2", { loop: true });
   MUSIC_rustedGate = this.sound.add("MUSIC_rustedGate", { loop: true });
 
+  //Animação Mensagems
+
+  this.anims.create({
+    key: "await-forMage",
+    frames: this.anims.generateFrameNUmbers("roomMessage", {
+      start: 1,
+      end: 4,
+    }),
+    frameRate: 10,
+    repeat: -1
+  })
+
   //ANIMAÇÕES MAGEKNIGHT
   this.anims.create({
     key: "MK-idleRight",
@@ -1495,6 +1517,12 @@ mainGame.update = function () {
 
   //Preparing Loop START
   if (playersOnline === false) {
+    if (jogador === 1) {
+      roomMessage.anims.play("await-forMage", true);
+    } else {
+      roomMessage.setFrame(0);
+    }
+
     if (preparingCount === 0) {
       preparingCount = preparingCount + 1;
       MUSIC_preparing1.play();
@@ -1520,6 +1548,7 @@ mainGame.update = function () {
   //Preparing Loop END
 
   if (playersOnline === true) {
+    roomMessage.setFrame(5);
     if (jogador === 1) {
       if (knightCirclePress === false) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 0);
