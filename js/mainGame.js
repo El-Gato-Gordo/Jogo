@@ -1166,7 +1166,7 @@ mainGame.create = function () {
 
   this.anims.create({
     key: "await-forMage",
-    frames: this.anims.generateFrameNUmbers("roomMessage", {
+    frames: this.anims.generateFrameNumbers("roomMessage", {
       start: 1,
       end: 4,
     }),
