@@ -440,13 +440,6 @@ mainGame.preload = function () {
     }
   );
 
-  //Inimigo
-
-  this.load.spritesheet("bichopapao", "./assets/spritesheets/bichopapao.png", {
-    frameWidth: 150,
-    frameHeight: 150,
-  });
-
   //Olhão Louco
 
   this.load.spritesheet(
@@ -799,12 +792,12 @@ mainGame.create = function () {
   //this.cameras.main.startFollow(player);
 
   vfx_mageParry = this.physics.add
-    .staticSprite(0, 0, "VFX_invisibleThing")
+    .staticSprite(0, 0, "BUTTON_INVISIBLE")
     .setScale(0.3);
 
   //FEITIÇO DO MAGO FINALMENTE
 
-  mageSpell = this.physics.add.sprite(0, 0, "VFX_invisibleThing").setImmovable(true)
+  mageSpell = this.physics.add.sprite(0, 0, "BUTTON_INVISIBLE").setImmovable(true)
     .setScale(0.5);
   mageSpell.body.setAllowGravity(false)
   mageSpell.setCollideWorldBounds(true); //Criar 
@@ -1188,16 +1181,7 @@ null, null, this);
     repeat: -1,
   });
 
-  //Animações Inimigo
-  this.anims.create({
-    key: "bichopapao",
-    frames: this.anims.generateFrameNumbers("bichopapao", {
-      start: 0,
-      end: 4,
-    }),
-    frameRate: 16,
-    repeat: -1,
-  });
+
 
   //Animações do Olhão Louco!
 
