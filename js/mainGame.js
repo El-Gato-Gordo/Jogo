@@ -65,8 +65,8 @@ var MK_canLeap = true;
 var MK_hasCast = false;
 var MK_castLeap = false;
 var MK_castCooldown = 0;
-var MK_castDirection = "null"
-var MK_spellBurstDuration = 0
+var MK_castDirection = "null";
+var MK_spellBurstDuration = 0;
 var MK_spellHasHit = false;
 
 var MK_isParrying = false;
@@ -126,7 +126,6 @@ var BUTTON_SQUARE;
 var BUTTON_UP;
 var BUTTON_RIGHT;
 var BUTTON_LEFT;
-
 
 var playersOnline = false;
 
@@ -585,14 +584,14 @@ mainGame.preload = function () {
     }
   );
 
-    this.load.spritesheet(
-      "PROJECTILES_spellRightDown",
-      "./assets/spritesheets/projectiles/PROJECTILES_spellRightDown.png",
-      {
-        frameWidth: 200,
-        frameHeight: 200,
-      }
-    );
+  this.load.spritesheet(
+    "PROJECTILES_spellRightDown",
+    "./assets/spritesheets/projectiles/PROJECTILES_spellRightDown.png",
+    {
+      frameWidth: 200,
+      frameHeight: 200,
+    }
+  );
 
   this.load.spritesheet(
     "PROJECTILES_spellBurst",
@@ -660,6 +659,20 @@ mainGame.create = function () {
     }
   });
 */
+  socket.on("botao", ({ botoes }) => {
+    knightCirclePress = botoes.knightCirclePress;
+    knightSquarePress = botoes.knightSquarePress;
+    knightUpPress = botoes.knightUpPress;
+    knightRightPress = botoes.knightRightPress;
+    knightLeftPress = botoes.knightLeftPress;
+
+    mageCirclePress = botoes.knightCirclePress;
+    mageSquarePress = botoes.knightSquarePress;
+    mageUpPress = botoes.knightUpPress;
+    mageRightPress = botoes.knightRightPress;
+    mageLeftPress = botoes.knightLeftPress;
+  });
+
   socket.on("jogadores", (jogadores) => {
     if (jogadores.primeiro === socket.id) {
       // Define jogador como o primeiro
@@ -810,27 +823,35 @@ mainGame.create = function () {
 
   //FEITIÇO DO MAGO FINALMENTE
 
-  mageSpell = this.physics.add.sprite(0, 0, "BUTTON_INVISIBLE").setImmovable(true)
+  mageSpell = this.physics.add
+    .sprite(0, 0, "BUTTON_INVISIBLE")
+    .setImmovable(true)
     .setScale(0.5);
-  mageSpell.body.setAllowGravity(false)
-  mageSpell.setCollideWorldBounds(true); //Criar 
+  mageSpell.body.setAllowGravity(false);
+  mageSpell.setCollideWorldBounds(true); //Criar
   mageSpell.setSize(60, 60, true);
 
-  this.physics.add.collider(mageSpell, platforms, function () {
-    MK_spellBurstDuration = 0
-    
-    if (MK_spellBurstDuration <= 50) {
-      mageSpell.anims.play("PROJECTILES_spellBurst", true);
-    } else {
-      MK_isCasting = false;
-      MK_hasCast = false;
-      MK_castDirection = "null"
-      mageSpell.setFrame(5);
-      mageSpell.x = 0
-      mageSpell.y = 0
-    }
-  },
-null, null, this);
+  this.physics.add.collider(
+    mageSpell,
+    platforms,
+    function () {
+      MK_spellBurstDuration = 0;
+
+      if (MK_spellBurstDuration <= 50) {
+        mageSpell.anims.play("PROJECTILES_spellBurst", true);
+      } else {
+        MK_isCasting = false;
+        MK_hasCast = false;
+        MK_castDirection = "null";
+        mageSpell.setFrame(5);
+        mageSpell.x = 0;
+        mageSpell.y = 0;
+      }
+    },
+    null,
+    null,
+    this
+  );
 
   this.physics.add.collider(
     mageSpell,
@@ -854,7 +875,6 @@ null, null, this);
     null,
     this
   );
-  
 
   fullScreen_button = this.physics.add
     .staticSprite(760, 40, "fullScreen_button")
@@ -917,13 +937,15 @@ null, null, this);
     "pointerover",
     function () {
       RIGHT_isPressed = true;
-      
+
       if (jogador === 1) {
-      MK_isRunning = true;
-      knightRightPress = true
+        MK_isRunning = true;
+        knightRightPress = true;
+        socket.emit("botao", sala, { knightRightPress: true });
       }
       if (jogador === 2) {
-        mageRightPress = true
+        mageRightPress = true;
+        socket.emit("botao", sala, { mageRightPress: true });
       }
     },
     this
@@ -934,13 +956,15 @@ null, null, this);
     function () {
       LEFT_isPressed = true;
 
-       if (jogador === 1) {
-         MK_isRunning = true;
-         knightLeftPress = true;
-       }
-       if (jogador === 2) {
-         mageLeftPress = true;
-       }
+      if (jogador === 1) {
+        MK_isRunning = true;
+        knightLeftPress = true;
+        socket.emit("botao", sala, { knightLeftPress: true });
+      }
+      if (jogador === 2) {
+        mageLeftPress = true;
+        socket.emit("botao", sala, { mageLeftPress: true });
+      }
     },
     this
   );
@@ -949,13 +973,14 @@ null, null, this);
     "pointerover",
     function () {
       CIRCLE_isPressed = true;
-       if (jogador === 1) {
-         knightCirclePress = true;
-       }
-       if (jogador === 2) {
-         mageCirclePress = true;
-       }
-      
+      if (jogador === 1) {
+        knightCirclePress = true;
+        socket.emit("botao", sala, { knightCirclePress: true });
+      }
+      if (jogador === 2) {
+        mageCirclePress = true;
+        socket.emit("botao", sala, { mageCirclePress: true });
+      }
     },
     this
   );
@@ -964,12 +989,14 @@ null, null, this);
     "pointerover",
     function () {
       SQUARE_isPressed = true;
-        if (jogador === 1) {
-         knightSquarePress = true;
-       }
-       if (jogador === 2) {
-         mageSquarePress = true;
-       }
+      if (jogador === 1) {
+        knightSquarePress = true;
+        socket.emit("botao", sala, { knightSquarePress: true });
+      }
+      if (jogador === 2) {
+        mageSquarePress = true;
+        socket.emit("botao", sala, { mageSquarePress: true });
+      }
     },
     this
   );
@@ -978,12 +1005,14 @@ null, null, this);
     "pointerover",
     function () {
       UP_isPressed = true;
-        if (jogador === 1) {
-         knightUpPress = true;
-       }
-       if (jogador === 2) {
-         mageUpPress = true;
-       }
+      if (jogador === 1) {
+        knightUpPress = true;
+        socket.emit("botao", sala, { knightUpPress: true });
+      }
+      if (jogador === 2) {
+        mageUpPress = true;
+        socket.emit("botao", sala, { mageUpPress: true });
+      }
     },
     this
   );
@@ -993,13 +1022,15 @@ null, null, this);
     "pointerout",
     function () {
       RIGHT_isPressed = false;
-        if (jogador === 1) {
+      if (jogador === 1) {
         MK_isRunning = false;
-         knightRightPress = false;
-       }
-       if (jogador === 2) {
-         mageRightPress = false;
-       }
+        knightRightPress = false;
+        socket.emit("botao", sala, { knightRightPress: false });
+      }
+      if (jogador === 2) {
+        mageRightPress = false;
+        socket.emit("botao", sala, { mageRightPress: false });
+      }
     },
     this
   );
@@ -1008,12 +1039,14 @@ null, null, this);
     "pointerout",
     function () {
       UP_isPressed = false;
-       if (jogador === 1) {
-         knightUpPress = false;
-       }
-       if (jogador === 2) {
-         mageUpPress = false;
-       }
+      if (jogador === 1) {
+        knightUpPress = false;
+        socket.emit("botao", sala, { knightUpPress: false });
+      }
+      if (jogador === 2) {
+        mageUpPress = false;
+        socket.emit("botao", sala, { mageUpPress: false });
+      }
     },
     this
   );
@@ -1022,11 +1055,13 @@ null, null, this);
     function () {
       LEFT_isPressed = false;
       if (jogador === 1) {
-        MK_isRunning = false
+        MK_isRunning = false;
         knightLeftPress = false;
+        socket.emit("botao", sala, { knightLeftPress: false });
       }
       if (jogador === 2) {
         mageLeftPress = false;
+        socket.emit("botao", sala, { mageLeftPress: false });
       }
     },
     this
@@ -1038,12 +1073,12 @@ null, null, this);
       CIRCLE_isPressed = false;
       if (jogador === 1) {
         knightCirclePress = false;
+        socket.emit("botao", sala, { knightCirclePress: false });
       }
       if (jogador === 2) {
         mageCirclePress = false;
+        socket.emit("botao", sala, { mageCirclePress: false });
       }
-
-      
     },
     this
   );
@@ -1054,15 +1089,15 @@ null, null, this);
       SQUARE_isPressed = false;
       if (jogador === 1) {
         knightSquarePress = false;
+        socket.emit("botao", sala, { knightSquarePress: false });
       }
       if (jogador === 2) {
         mageSquarePress = false;
+        socket.emit("botao", sala, { mageSquarePress: false });
       }
     },
     this
   );
-
-
 
   this.physics.add.overlap(
     eye,
@@ -1070,7 +1105,7 @@ null, null, this);
     function () {
       MK_overlapBoss = true;
 
-      if (MK_isAttacking === true && EYE_justHit === false ) {
+      if (MK_isAttacking === true && EYE_justHit === false) {
         SFX_swordHit.play();
         EYE_healthPower = EYE_healthPower - 1;
         eye.tint = 0xff0000;
@@ -1083,7 +1118,7 @@ null, null, this);
         EYE_healthPower = EYE_healthPower - 1;
         EYE.tint = 0xff0000;
         EYE_juustHit = true;
-        EYE_hitCooldown = 20
+        EYE_hitCooldown = 20;
       }
     },
     null,
@@ -1265,8 +1300,6 @@ null, null, this);
     repeat: -1,
   });
 
-
-
   //Animações do Olhão Louco!
 
   this.anims.create({
@@ -1433,20 +1466,26 @@ null, null, this);
     repeat: 0,
   });
 
-   this.anims.create({
-     key: "PROJECTILES_spellBurst",
-     frames: this.anims.generateFrameNumbers("PROJECTILES_spellBurst", {
-       start: 0,
-       end: 5,
-     }),
-     frameRate: 16,
-     repeat: 0,
-   });
-
+  this.anims.create({
+    key: "PROJECTILES_spellBurst",
+    frames: this.anims.generateFrameNumbers("PROJECTILES_spellBurst", {
+      start: 0,
+      end: 5,
+    }),
+    frameRate: 16,
+    repeat: 0,
+  });
 };
 
 //UPDATE
 mainGame.update = function () {
+
+  if (knightRightPress === true || knightLeftPress === true) {
+    MK_isRunnning === true
+  } else {
+    MK_isRunning === false
+  }
+  
   //Preparing Loop START
   if (playersOnline === false) {
     if (preparingCount === 0) {
@@ -1584,11 +1623,7 @@ mainGame.update = function () {
     MK_overlapBoss = false;
 
     //PULAR INÍCIO
-    if (
-      SQUARE_isPressed === true &&
-      MK_isAttacking === false &&
-      jogador === 1
-    ) {
+    if (knightSQuarePress === true && MK_isAttacking === false) {
       if (jumpTimer === 0 && player.body.touching.down) {
         //jumpTimer verifica o tempo que o jogador está no ar
 
@@ -1613,65 +1648,127 @@ mainGame.update = function () {
       MK_canCast === true &&
       MK_isCasting === false
     ) {
-      
       MK_canCast = false;
-      //if (UP_isPressed === true || RIGHT_isPressed === true || LEFT_isPressed === true) {
+      if (
+        UP_isPressed === true ||
+        RIGHT_isPressed === true ||
+        LEFT_isPressed === true
+      ) {
         MK_hasCast = true;
-
-      //}
-     // else if (MK_canLeap === true) {
-    //    MK_castLeap = true
-    //  }
+      } else if (MK_canLeap === true) {
+        MK_castLeap = true;
+      }
     }
 
     if (MK_castLeap === true) {
       MK_castLeap = false;
       MK_canLeap = false;
-      player.setVelocityY(-550) 
+      player.setVelocityY(-550);
     }
 
     if (MK_hasCast === true) {
-      MK_hasCast = false
-      MK_isCasting = true
+      MK_hasCast = false;
+      MK_isCasting = true;
 
       //FEITIÇO DIREITA >
-    
-      //if (
-     //   RIGHT_isPressed === true && UP_isPressed === false && LEFT_isPressed === false 
-      //   ) {
 
-        MK_castDirection = "R"
-        mageSpell.setTexture("PROJECTILES_spellRight", 0)
-        mageSpell.x = player.x - 5 
-        mageSpell.y = player.y - 5
+      if (
+        mageRightPress === true &&
+        mageUpPress === false &&
+        mageLeftPress === false
+      ) {
+        MK_castDirection = "R";
+        mageSpell.setTexture("PROJECTILES_spellRight", 0);
+        mageSpell.x = player.x - 5;
+        mageSpell.y = player.y - 5;
+      }
 
-     // }
+      if (
+        mageRightPress === true &&
+        mageUpPress === true &&
+        mageLeftPress === false
+      ) {
+        MK_castDirection = "RU";
+        mageSpell.setTexture("PROJECTILES_spellRightUp", 0);
+        mageSpell.x = player.x - 5;
+        mageSpell.y = player.y - 5;
+      }
 
-      if (MK_castDirection === "R" && MK_spellBurstDuration === 0)
-      {
-        
+      if (
+        mageRightPress === false &&
+        mageUpPress === false &&
+        mageLeftPress === false
+      ) {
+        MK_castDirection = "U";
+        mageSpell.setTexture("PROJECTILES_spellUp", 0);
+        mageSpell.x = player.x - 5;
+        mageSpell.y = player.y - 5;
+      }
+
+      if (
+        mageRightPress === false &&
+        mageUpPress === true &&
+        mageLeftPress === true
+      ) {
+        MK_castDirection = "LU";
+        mageSpell.setTexture("PROJECTILES_spellLeftUp", 0);
+        mageSpell.x = player.x - 5;
+        mageSpell.y = player.y - 5;
+      }
+
+      if (
+        mageRightPress === false &&
+        mageUpPress === false &&
+        mageLeftPress === true
+      ) {
+        MK_castDirection = "R";
+        mageSpell.setTexture("PROJECTILES_spellLeft", 0);
+        mageSpell.x = player.x - 5;
+        mageSpell.y = player.y - 5;
+      }
+
+      if (MK_castDirection === "R" && MK_spellBurstDuration === 0) {
         mageSpell.anims.play("PROJECTILES_spellRight", true);
+        mageSpell.setVelocityX(550);
+      }
+
+      if (MK_castDirection === "RU" && MK_spellBurstDuration === 0) {
+        mageSpell.anims.play("PROJECTILES_spellRightUp", true);
         mageSpell.setVelocityX(450);
-        }
+        mageSpell.setVelocityY(-450);
+      }
+
+      if (MK_castDirection === "U" && MK_spellBurstDuration === 0) {
+        mageSpell.anims.play("PROJECTILES_spellUp", true);
+        mageSpell.setVelocityY(550);
+      }
+
+      if (MK_castDirection === "LU" && MK_spellBurstDuration === 0) {
+        mageSpell.anims.play("PROJECTILES_spellLeftUp", true);
+        mageSpell.setVelocityX(-450);
+        mageSpell.setVelocityY(-450);
+      }
+
+      if (MK_castDirection === "L" && MK_spellBurstDuration === 0) {
+        mageSpell.anims.play("PROJECTILES_spellLeft", true);
+        mageSpell.setVelocityX(-550);
+      }
     }
 
     //Aparo de Ataques
 
     if (
-      CIRCLE_isPressed &&
+      mageCirclePress === true &&
       MK_isParrying === false &&
-      MK_canParry === true &&
-      jogador === 2
+      MK_canParry === true
     ) {
       MK_isParrying = true;
     }
     //Ataques Laterais
     if (
-      CIRCLE_isPressed &&
-      MK_isEvading === false &&
+      knightCirclePress === true &&
       MK_isAttacking === false &&
-      MK_canAttack === true &&
-      jogador === 1
+      MK_canAttack === true
     ) {
       MK_isAttacking = true;
       SFX_swordSwing.play();
@@ -1731,12 +1828,7 @@ mainGame.update = function () {
       }
 
       //ANDAR E CORRER INÍCIO
-      if (
-        RIGHT_isPressed &&
-        MK_isAttacking === false &&
-        MK_isEvading === false &&
-        jogador === 1
-      ) {
+      if (knightRightPress === true && MK_isAttacking === false) {
         last_direction = "R";
 
         if (MK_isRunning === false) {
@@ -1750,12 +1842,7 @@ mainGame.update = function () {
           player.setVelocityX(350);
           player.anims.play("MK-runRight", true);
         }
-      } else if (
-        LEFT_isPressed &&
-        MK_isAttacking === false &&
-        MK_isEvading === false &&
-        jogador === 1
-      ) {
+      } else if (knightLeftPress === true && MK_isAttacking === false) {
         last_direction = "L";
 
         if (MK_isRunning === false) {
@@ -1777,25 +1864,25 @@ mainGame.update = function () {
 
       //PARADO INÍCIO
       if (player.body.velocity.x === 0 && MK_isAttacking === false) {
-        if (last_direction === "R" && UP_isPressed === false && jogador === 1) {
+        if (last_direction === "R" && knightUpPress === false) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleRight", true);
         }
 
-        if (last_direction === "R" && UP_isPressed === true && jogador === 1) {
+        if (last_direction === "R" && knightUpPress === true) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-lookupRight", true);
         }
 
-        if (last_direction === "L" && UP_isPressed === false && jogador === 1) {
+        if (last_direction === "L" && knightUpPress === false) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleLeft", true);
         }
 
-        if (last_direction === "L" && UP_isPressed === true && jogador === 1) {
+        if (last_direction === "L" && knightUpPress === true) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-lookupLeft", true);
@@ -1857,9 +1944,7 @@ mainGame.update = function () {
         }
       }
 
-      if (RIGHT_isPressed && player.body.velocity.x <= 200 && jogador === 1 ||
-        jogador === 2 && knightRightPress) {
-        
+      if (knightRightPress === true && player.body.velocity.x <= 200) {
         airSpeed = player.body.velocity.x + 5;
         player.setVelocityX(airSpeed);
         if (player.body.velocity.x > 0) {
@@ -1868,9 +1953,7 @@ mainGame.update = function () {
       }
 
       //Define a aceleração do jogador no ar, para que não se movimente livremente fora do chão [ESQUERDA]
-      if (LEFT_isPressed && player.body.velocity.x >= -200 && jogador === 1 ||
-        jogador === 2 && knightLeftPress) {
-        
+      if (knightLeftPress === true && player.body.velocity.x >= -200) {
         airSpeed = player.body.velocity.x - 5;
         player.setVelocityX(airSpeed);
         if (player.body.velocity.x < 0) {
