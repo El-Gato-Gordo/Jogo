@@ -678,7 +678,7 @@ mainGame.create = function () {
     }
   });
 */
-  socket.on("botao", ({ botoes }) => {
+  socket.on("botao", (botoes)  => {
     knightCirclePress = botoes.knightCirclePress;
     knightSquarePress = botoes.knightSquarePress;
     knightUpPress = botoes.knightUpPress;
