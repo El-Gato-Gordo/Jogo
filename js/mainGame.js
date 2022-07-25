@@ -109,11 +109,24 @@ var LEFT_isPressed = false;
 var CIRCLE_isPressed = false;
 var SQUARE_isPressed = false;
 
+var mageUpPress = false;
+var mageRightPress = false;
+var mageLeftPress = false;
+var mageSquarePress = false;
+var mageCirclePress = false;
+
+var knightUpPress = false;
+var knightRightPress = false;
+var knightLeftPress = false;
+var knightSquarePress = false;
+var knightCirclePress = false;
+
 var BUTTON_CIRCLE;
 var BUTTON_SQUARE;
 var BUTTON_UP;
 var BUTTON_RIGHT;
 var BUTTON_LEFT;
+
 
 var playersOnline = false;
 
@@ -1774,7 +1787,9 @@ mainGame.update = function () {
         }
       }
 
-      if (keyD.isDown && player.body.velocity.x <= 200) {
+      if (RIGHT_isPressed && player.body.velocity.x <= 200 && jogador === 1 ||
+        jogador === 2 && knightRightPress) {
+        
         airSpeed = player.body.velocity.x + 5;
         player.setVelocityX(airSpeed);
         if (player.body.velocity.x > 0) {
@@ -1783,7 +1798,9 @@ mainGame.update = function () {
       }
 
       //Define a aceleração do jogador no ar, para que não se movimente livremente fora do chão [ESQUERDA]
-      if (keyA.isDown && player.body.velocity.x >= -200) {
+      if (LEFT_isPressed && player.body.velocity.x >= -200 && jogador === 1 ||
+        jogador === 2 && knightLeftPress) {
+        
         airSpeed = player.body.velocity.x - 5;
         player.setVelocityX(airSpeed);
         if (player.body.velocity.x < 0) {
