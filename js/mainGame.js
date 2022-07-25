@@ -780,7 +780,7 @@ mainGame.create = function () {
 
   //  Here we create the ground.
   //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-  platforms.create(400, 565, "MAP_floor");
+  platforms.create(430, 565, "MAP_floor");
 
   //Inimigo!
   eye = this.physics.add.sprite(600, 400, "EYE_heAwakens").setImmovable(true);
@@ -911,7 +911,14 @@ null, null, this);
     "pointerover",
     function () {
       RIGHT_isPressed = true;
+      
+      if (jogador === 1) {
       MK_isRunning = true;
+      knightRightPress = true
+      }
+      if (jogador === 2) {
+        mageRightPress = true
+      }
     },
     this
   );
@@ -920,7 +927,14 @@ null, null, this);
     "pointerover",
     function () {
       LEFT_isPressed = true;
-      MK_isRunning = true;
+
+       if (jogador === 1) {
+         MK_isRunning = true;
+         knightLeftPress = true;
+       }
+       if (jogador === 2) {
+         mageLeftPress = true;
+       }
     },
     this
   );
@@ -929,6 +943,13 @@ null, null, this);
     "pointerover",
     function () {
       CIRCLE_isPressed = true;
+       if (jogador === 1) {
+         knightCirclePress = true;
+       }
+       if (jogador === 2) {
+         mageCirclePress = true;
+       }
+      
     },
     this
   );
@@ -937,6 +958,12 @@ null, null, this);
     "pointerover",
     function () {
       SQUARE_isPressed = true;
+        if (jogador === 1) {
+         knightSquarePress = true;
+       }
+       if (jogador === 2) {
+         mageSquarePress = true;
+       }
     },
     this
   );
@@ -945,6 +972,12 @@ null, null, this);
     "pointerover",
     function () {
       UP_isPressed = true;
+        if (jogador === 1) {
+         knightUpPress = true;
+       }
+       if (jogador === 2) {
+         mageUpPress = true;
+       }
     },
     this
   );
@@ -954,7 +987,13 @@ null, null, this);
     "pointerout",
     function () {
       RIGHT_isPressed = false;
-      MK_isRunning = false;
+        if (jogador === 1) {
+        MK_isRunning = false;
+         knightRightPress = false;
+       }
+       if (jogador === 2) {
+         mageRightPress = false;
+       }
     },
     this
   );
@@ -963,6 +1002,12 @@ null, null, this);
     "pointerout",
     function () {
       UP_isPressed = false;
+       if (jogador === 1) {
+         knightUpPress = false;
+       }
+       if (jogador === 2) {
+         mageUpPress = false;
+       }
     },
     this
   );
@@ -970,7 +1015,13 @@ null, null, this);
     "pointerout",
     function () {
       LEFT_isPressed = false;
-      MK_isRunning = false;
+      if (jogador === 1) {
+        MK_isRunning = false
+        knightLeftPress = false;
+      }
+      if (jogador === 2) {
+        mageLeftPress = false;
+      }
     },
     this
   );
@@ -979,6 +1030,14 @@ null, null, this);
     "pointerout",
     function () {
       CIRCLE_isPressed = false;
+      if (jogador === 1) {
+        knightCirclePress = false;
+      }
+      if (jogador === 2) {
+        mageCirclePress = false;
+      }
+
+      
     },
     this
   );
@@ -987,6 +1046,12 @@ null, null, this);
     "pointerout",
     function () {
       SQUARE_isPressed = false;
+      if (jogador === 1) {
+        knightSquarePress = false;
+      }
+      if (jogador === 2) {
+        mageSquarePress = false;
+      }
     },
     this
   );
@@ -1523,7 +1588,7 @@ mainGame.update = function () {
 
         player.setVelocityY(-350); //Altura inicial do salto
         jumpTimer = 1; //Inicia o jumpTimer
-      } else if (jumpTimer > 0 && jumpTimer <= 20) {
+      } else if (jumpTimer > 0 && jumpTimer <= 10) {
         //Enquanto o jumpTimer estiver entre 1 e 20, vai adicionar 1 ao jumpTimer e à cada verificação vai alterar a velocidade do Y
 
         jumpTimer = jumpTimer + 1;
@@ -1543,7 +1608,7 @@ mainGame.update = function () {
     ) {
       
       MK_canCast = false;
-      if (UP_isPressed === true || RIGHT_isPressed === true || LEFT_isPressed === true) {
+      if (UP_isPressed === true || RIGHT_isPressed === true || LEFT_isPressed === true || keyJ.isDown) {
         MK_hasCast = true;
 
       }
@@ -1565,7 +1630,8 @@ mainGame.update = function () {
       if (
         RIGHT_isPressed === true &&
         UP_isPressed === false &&
-        LEFT_isPressed === false
+        LEFT_isPressed === false ||
+        keyJ.isDown
       )
 
       {
