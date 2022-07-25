@@ -960,7 +960,6 @@ mainGame.create = function () {
   BUTTON_RIGHT.on(
     "pointerover",
     function () {
-      RIGHT_isPressed = true;
 
       if (jogador === 1) {
         knightRightPress = true;
@@ -977,8 +976,6 @@ mainGame.create = function () {
   BUTTON_LEFT.on(
     "pointerover",
     function () {
-      LEFT_isPressed = true;
-
       if (jogador === 1) {
         knightLeftPress = true;
         socket.emit("botao", sala, { knightLeftPress: true });
@@ -994,7 +991,6 @@ mainGame.create = function () {
   BUTTON_CIRCLE.on(
     "pointerover",
     function () {
-      CIRCLE_isPressed = true;
       if (jogador === 1) {
         knightCirclePress = true;
         socket.emit("botao", sala, { knightCirclePress: true });
@@ -1010,7 +1006,6 @@ mainGame.create = function () {
   BUTTON_SQUARE.on(
     "pointerover",
     function () {
-      SQUARE_isPressed = true;
       if (jogador === 1) {
         knightSquarePress = true;
         socket.emit("botao", sala, { knightSquarePress: true });
@@ -1026,7 +1021,6 @@ mainGame.create = function () {
   BUTTON_UP.on(
     "pointerover",
     function () {
-      UP_isPressed = true;
       if (jogador === 1) {
         knightUpPress = true;
         socket.emit("botao", sala, { knightUpPress: true });
@@ -1043,7 +1037,6 @@ mainGame.create = function () {
   BUTTON_RIGHT.on(
     "pointerout",
     function () {
-      RIGHT_isPressed = false;
       if (jogador === 1) {
         knightRightPress = false;
         socket.emit("botao", sala, { knightRightPress: false });
@@ -1059,7 +1052,6 @@ mainGame.create = function () {
   BUTTON_UP.on(
     "pointerout",
     function () {
-      UP_isPressed = false;
       if (jogador === 1) {
         knightUpPress = false;
         socket.emit("botao", sala, { knightUpPress: false });
@@ -1074,7 +1066,6 @@ mainGame.create = function () {
   BUTTON_LEFT.on(
     "pointerout",
     function () {
-      LEFT_isPressed = false;
       if (jogador === 1) {
         knightLeftPress = false;
         socket.emit("botao", sala, { knightLeftPress: false });
@@ -1090,7 +1081,6 @@ mainGame.create = function () {
   BUTTON_CIRCLE.on(
     "pointerout",
     function () {
-      CIRCLE_isPressed = false;
       if (jogador === 1) {
         knightCirclePress = false;
         socket.emit("botao", sala, { knightCirclePress: false });
@@ -1106,7 +1096,6 @@ mainGame.create = function () {
   BUTTON_SQUARE.on(
     "pointerout",
     function () {
-      SQUARE_isPressed = false;
       if (jogador === 1) {
         knightSquarePress = false;
         socket.emit("botao", sala, { knightSquarePress: false });
@@ -1170,7 +1159,7 @@ mainGame.create = function () {
       start: 1,
       end: 4,
     }),
-    frameRate: 10,
+    frameRate: 3,
     repeat: -1
   })
 
