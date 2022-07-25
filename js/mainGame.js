@@ -1646,7 +1646,7 @@ mainGame.update = function () {
         
       }
 
-      if (MK_CastDirection === "R" && MK_spellBurstDuration === 0)
+      if (MK_castDirection === "R" && MK_spellBurstDuration === 0)
       {
         mageSpell.anims.play("PROJECTILES_spellRight", true);
         mageSpell.setVelocityX(450);
