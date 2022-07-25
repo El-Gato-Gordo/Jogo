@@ -27,5 +27,4 @@ var config = {
   scene: [mainMenu, mainGame]
 };
 
-//pressStart;
 var game = new Phaser.Game(config);

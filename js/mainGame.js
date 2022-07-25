@@ -32,6 +32,8 @@ var SFX_mageParry;
 var SFX_mageDeflected;
 var SFX_mageLeap;
 var SFX_mageFireball;
+var SFX_spellCast;
+var SFX_magicLeap;
 
 var MUSIC_preparing1;
 var MUSIC_preparing2;
@@ -190,6 +192,10 @@ mainGame.preload = function () {
   this.load.audio("SFX_mageLeap", ["./assets/sfx/SFX_mageLeap.wav"]);
   this.load.audio("SFX_mageParry", ["./assets/sfx/SFX_mageParry.wav"]);
   this.load.audio("SFX_mageDeflected", ["./assets/sfx/SFX_mageDeflected.wav"]);
+  this.load.audio("SFX_spellCast", ["./assets/sfx/SFX_SpellCast.wav"]);
+  this.load.audio("SFX_magicLeap", ["./assets/sfx/SFX_magicLEap.wav"]);
+
+
 
   this.load.audio("MUSIC_preparing1", ["./assets/music/MUSIC_preparing1.wav"]);
 
@@ -837,6 +843,11 @@ mainGame.create = function () {
     function () {
       MK_spellBurstDuration = 0;
 
+      
+      if (MK_spellBurstDuration === 1) {
+        SFX_mageFireball.play();
+      }
+
       if (MK_spellBurstDuration <= 50) {
         mageSpell.anims.play("PROJECTILES_spellBurst", true);
       } else {
@@ -859,6 +870,9 @@ mainGame.create = function () {
     function () {
       MK_spellBurstDuration = 0;
 
+      if (MK_spellBurstDuration === 1) {
+        SFX_mageFireball.play();
+      }
       if (MK_spellBurstDuration <= 50) {
         mageSpell.anims.play("PROJECTILES_spellBurst", true);
       } else {
@@ -1134,6 +1148,9 @@ mainGame.create = function () {
   SFX_mageDeflected = this.sound.add("SFX_mageDeflected", { loop: false });
   SFX_mageLeap = this.sound.add("SFX_mageLeap", { loop: false });
   SFX_mageFireball = this.sound.add("SFX_mageFireball", { loop: false });
+  SFX_spellCast = this.sound.add("SFX_spellCast", { loop: false });
+  SFX_magicLeap = this.sound.add("SFX_magicLeap", { loop: false });
+
 
   MUSIC_preparing1 = this.sound.add("MUSIC_preparing1", { loop: false });
   MUSIC_preparing2 = this.sound.add("MUSIC_preparing2", { loop: true });
@@ -1485,7 +1502,7 @@ mainGame.update = function () {
   } else {
     MK_isRunning === false
   }
-  
+
   //Preparing Loop START
   if (playersOnline === false) {
     if (preparingCount === 0) {
@@ -1661,12 +1678,15 @@ mainGame.update = function () {
     }
 
     if (MK_castLeap === true) {
+
+      SFX_magicLeap.play();
       MK_castLeap = false;
       MK_canLeap = false;
       player.setVelocityY(-550);
     }
 
     if (MK_hasCast === true) {
+      SFX_spellCast.play()
       MK_hasCast = false;
       MK_isCasting = true;
 
