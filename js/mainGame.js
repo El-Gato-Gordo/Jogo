@@ -962,11 +962,11 @@ mainGame.create = function () {
     function () {
 
       if (jogador === 1) {
-        knightRightPress = true;
+        //knightRightPress = true;
         socket.emit("botao", sala, { knightRightPress: true });
       }
       if (jogador === 2) {
-        mageRightPress = true;
+        //mageRightPress = true;
         socket.emit("botao", sala, { mageRightPress: true });
       }
     },
@@ -977,11 +977,11 @@ mainGame.create = function () {
     "pointerover",
     function () {
       if (jogador === 1) {
-        knightLeftPress = true;
+        //knightLeftPress = true;
         socket.emit("botao", sala, { knightLeftPress: true });
       }
       if (jogador === 2) {
-        mageLeftPress = true;
+        //mageLeftPress = true;
         socket.emit("botao", sala, { mageLeftPress: true });
       }
     },
@@ -992,11 +992,11 @@ mainGame.create = function () {
     "pointerover",
     function () {
       if (jogador === 1) {
-        knightCirclePress = true;
+        //knightCirclePress = true;
         socket.emit("botao", sala, { knightCirclePress: true });
       }
       if (jogador === 2) {
-        mageCirclePress = true;
+        //mageCirclePress = true;
         socket.emit("botao", sala, { mageCirclePress: true });
       }
     },
@@ -1007,11 +1007,11 @@ mainGame.create = function () {
     "pointerover",
     function () {
       if (jogador === 1) {
-        knightSquarePress = true;
+        //knightSquarePress = true;
         socket.emit("botao", sala, { knightSquarePress: true });
       }
       if (jogador === 2) {
-        mageSquarePress = true;
+        //mageSquarePress = true;
         socket.emit("botao", sala, { mageSquarePress: true });
       }
     },
@@ -1022,11 +1022,11 @@ mainGame.create = function () {
     "pointerover",
     function () {
       if (jogador === 1) {
-        knightUpPress = true;
+        //knightUpPress = true;
         socket.emit("botao", sala, { knightUpPress: true });
       }
       if (jogador === 2) {
-        mageUpPress = true;
+        //mageUpPress = true;
         socket.emit("botao", sala, { mageUpPress: true });
       }
     },
@@ -1038,11 +1038,11 @@ mainGame.create = function () {
     "pointerout",
     function () {
       if (jogador === 1) {
-        knightRightPress = false;
+        //knightRightPress = false;
         socket.emit("botao", sala, { knightRightPress: false });
       }
       if (jogador === 2) {
-        mageRightPress = false;
+        //mageRightPress = false;
         socket.emit("botao", sala, { mageRightPress: false });
       }
     },
@@ -1053,11 +1053,11 @@ mainGame.create = function () {
     "pointerout",
     function () {
       if (jogador === 1) {
-        knightUpPress = false;
+        //knightUpPress = false;
         socket.emit("botao", sala, { knightUpPress: false });
       }
       if (jogador === 2) {
-        mageUpPress = false;
+        //mageUpPress = false;
         socket.emit("botao", sala, { mageUpPress: false });
       }
     },
@@ -1067,11 +1067,11 @@ mainGame.create = function () {
     "pointerout",
     function () {
       if (jogador === 1) {
-        knightLeftPress = false;
+        //knightLeftPress = false;
         socket.emit("botao", sala, { knightLeftPress: false });
       }
       if (jogador === 2) {
-        mageLeftPress = false;
+        //mageLeftPress = false;
         socket.emit("botao", sala, { mageLeftPress: false });
       }
     },
@@ -1082,11 +1082,11 @@ mainGame.create = function () {
     "pointerout",
     function () {
       if (jogador === 1) {
-        knightCirclePress = false;
+        //knightCirclePress = false;
         socket.emit("botao", sala, { knightCirclePress: false });
       }
       if (jogador === 2) {
-        mageCirclePress = false;
+        //mageCirclePress = false;
         socket.emit("botao", sala, { mageCirclePress: false });
       }
     },
@@ -1097,11 +1097,11 @@ mainGame.create = function () {
     "pointerout",
     function () {
       if (jogador === 1) {
-        knightSquarePress = false;
+        //knightSquarePress = false;
         socket.emit("botao", sala, { knightSquarePress: false });
       }
       if (jogador === 2) {
-        mageSquarePress = false;
+        //mageSquarePress = false;
         socket.emit("botao", sala, { mageSquarePress: false });
       }
     },
