@@ -123,6 +123,19 @@ var knightLeftPress = false;
 var knightSquarePress = false;
 var knightCirclePress = false;
 
+var botoes = [
+  knightCirclePress,
+  knightSquarePress,
+  knightUpPress,
+  knightRightPress,
+  knightLeftPress,
+  mageCirclePress,
+  mageSquarePress,
+  mageUpPress,
+  mageRightPress,
+  mageLeftPress,
+];
+
 var BUTTON_CIRCLE;
 var BUTTON_SQUARE;
 var BUTTON_UP;
@@ -672,11 +685,11 @@ mainGame.create = function () {
     knightRightPress = botoes.knightRightPress;
     knightLeftPress = botoes.knightLeftPress;
 
-    mageCirclePress = botoes.knightCirclePress;
-    mageSquarePress = botoes.knightSquarePress;
-    mageUpPress = botoes.knightUpPress;
-    mageRightPress = botoes.knightRightPress;
-    mageLeftPress = botoes.knightLeftPress;
+    mageCirclePress = botoes.mageCirclePress;
+    mageSquarePress = botoes.mageSquarePress;
+    mageUpPress = botoes.mageUpPress;
+    mageRightPress = botoes.mageRightPress;
+    mageLeftPress = botoes.mageLeftPress;
   });
 
   socket.on("jogadores", (jogadores) => {
