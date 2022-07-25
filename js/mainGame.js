@@ -123,19 +123,6 @@ var knightLeftPress = false;
 var knightSquarePress = false;
 var knightCirclePress = false;
 
-var botoes = [
-  knightCirclePress,
-  knightSquarePress,
-  knightUpPress,
-  knightRightPress,
-  knightLeftPress,
-  mageCirclePress,
-  mageSquarePress,
-  mageUpPress,
-  mageRightPress,
-  mageLeftPress,
-];
-
 var BUTTON_CIRCLE;
 var BUTTON_SQUARE;
 var BUTTON_UP;
@@ -1534,31 +1521,31 @@ mainGame.update = function () {
 
   if (playersOnline === true) {
     if (jogador === 1) {
-      if (CIRCLE_isPressed === false) {
+      if (knightCirclePress === false) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 0);
       } else {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 1);
       }
 
-      if (SQUARE_isPressed === false) {
+      if (knightSquarePress === false) {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREK", 0);
       } else {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREK", 1);
       }
 
-      if (UP_isPressed === false) {
+      if (knightUpPress === false) {
         BUTTON_UP.setTexture("BUTTON_UPK", 0);
       } else {
         BUTTON_UP.setTexture("BUTTON_UPK", 1);
       }
 
-      if (RIGHT_isPressed === false) {
+      if (knightRightPress === false) {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTK", 0);
       } else {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTK", 1);
       }
 
-      if (LEFT_isPressed === false) {
+      if (knightLeftPress === false) {
         BUTTON_LEFT.setTexture("BUTTON_LEFTK", 0);
       } else {
         BUTTON_LEFT.setTexture("BUTTON_LEFTK", 1);
@@ -1566,31 +1553,31 @@ mainGame.update = function () {
     }
 
     if (jogador === 2) {
-      if (CIRCLE_isPressed === false) {
+      if (mageCirclePress === false) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEM", 0);
       } else {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEM", 1);
       }
 
-      if (SQUARE_isPressed === false) {
+      if (mageSquarePress === false) {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREM", 0);
       } else {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREM", 1);
       }
 
-      if (UP_isPressed === false) {
+      if (mageUpPress === false) {
         BUTTON_UP.setTexture("BUTTON_UPM", 0);
       } else {
         BUTTON_UP.setTexture("BUTTON_UPM", 1);
       }
 
-      if (RIGHT_isPressed === false) {
+      if (mageRightPress === false) {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTM", 0);
       } else {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTM", 1);
       }
 
-      if (LEFT_isPressed === false) {
+      if (mageLeftPress === false) {
         BUTTON_LEFT.setTexture("BUTTON_LEFTM", 0);
       } else {
         BUTTON_LEFT.setTexture("BUTTON_LEFTM", 1);
@@ -1663,16 +1650,15 @@ mainGame.update = function () {
     //PULAR FIM
 
     if (
-      SQUARE_isPressed &&
-      jogador === 2 &&
+      mageSquarePress &&
       MK_canCast === true &&
       MK_isCasting === false
     ) {
       MK_canCast = false;
       if (
-        UP_isPressed === true ||
-        RIGHT_isPressed === true ||
-        LEFT_isPressed === true
+        mageUpPress === true ||
+        mageRightPress === true ||
+        mageLeftPress === true
       ) {
         MK_hasCast = true;
       } else if (MK_canLeap === true) {
@@ -1744,7 +1730,7 @@ mainGame.update = function () {
         mageUpPress === false &&
         mageLeftPress === true
       ) {
-        MK_castDirection = "R";
+        MK_castDirection = "L";
         mageSpell.setTexture("PROJECTILES_spellLeft", 0);
         mageSpell.x = player.x - 5;
         mageSpell.y = player.y - 5;
