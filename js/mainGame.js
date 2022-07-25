@@ -49,7 +49,7 @@ var jumpTimer = 0; //Tempo no ar
 var jumpTune = 0; //
 
 var last_direction = "R"; //Verifica qual a última direção que o jogador se moveu
-var MK_isRunning = false;
+var MK_isRunning = true;
 
 var MK_isAttacking = false;
 var MK_attackDuration = 0;
@@ -966,7 +966,6 @@ mainGame.create = function () {
       RIGHT_isPressed = true;
 
       if (jogador === 1) {
-        MK_isRunning = true;
         knightRightPress = true;
         socket.emit("botao", sala, { knightRightPress: true });
       }
@@ -984,7 +983,6 @@ mainGame.create = function () {
       LEFT_isPressed = true;
 
       if (jogador === 1) {
-        MK_isRunning = true;
         knightLeftPress = true;
         socket.emit("botao", sala, { knightLeftPress: true });
       }
@@ -1050,7 +1048,6 @@ mainGame.create = function () {
     function () {
       RIGHT_isPressed = false;
       if (jogador === 1) {
-        MK_isRunning = false;
         knightRightPress = false;
         socket.emit("botao", sala, { knightRightPress: false });
       }
@@ -1082,7 +1079,6 @@ mainGame.create = function () {
     function () {
       LEFT_isPressed = false;
       if (jogador === 1) {
-        MK_isRunning = false;
         knightLeftPress = false;
         socket.emit("botao", sala, { knightLeftPress: false });
       }
@@ -1509,12 +1505,6 @@ mainGame.create = function () {
 
 //UPDATE
 mainGame.update = function () {
-
-  if (knightRightPress === true || knightLeftPress === true) {
-    MK_isRunnning === true
-  } else {
-    MK_isRunning === false
-  }
 
   //Preparing Loop START
   if (playersOnline === false) {
