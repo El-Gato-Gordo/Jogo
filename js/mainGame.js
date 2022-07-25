@@ -193,7 +193,7 @@ mainGame.preload = function () {
   this.load.audio("SFX_mageParry", ["./assets/sfx/SFX_mageParry.wav"]);
   this.load.audio("SFX_mageDeflected", ["./assets/sfx/SFX_mageDeflected.wav"]);
   this.load.audio("SFX_spellCast", ["./assets/sfx/SFX_SpellCast.wav"]);
-  this.load.audio("SFX_magicLeap", ["./assets/sfx/SFX_magicLEap.wav"]);
+  this.load.audio("SFX_magicLeap", ["./assets/sfx/SFX_magicLeap.wav"]);
 
 
 
