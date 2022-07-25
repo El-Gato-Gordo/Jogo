@@ -49,18 +49,18 @@ io.on("connection", (socket) => {
   });
 
   // Disparar evento quando jogador sair da partida
-  socket.on("disconnect", () => { });
+  socket.on("disconnect", () => {});
 
   // Envio do estado do outro jogador
   socket.on("estadoDoJogador", (sala, estado) => {
     socket.broadcast.to(sala).emit("desenharOutroJogador", estado);
   });
 
-  ocket.on("botao", (sala, botao) => {
+  socket.on("botao", (sala, botao) => {
     socket.broadcast.to(sala).emit("botao", botao);
   });
 });
 
 // Abrir porta para HTTPS/WSS
-app.use(express.static("./"))
+app.use(express.static("./"));
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}!`));
