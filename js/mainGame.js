@@ -1640,7 +1640,7 @@ mainGame.update = function () {
     MK_overlapBoss = false;
 
     //PULAR INÍCIO
-    if (knightSQuarePress === true && MK_isAttacking === false) {
+    if (knightSquarePress === true && MK_isAttacking === false) {
       if (jumpTimer === 0 && player.body.touching.down) {
         //jumpTimer verifica o tempo que o jogador está no ar
 
