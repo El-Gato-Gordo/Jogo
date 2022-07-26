@@ -641,6 +641,8 @@ mainGame.preload = function () {
 
 //CREATE
 mainGame.create = function () {
+
+  /*
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
@@ -762,8 +764,10 @@ mainGame.create = function () {
     conn.addIceCandidate(new RTCIceCandidate(candidate));
   });
 
-  //this.cameras.main.setBounds(0, -150, 1000, 800);
-
+  */
+  
+  jogador = 1
+  
   //Criando as teclas
 
   keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
