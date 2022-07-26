@@ -26,11 +26,12 @@ pressStart.create = function () {
     .setInteractive()
     .setScrollFactor(0);
 
+  background_pressStart.setSize(800, 600, true)
+
     background_pressStart.on(
       "pointerover",
       function () {
         this.scene.start("Main Menu");
-        
       },
       this,
     );
