@@ -767,7 +767,7 @@ mainGame.create = function () {
   */
   
   jogador = 1
-  playerOnline = true
+  playersOnline = true
   //Criando as teclas
 
   keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
