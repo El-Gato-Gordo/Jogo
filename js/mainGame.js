@@ -196,8 +196,6 @@ mainGame.preload = function () {
   this.load.audio("SFX_spellCast", ["./assets/sfx/SFX_SpellCast.wav"]);
   this.load.audio("SFX_magicLeap", ["./assets/sfx/SFX_magicLeap.wav"]);
 
-
-
   this.load.audio("MUSIC_preparing1", ["./assets/music/MUSIC_preparing1.wav"]);
 
   this.load.audio("MUSIC_preparing2", ["./assets/music/MUSIC_preparing2.wav"]);
@@ -213,7 +211,7 @@ mainGame.preload = function () {
     }
   );
 
-    this.load.spritesheet(
+  this.load.spritesheet(
     "roomMessage",
     "./assets/messages/waitPlayer2_MSG.png",
     {
@@ -641,7 +639,6 @@ mainGame.preload = function () {
 
 //CREATE
 mainGame.create = function () {
-
   /*
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
@@ -765,9 +762,9 @@ mainGame.create = function () {
   });
 
   */
-  
-  jogador = 1
-  playersOnline = true
+
+  jogador = 1;
+  playersOnline = true;
   //Criando as teclas
 
   keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -812,7 +809,9 @@ mainGame.create = function () {
 
   //Mensagem Sala
 
-  roomMessage = this.physics.add.sprite(400, 100, "roomMessage").setImmovable(true);
+  roomMessage = this.physics.add
+    .sprite(400, 100, "roomMessage")
+    .setImmovable(true);
   roomMessage.body.setAllowGravity(false);
 
   //Inimigo!
@@ -857,7 +856,6 @@ mainGame.create = function () {
     function () {
       MK_spellBurstDuration = 0;
 
-      
       if (MK_spellBurstDuration === 1) {
         SFX_mageFireball.play();
       }
@@ -964,7 +962,6 @@ mainGame.create = function () {
   BUTTON_RIGHT.on(
     "pointerover",
     function () {
-
       if (jogador === 1) {
         knightRightPress = true;
         //socket.emit("botao", sala, { knightRightPress: true });
@@ -1150,7 +1147,6 @@ mainGame.create = function () {
   SFX_spellCast = this.sound.add("SFX_spellCast", { loop: false });
   SFX_magicLeap = this.sound.add("SFX_magicLeap", { loop: false });
 
-
   MUSIC_preparing1 = this.sound.add("MUSIC_preparing1", { loop: false });
   MUSIC_preparing2 = this.sound.add("MUSIC_preparing2", { loop: true });
   MUSIC_rustedGate = this.sound.add("MUSIC_rustedGate", { loop: true });
@@ -1164,8 +1160,8 @@ mainGame.create = function () {
       end: 4,
     }),
     frameRate: 3,
-    repeat: -1
-  })
+    repeat: -1,
+  });
 
   //ANIMAÇÕES MAGEKNIGHT
   this.anims.create({
@@ -1507,7 +1503,6 @@ mainGame.create = function () {
 
 //UPDATE
 mainGame.update = function () {
-
   //Preparing Loop START
   if (playersOnline === false) {
     if (jogador === 1) {
@@ -1671,6 +1666,20 @@ mainGame.update = function () {
 
     //PULAR FIM
 
+    if (keyW.isDown && MK_canCast === true && MK_isCasting === false) {
+      MK_canCast = false;
+      if (
+        mageUpPress === true ||
+        mageRightPress === true ||
+        mageLeftPress === true
+      ) {
+        MK_hasCast = true;
+      } else if (MK_canLeap === true) {
+        MK_castLeap = true;
+      }
+    }
+
+    /*
     if (
       mageSquarePress &&
       MK_canCast === true &&
@@ -1687,9 +1696,9 @@ mainGame.update = function () {
         MK_castLeap = true;
       }
     }
+    */
 
     if (MK_castLeap === true) {
-
       SFX_magicLeap.play();
       MK_castLeap = false;
       MK_canLeap = false;
@@ -1697,7 +1706,7 @@ mainGame.update = function () {
     }
 
     if (MK_hasCast === true) {
-      SFX_spellCast.play()
+      SFX_spellCast.play();
       MK_hasCast = false;
       MK_isCasting = true;
 
@@ -2030,6 +2039,14 @@ mainGame.update = function () {
         }
       }
     }
+  }
+
+  if (keyJ.isDown) {
+    jogador = 1;
+  }
+
+  if (keyK.isDown) {
+    jogador = 2;
   }
 };
 
