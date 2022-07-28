@@ -68,7 +68,7 @@ var MK_canLeap = true;
 var MK_hasCast = false;
 var MK_castLeap = false;
 var MK_castDirection = "null";
-var MK_spellBurstDuration = 52;
+var MK_spellBurstDuration = 0;
 var MK_spellHasHit = false;
 
 var MK_isParrying = false;
@@ -640,11 +640,11 @@ mainGame.preload = function () {
 //CREATE
 mainGame.create = function () {
 
-
+  /*
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
-  socket.emit("entrar-na-sala", sala);
+  //socket.emit("entrar-na-sala", sala);
 
 
   var mensagemEntrada = this.add.text(10, 50, "", {
@@ -708,7 +708,7 @@ mainGame.create = function () {
             .getTracks()
             .forEach((track) => localConnection.addTrack(track, midias));
           localConnection.onicecandidate = ({ candidate }) => {
-            candidate && socket.emit("candidate", sala, candidate);
+            candidate && //socket.emit("candidate", sala, candidate);
           };
 
           console.log(midias);
@@ -720,7 +720,7 @@ mainGame.create = function () {
             .createOffer()
             .then((offer) => localConnection.setLocalDescription(offer))
             .then(() => {
-              socket.emit("offer", sala, localConnection.localDescription);
+              //socket.emit("offer", sala, localConnection.localDescription);
             });
         })
         .catch((error) => console.log(error));
@@ -739,7 +739,7 @@ mainGame.create = function () {
       .getTracks()
       .forEach((track) => remoteConnection.addTrack(track, midias));
     remoteConnection.onicecandidate = ({ candidate }) => {
-      candidate && socket.emit("candidate", sala, candidate);
+      candidate && //socket.emit("candidate", sala, candidate);
     };
     remoteConnection.ontrack = ({ streams: [midias] }) => {
       audio.srcObject = midias;
@@ -749,7 +749,7 @@ mainGame.create = function () {
       .then(() => remoteConnection.createAnswer())
       .then((answer) => remoteConnection.setLocalDescription(answer))
       .then(() => {
-        socket.emit("answer", sala, remoteConnection.localDescription);
+        //socket.emit("answer", sala, remoteConnection.localDescription);
       });
   });
 
@@ -762,8 +762,10 @@ mainGame.create = function () {
     conn.addIceCandidate(new RTCIceCandidate(candidate));
   });
 
+  */
 
-
+  jogador = 1;
+  playersOnline = true;
   //Criando as teclas
 
   keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -856,28 +858,26 @@ mainGame.create = function () {
     function (body) {
       MK_spellBurstDuration = 0;
 
-      if (MK_isCasting === true) {
-        if (MK_spellBurstDuration === 1) {
-          SFX_mageFireball.play();
-        }
+      if (MK_spellBurstDuration === 1) {
+        SFX_mageFireball.play();
+      }
 
-        if (MK_spellBurstDuration <= 50) {
-          MK_spellBurstDuration + 1
-          mageSpell.anims.play("PROJECTILES_spellBurst", true);
-          console.log("Explodindo!, olha só o negocio: %s.", MK_spellBurstDuration)
-        }
+      if (MK_spellBurstDuration <= 50) {
+        MK_spellBurstDuration + 1
+        mageSpell.anims.play("PROJECTILES_spellBurst", true);
+        console.log("Explodindo!, olha só o negocio: %s.", MK_spellBurstDuration)
+      }
       
-        if (MK_spellBurstDuration === 51) {
-          MK_canCast = true;
-          MK_isCasting = false;
-          MK_hasCast = false;
-          MK_castDirection = "null";
-          mageSpell.setFrame(5);
-          mageSpell.x = 0;
-          mageSpell.y = 0;
-          console.log("Bateu na Parede!!!, se liga no status: %s.", MK_canCast)
-          MK_spellBurstDuration = 52
-        }
+      if(MK_spellBurstDuration > 50) {
+        MK_canCast = true;
+        MK_isCasting = false;
+        MK_hasCast = false;
+        MK_castDirection = "null";
+        mageSpell.setFrame(5);
+        mageSpell.x = 0;
+        mageSpell.y = 0;
+        console.log("Bateu na Parede!!!, se liga no status: %s.", MK_canCast)
+        MK_spellBurstDuration = 0
       }
     },
     null,
@@ -913,7 +913,7 @@ mainGame.create = function () {
     this
   );
 
-  this.physics.add.overlap(
+  this.physics.add.collider(
     mageSpell,
     eye,
     function () {
@@ -937,6 +937,7 @@ mainGame.create = function () {
         console.log()
       }
     },
+    null,
     null,
     this
   );
@@ -1003,11 +1004,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightRightPress = true;
-        socket.emit("botao", sala, { knightRightPress: true });
+        //socket.emit("botao", sala, { knightRightPress: true });
       }
       if (jogador === 2) {
         mageRightPress = true;
-        socket.emit("botao", sala, { mageRightPress: true });
+        //socket.emit("botao", sala, { mageRightPress: true });
       }
     },
     this
@@ -1018,11 +1019,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightLeftPress = true;
-        socket.emit("botao", sala, { knightLeftPress: true });
+        //socket.emit("botao", sala, { knightLeftPress: true });
       }
       if (jogador === 2) {
         mageLeftPress = true;
-        socket.emit("botao", sala, { mageLeftPress: true });
+        //socket.emit("botao", sala, { mageLeftPress: true });
       }
     },
     this
@@ -1033,11 +1034,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightCirclePress = true;
-        socket.emit("botao", sala, { knightCirclePress: true });
+        //socket.emit("botao", sala, { knightCirclePress: true });
       }
       if (jogador === 2) {
         mageCirclePress = true;
-        socket.emit("botao", sala, { mageCirclePress: true });
+        //socket.emit("botao", sala, { mageCirclePress: true });
       }
     },
     this
@@ -1048,11 +1049,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightSquarePress = true;
-        socket.emit("botao", sala, { knightSquarePress: true });
+        //socket.emit("botao", sala, { knightSquarePress: true });
       }
       if (jogador === 2) {
         mageSquarePress = true;
-        socket.emit("botao", sala, { mageSquarePress: true });
+        //socket.emit("botao", sala, { mageSquarePress: true });
       }
     },
     this
@@ -1063,11 +1064,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightUpPress = true;
-        socket.emit("botao", sala, { knightUpPress: true });
+        //socket.emit("botao", sala, { knightUpPress: true });
       }
       if (jogador === 2) {
         mageUpPress = true;
-        socket.emit("botao", sala, { mageUpPress: true });
+        //socket.emit("botao", sala, { mageUpPress: true });
       }
     },
     this
@@ -1079,11 +1080,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightRightPress = false;
-        socket.emit("botao", sala, { knightRightPress: false });
+        //socket.emit("botao", sala, { knightRightPress: false });
       }
       if (jogador === 2) {
         mageRightPress = false;
-        socket.emit("botao", sala, { mageRightPress: false });
+        //socket.emit("botao", sala, { mageRightPress: false });
       }
     },
     this
@@ -1094,11 +1095,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightUpPress = false;
-        socket.emit("botao", sala, { knightUpPress: false });
+        //socket.emit("botao", sala, { knightUpPress: false });
       }
       if (jogador === 2) {
         mageUpPress = false;
-        socket.emit("botao", sala, { mageUpPress: false });
+        //socket.emit("botao", sala, { mageUpPress: false });
       }
     },
     this
@@ -1108,11 +1109,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightLeftPress = false;
-        socket.emit("botao", sala, { knightLeftPress: false });
+        //socket.emit("botao", sala, { knightLeftPress: false });
       }
       if (jogador === 2) {
         mageLeftPress = false;
-        socket.emit("botao", sala, { mageLeftPress: false });
+        //socket.emit("botao", sala, { mageLeftPress: false });
       }
     },
     this
@@ -1123,11 +1124,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightCirclePress = false;
-        socket.emit("botao", sala, { knightCirclePress: false });
+        //socket.emit("botao", sala, { knightCirclePress: false });
       }
       if (jogador === 2) {
         mageCirclePress = false;
-        socket.emit("botao", sala, { mageCirclePress: false });
+        //socket.emit("botao", sala, { mageCirclePress: false });
       }
     },
     this
@@ -1138,11 +1139,11 @@ mainGame.create = function () {
     function () {
       if (jogador === 1) {
         knightSquarePress = false;
-        socket.emit("botao", sala, { knightSquarePress: false });
+        //socket.emit("botao", sala, { knightSquarePress: false });
       }
       if (jogador === 2) {
         mageSquarePress = false;
-        socket.emit("botao", sala, { mageSquarePress: false });
+        //socket.emit("botao", sala, { mageSquarePress: false });
       }
     },
     this
@@ -1162,29 +1163,17 @@ mainGame.create = function () {
         EYE_hitCooldown = 20;
       }
 
-    },
-    null,
-    this
-  );
-
-  this.physics.add.collider(
-    eye,
-    mageSpell,
-    function () {
-      MK_overlapBoss = true;
-
       if (MK_spellHasHit === true) {
         MK_spellHasHit = false;
         EYE_healthPower = EYE_healthPower - 1;
         EYE.tint = 0xff0000;
-        EYE_justHit = true;
+        EYE_juustHit = true;
         EYE_hitCooldown = 20;
       }
     },
     null,
     this
   );
-  
 
   //SONS
   SFX_Land = this.sound.add("SFX_Land", { loop: false });
@@ -1787,7 +1776,7 @@ mainGame.update = function () {
 
       if (
         mageRightPress === false &&
-        mageUpPress === true &&
+        mageUpPress === false &&
         mageLeftPress === false
       ) {
         MK_castDirection = "U";
@@ -1831,7 +1820,7 @@ mainGame.update = function () {
 
       if (MK_castDirection === "U" && MK_spellBurstDuration === 0) {
         mageSpell.anims.play("PROJECTILES_spellUp", true);
-        mageSpell.setVelocityY(-550);
+        mageSpell.setVelocityY(550);
       }
 
       if (MK_castDirection === "LU" && MK_spellBurstDuration === 0) {
@@ -2090,6 +2079,14 @@ mainGame.update = function () {
         }
       }
     }
+  }
+
+  if (keyJ.isDown) {
+    jogador = 1;
+  }
+
+  if (keyK.isDown) {
+    jogador = 2;
   }
 };
 

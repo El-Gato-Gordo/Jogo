@@ -13,7 +13,7 @@ var config = {
     default: "arcade",
     arcade: {
       gravity: { y: 1000 },
-      debug: false,
+      debug: true,
     },
   },
   scale: {
@@ -24,7 +24,7 @@ var config = {
     height: 600,
   },
 
-  scene: [mainMenu, mainGame]
+  scene: [mainGame]
 };
 
 var game = new Phaser.Game(config);
