@@ -673,61 +673,7 @@ mainGame.create = function () {
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
-  BUTTON_room1.on("pointerover", function () {
-    sala = 1;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
-
-    socket.emit("entrar-na-sala", sala);
-  });
-
-  BUTTON_room2.on("pointerover", function () {
-    sala = 2;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
-
-    socket.emit("entrar-na-sala", sala);
-  });
-
-  BUTTON_room3.on("pointerover", function () {
-    sala = 3;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
-
-    socket.emit("entrar-na-sala", sala);
-  });
-
-  BUTTON_room4.on("pointerover", function () {
-    sala = 4;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
-
-    socket.emit("entrar-na-sala", sala);
-  });
-
-  BUTTON_room5.on("pointerover", function () {
-    sala = 5;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
-
-    socket.emit("entrar-na-sala", sala);
-  });
-
+  
   socket.on("botao", (botoes) => {
     knightCirclePress = botoes.knightCirclePress;
     knightSquarePress = botoes.knightSquarePress;
@@ -818,6 +764,62 @@ mainGame.create = function () {
   socket.on("candidate", (candidate) => {
     const conn = localConnection || remoteConnection;
     conn.addIceCandidate(new RTCIceCandidate(candidate));
+  });
+
+  //Botão de Sala
+  BUTTON_room1.on("pointerover", function () {
+    sala = 1;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
+  });
+
+  BUTTON_room2.on("pointerover", function () {
+    sala = 2;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
+  });
+
+  BUTTON_room3.on("pointerover", function () {
+    sala = 3;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
+  });
+
+  BUTTON_room4.on("pointerover", function () {
+    sala = 4;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
+  });
+
+  BUTTON_room5.on("pointerover", function () {
+    sala = 5;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
   });
 
   //Criando as teclas
