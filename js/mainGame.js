@@ -670,6 +670,43 @@ mainGame.preload = function () {
 
 //CREATE
 mainGame.create = function () {
+  //Botões de Sala
+
+  BUTTON_room1 = this.physics.add
+    .staticSprite(180, 300, "BUTTON_room1")
+    .setScale(1)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_room2 = this.physics.add
+    .staticSprite(300, 300, "BUTTON_room2")
+    .setScale(1)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_room3 = this.physics.add
+    .staticSprite(420, 300, "BUTTON_room3")
+    .setScale(1)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_room4 = this.physics.add
+    .staticSprite(540, 300, "BUTTON_room4")
+    .setScale(1)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_room5 = this.physics.add
+    .staticSprite(660, 300, "BUTTON_room5")
+    .setScale(1)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
@@ -1040,43 +1077,6 @@ mainGame.create = function () {
     },
     this
   );
-
-  //Botões de Sala
-
-  BUTTON_room1 = this.physics.add
-    .staticSprite(180, 300, "BUTTON_room1")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
-
-  BUTTON_room2 = this.physics.add
-    .staticSprite(300, 300, "BUTTON_room2")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
-
-  BUTTON_room3 = this.physics.add
-    .staticSprite(420, 300, "BUTTON_room3")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
-
-  BUTTON_room4 = this.physics.add
-    .staticSprite(540, 300, "BUTTON_room4")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
-
-  BUTTON_room5 = this.physics.add
-    .staticSprite(660, 300, "BUTTON_room5")
-    .setScale(0.7)
-    .refreshBody()
-    .setInteractive()
-    .setScrollFactor(0);
 
   //Controles
 
