@@ -673,7 +673,6 @@ mainGame.create = function () {
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
-  
   socket.on("botao", (botoes) => {
     knightCirclePress = botoes.knightCirclePress;
     knightSquarePress = botoes.knightSquarePress;
@@ -767,60 +766,80 @@ mainGame.create = function () {
   });
 
   //Botão de Sala
-  BUTTON_room1.on("pointerover", function () {
-    sala = 1;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
+  BUTTON_room1.on(
+    "pointerover",
+    function () {
+      sala = 1;
+      BUTTON_room1.destroy();
+      BUTTON_room2.destroy();
+      BUTTON_room3.destroy();
+      BUTTON_room4.destroy();
+      BUTTON_room5.destroy();
 
-    socket.emit("entrar-na-sala", sala);
-  });
+      socket.emit("entrar-na-sala", sala);
+    },
+    this
+  );
 
-  BUTTON_room2.on("pointerover", function () {
-    sala = 2;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
+  BUTTON_room2.on(
+    "pointerover",
+    function () {
+      sala = 2;
+      BUTTON_room1.destroy();
+      BUTTON_room2.destroy();
+      BUTTON_room3.destroy();
+      BUTTON_room4.destroy();
+      BUTTON_room5.destroy();
 
-    socket.emit("entrar-na-sala", sala);
-  });
+      socket.emit("entrar-na-sala", sala);
+    },
+    this
+  );
 
-  BUTTON_room3.on("pointerover", function () {
-    sala = 3;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
+  BUTTON_room3.on(
+    "pointerover",
+    function () {
+      sala = 3;
+      BUTTON_room1.destroy();
+      BUTTON_room2.destroy();
+      BUTTON_room3.destroy();
+      BUTTON_room4.destroy();
+      BUTTON_room5.destroy();
 
-    socket.emit("entrar-na-sala", sala);
-  });
+      socket.emit("entrar-na-sala", sala);
+    },
+    this
+  );
 
-  BUTTON_room4.on("pointerover", function () {
-    sala = 4;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
+  BUTTON_room4.on(
+    "pointerover",
+    function () {
+      sala = 4;
+      BUTTON_room1.destroy();
+      BUTTON_room2.destroy();
+      BUTTON_room3.destroy();
+      BUTTON_room4.destroy();
+      BUTTON_room5.destroy();
 
-    socket.emit("entrar-na-sala", sala);
-  });
+      socket.emit("entrar-na-sala", sala);
+    },
+    this
+  );
 
-  BUTTON_room5.on("pointerover", function () {
-    sala = 5;
-    BUTTON_room1.destroy();
-    BUTTON_room2.destroy();
-    BUTTON_room3.destroy();
-    BUTTON_room4.destroy();
-    BUTTON_room5.destroy();
+  BUTTON_room5.on(
+    "pointerover",
+    function () {
+      sala = 5;
+      BUTTON_room1.destroy();
+      BUTTON_room2.destroy();
+      BUTTON_room3.destroy();
+      BUTTON_room4.destroy();
+      BUTTON_room5.destroy();
 
-    socket.emit("entrar-na-sala", sala);
-  });
+      socket.emit("entrar-na-sala", sala);
+    },
+    this
+  );
 
   //Criando as teclas
 
