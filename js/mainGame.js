@@ -40,6 +40,12 @@ var MUSIC_preparing1;
 var MUSIC_preparing2;
 var MUSIC_rustedGate;
 
+var BUTTON_room1;
+var BUTTON_room2;
+var BUTTON_room3;
+var BUTTON_room4;
+var BUTTON_room5;
+
 var VFX_yOffset = 0;
 
 var vfx_mageParry;
@@ -47,7 +53,7 @@ var vfx_mageParry;
 var airSpeed = 0; //Aceleração no ar
 
 var jumpTimer = 0; //Tempo no ar
-var jumpTune = 0; //
+var jumpTune = 0;
 
 var last_direction = "R"; //Verifica qual a última direção que o jogador se moveu
 var MK_isRunning = true;
@@ -210,6 +216,31 @@ mainGame.preload = function () {
       frameHeight: 128,
     }
   );
+
+  this.load.spritesheet("BUTTON_room1", "./assets/buttons/BUTTON_ROOM1.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
+
+  this.load.spritesheet("BUTTON_room2", "./assets/buttons/BUTTON_ROOM2.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
+
+  this.load.spritesheet("BUTTON_room3", "./assets/buttons/BUTTON_ROOM3.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
+
+  this.load.spritesheet("BUTTON_room4", "./assets/buttons/BUTTON_ROOM4.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
+
+  this.load.spritesheet("BUTTON_room5", "./assets/buttons/BUTTON_ROOM5.png", {
+    frameWidth: 100,
+    frameHeight: 100,
+  });
 
   this.load.spritesheet(
     "roomMessage",
@@ -639,13 +670,10 @@ mainGame.preload = function () {
 
 //CREATE
 mainGame.create = function () {
-
-
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
   socket.emit("entrar-na-sala", sala);
-
 
   var mensagemEntrada = this.add.text(10, 50, "", {
     font: "32px Courier",
@@ -670,7 +698,7 @@ mainGame.create = function () {
       mensagemEntrada.destroy();
     }
   });
-  socket.on("botao", (botoes)  => {
+  socket.on("botao", (botoes) => {
     knightCirclePress = botoes.knightCirclePress;
     knightSquarePress = botoes.knightSquarePress;
     knightUpPress = botoes.knightUpPress;
@@ -762,8 +790,6 @@ mainGame.create = function () {
     conn.addIceCandidate(new RTCIceCandidate(candidate));
   });
 
-
-
   //Criando as teclas
 
   keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -845,7 +871,7 @@ mainGame.create = function () {
     .sprite(0, 0, "PROJECTILES_spellRight")
     .setImmovable(true)
     .setScale(0.5);
-  mageSpell.setTexture("PROJECTILES_spellBurst", 5)
+  mageSpell.setTexture("PROJECTILES_spellBurst", 5);
   mageSpell.body.setAllowGravity(false);
   mageSpell.setSize(50, 50, true).refreshBody;
   mageSpell.setCollideWorldBounds(true); //Criar
@@ -862,11 +888,14 @@ mainGame.create = function () {
         }
 
         if (MK_spellBurstDuration <= 50) {
-          MK_spellBurstDuration + 1
+          MK_spellBurstDuration + 1;
           mageSpell.anims.play("PROJECTILES_spellBurst", true);
-          console.log("Explodindo!, olha só o negocio: %s.", MK_spellBurstDuration)
+          console.log(
+            "Explodindo!, olha só o negocio: %s.",
+            MK_spellBurstDuration
+          );
         }
-      
+
         if (MK_spellBurstDuration === 51) {
           MK_canCast = true;
           MK_isCasting = false;
@@ -875,8 +904,8 @@ mainGame.create = function () {
           mageSpell.setFrame(5);
           mageSpell.x = 0;
           mageSpell.y = 0;
-          console.log("Bateu na Parede!!!, se liga no status: %s.", MK_canCast)
-          MK_spellBurstDuration = 52
+          console.log("Bateu na Parede!!!, se liga no status: %s.", MK_canCast);
+          MK_spellBurstDuration = 52;
         }
       }
     },
@@ -934,7 +963,7 @@ mainGame.create = function () {
         mageSpell.setFrame(5);
         mageSpell.x = 0;
         mageSpell.y = 0;
-        console.log()
+        console.log();
       }
     },
     null,
@@ -961,7 +990,44 @@ mainGame.create = function () {
     this
   );
 
-  //Controles
+  //Botões de Sala
+
+  BUTTON_room1 = this.physics.add
+    .staticSprite(220, 300, "BUTTON_room1")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_room2 = this.physics.add
+    .staticSprite(340, 300, "BUTTON_room2")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_room3 = this.physics.add
+    .staticSprite(460, 300, "BUTTON_room3")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_room4 = this.physics.add
+    .staticSprite(580, 300, "BUTTON_room4")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+
+  BUTTON_room5 = this.physics.add
+    .staticSprite(700, 300, "BUTTON_room5")
+    .setScale(0.7)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
+  
+    //Controles
 
   BUTTON_CIRCLE = this.physics.add
     .staticSprite(740, 495, "BUTTON_INVISIBLE")
@@ -1161,7 +1227,6 @@ mainGame.create = function () {
         EYE_justHit = true;
         EYE_hitCooldown = 20;
       }
-
     },
     null,
     this
@@ -1184,7 +1249,6 @@ mainGame.create = function () {
     null,
     this
   );
-  
 
   //SONS
   SFX_Land = this.sound.add("SFX_Land", { loop: false });
