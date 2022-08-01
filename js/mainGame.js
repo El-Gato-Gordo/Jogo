@@ -993,35 +993,35 @@ mainGame.create = function () {
   //Botões de Sala
 
   BUTTON_room1 = this.physics.add
-    .staticSprite(220, 300, "BUTTON_room1")
+    .staticSprite(180, 300, "BUTTON_room1")
     .setScale(0.7)
     .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
 
   BUTTON_room2 = this.physics.add
-    .staticSprite(340, 300, "BUTTON_room2")
+    .staticSprite(300, 300, "BUTTON_room2")
     .setScale(0.7)
     .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
 
   BUTTON_room3 = this.physics.add
-    .staticSprite(460, 300, "BUTTON_room3")
+    .staticSprite(420, 300, "BUTTON_room3")
     .setScale(0.7)
     .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
 
   BUTTON_room4 = this.physics.add
-    .staticSprite(580, 300, "BUTTON_room4")
+    .staticSprite(540, 300, "BUTTON_room4")
     .setScale(0.7)
     .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
 
   BUTTON_room5 = this.physics.add
-    .staticSprite(700, 300, "BUTTON_room5")
+    .staticSprite(660, 300, "BUTTON_room5")
     .setScale(0.7)
     .refreshBody()
     .setInteractive()
