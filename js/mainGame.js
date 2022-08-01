@@ -673,31 +673,61 @@ mainGame.create = function () {
   //Conexão do servidor
   socket = io("https://mage0knight.herokuapp.com/");
 
-  socket.emit("entrar-na-sala", sala);
+  BUTTON_room1.on("pointerover", function () {
+    sala = 1;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
 
-  var mensagemEntrada = this.add.text(10, 50, "", {
-    font: "32px Courier",
-    fill: "#ffff00",
+    socket.emit("entrar-na-sala", sala);
   });
 
-  this.input.keyboard.on("keydown", function (event) {
-    if (event.keyCode === 8 && mensagemEntrada.text.length > 0) {
-      mensagemEntrada.text = mensagemEntrada.text.substr(
-        0,
-        mensagemEntrada.text.length - 1
-      );
-    } else if (
-      event.keyCode === 32 ||
-      (event.keyCode >= 48 && event.keyCode < 90)
-    ) {
-      mensagemEntrada.text += event.key;
-    } else if (event.keyCode === 13) {
-      sala = mensagemEntrada.text;
-      console.log("Pedido de entrada na sala %s.", sala);
-      mensagem.destroy();
-      mensagemEntrada.destroy();
-    }
+  BUTTON_room2.on("pointerover", function () {
+    sala = 2;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
   });
+
+  BUTTON_room3.on("pointerover", function () {
+    sala = 3;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
+  });
+
+  BUTTON_room4.on("pointerover", function () {
+    sala = 4;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
+  });
+
+  BUTTON_room5.on("pointerover", function () {
+    sala = 5;
+    BUTTON_room1.destroy();
+    BUTTON_room2.destroy();
+    BUTTON_room3.destroy();
+    BUTTON_room4.destroy();
+    BUTTON_room5.destroy();
+
+    socket.emit("entrar-na-sala", sala);
+  });
+
   socket.on("botao", (botoes) => {
     knightCirclePress = botoes.knightCirclePress;
     knightSquarePress = botoes.knightSquarePress;
@@ -1026,8 +1056,8 @@ mainGame.create = function () {
     .refreshBody()
     .setInteractive()
     .setScrollFactor(0);
-  
-    //Controles
+
+  //Controles
 
   BUTTON_CIRCLE = this.physics.add
     .staticSprite(740, 495, "BUTTON_INVISIBLE")
