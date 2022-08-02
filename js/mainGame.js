@@ -646,6 +646,9 @@ mainGame.preload = function () {
 
 //CREATE
 mainGame.create = function () {
+  //  A simple background for our game
+  this.add.image(400, 300, "MAP_background");
+
   //Botões de Sala
 
   BUTTON_room1 = this.physics.add
@@ -886,9 +889,6 @@ mainGame.create = function () {
   keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT); // RIGHT
   keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT); // LEFT
 
-  //  A simple background for our game
-  this.add.image(400, 300, "MAP_background");
-
   //  The platforms group contains the ground and the 2 ledges we can jump on
   platforms = this.physics.add.staticGroup();
 
@@ -911,7 +911,7 @@ mainGame.create = function () {
   this.physics.add.collider(eye, platforms, null, null, this);
 
   // The player and its settings
-  player = this.physics.add.sprite(100, 400, "MK-idleRight").setScale(0.4);
+  player = this.physics.add.sprite(100, 450, "MK-idleRight").setScale(0.4);
   player.setSize(200, 250, true);
   player.setOffset(207, 250, false);
 
@@ -1647,6 +1647,7 @@ mainGame.create = function () {
 mainGame.update = function () {
   //Preparing Loop START
   if (playersOnline === false) {
+    player.anims.play("MK_idleRight")
     if (jogador === 1) {
       roomMessage.anims.play("await-forMage", true);
     } else {
