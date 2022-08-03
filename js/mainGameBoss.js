@@ -136,7 +136,7 @@ var BUTTON_UP;
 var BUTTON_RIGHT;
 var BUTTON_LEFT;
 
-var playersOnline = false;
+var playersOnline = true;
 
 //Declarando teclas do jogo
 
@@ -687,6 +687,7 @@ mainGame.create = function () {
     .setScrollFactor(0);
 
   //Conexão do servidor
+  /*
   socket = io("https://mage0knight.herokuapp.com/");
 
   socket.on("botao", (botoes) => {
@@ -781,6 +782,7 @@ mainGame.create = function () {
     conn.addIceCandidate(new RTCIceCandidate(candidate));
   });
 
+  
   //Botão de Sala
   BUTTON_room1.on(
     "pointerover",
@@ -856,7 +858,8 @@ mainGame.create = function () {
     },
     this
   );
-
+*/
+  
   //Criando as teclas
 
   keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -2166,13 +2169,11 @@ mainGame.update = function () {
     }
 
     if (EYE_isAwakened === true && EYE_isDead === false) {
-      EYE_cycleValue = EYE_cycleValue + 1;
-
       if (EYE_isActing === false) {
+        EYE_cycleValue = EYE_cycleValue + 1;
         eye.setVelocityX(0);
         eye.setVelocityY(0);
         eye.anims.play("EYE_idleFloat", true);
-      }
 
         if (EYE_cycleValue >= 0 && EYE_cycleValue <= 30) {
           eye.setVelocityX(-350);
@@ -2182,57 +2183,7 @@ mainGame.update = function () {
         if (EYE_cycleValue > 30 && EYE_cycleValue <= 50) {
           eye.setVelocityX(-110);
         }
-
-        if (EYE_cycleValue > 100 && EYE_cycleValue <= 150) {
-          EYE_isActing = true
-          eye.anims.play("EYE_electricCharge", true);
-        }
-      
-      if (EYE_cycleValue > 150 && EYE_cycleValue <= 160) {
-        EYE_isActing = true
-        eye.anims.play("EYE_electricCharge", true);
-        eye.setVelocity(-100)
       }
-      if (EYE_cycleValue > 160 && EYE_cycleValue <= 170) {
-        EYE_isActing = true
-        eye.anims.play("EYE_electricDash", true);
-        eye.setVelocityY(500)
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
   }
 };
