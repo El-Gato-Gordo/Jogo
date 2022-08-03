@@ -1647,7 +1647,7 @@ mainGame.create = function () {
 mainGame.update = function () {
   //Preparing Loop START
   if (playersOnline === false) {
-    player.anims.play("MK-idleRight")
+    player.anims.play("MK-idleRight", TextTrackCueList)
     if (jogador === 1) {
       roomMessage.anims.play("await-forMage", true);
     } else {
