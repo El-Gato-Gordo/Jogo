@@ -101,12 +101,11 @@ var EYE_actionChoice = 0;
 var EYE_isDead = false;
 var EYE_isDying = 0;
 
+var EYE_isAttacking = false;
+var EYE_projectileActive = false;
+
 var EYE_awakeningDuration = 0;
 var EYE_dyingDuration = 0;
-
-var EYE_actionDuration = 0;
-var EYE_moveDurationX = 0;
-var EYE_moveDurationY = 0;
 
 var PROJECTILE_electricOrb;
 var PROJECTILE_eyeCurse;
@@ -2195,6 +2194,7 @@ mainGame.update = function () {
       }
       if (EYE_cycleValue > 160 && EYE_cycleValue <= 170) {
         EYE_isActing = true
+        EYE_isAttacking = true
         eye.anims.play("EYE_electricDash", true);
         eye.setVelocityY(500)
         }
