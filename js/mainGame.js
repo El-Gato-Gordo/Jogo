@@ -927,7 +927,6 @@ mainGame.create = function () {
   vfx_mageParry = this.physics.add
     .staticSprite(0, 0, "BUTTON_INVISIBLE")
     .setScale(0.3);
-
   //FEITIÇO DO MAGO FINALMENTE
 
   mageSpell = this.physics.add
