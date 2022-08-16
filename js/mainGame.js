@@ -86,13 +86,14 @@ var MK_canParry = true;
 var preparingCount = 0;
 var pointer;
 
+var HUD_eyeHP;
 var mageSpell;
 
 //Olhão!!
 
 var EYE_justHit = false; //Se o jogador acabou de acertar o bicho
 var EYE_hitCooldown; //Cooldown para poder acertar de novo
-var EYE_healthPower = 100;
+var EYE_healthPower = 87;
 
 var EYE_isAwakened = false;
 var EYE_cycleValue = 0;
@@ -225,6 +226,15 @@ mainGame.preload = function () {
       frameHeight: 100,
     }
   );
+
+   this.load.spritesheet(
+     "HUD_eyeHP",
+     "./assets/hud/HUD_eyeHP.png",
+     {
+       frameWidth: 400,
+       frameHeight: 100,
+     }
+   );
 
   this.load.spritesheet(
     "BUTTON_INVISIBLE",
@@ -901,6 +911,14 @@ mainGame.create = function () {
     .sprite(400, 100, "roomMessage")
     .setImmovable(true);
   roomMessage.body.setAllowGravity(false);
+
+
+  HUD_eyeHP = this.physics.add
+    .staticSprite(400, 100, "BUTTON_INVISIBLE")
+    .setScale(1)
+    .refreshBody()
+    .setInteractive()
+    .setScrollFactor(0);
 
   //Inimigo!
   eye = this.physics.add.sprite(600, 400, "EYE_heAwakens").setImmovable(true);
@@ -2164,6 +2182,8 @@ mainGame.update = function () {
     }
 
     if (EYE_isAwakened === true && EYE_isDead === false) {
+      HUD_eyeHP.setTexture("HUD_eyeHP", EYE_healthPower)
+
       EYE_cycleValue = EYE_cycleValue + 1;
 
       if (EYE_isActing === false) {
