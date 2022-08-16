@@ -914,7 +914,7 @@ mainGame.create = function () {
 
 
   HUD_eyeHP = this.physics.add
-    .staticSprite(400, 100, "BUTTON_INVISIBLE")
+    .staticSprite(400, 50, "BUTTON_INVISIBLE")
     .setScale(1)
     .refreshBody()
     .setInteractive()
@@ -2216,7 +2216,14 @@ mainGame.update = function () {
         EYE_isAttacking = true
         eye.anims.play("EYE_electricDash", true);
         eye.setVelocityY(500)
-        }
+      }
+      if (EYE_cycleValue === 171) {
+        EYE_isActing = false
+        EYE_isAttacking = false
+        eye.anims.play("EYE_idleFloat", true);
+        eye.setVelocityY(0)
+        eye.setVelocityX(0)
+      }
 
 
 
