@@ -2044,7 +2044,7 @@ mainGame.update = function () {
           player.setVelocityX(-350);
           player.anims.play("MK-runLeft", true);
       
-      } else {
+      } else if (knightRightPress === false || knightLeftPress === false) {
        
         player.setVelocityX(0);
       }
