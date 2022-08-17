@@ -1664,7 +1664,7 @@ mainGame.create = function () {
 mainGame.update = function () {
   //Preparing Loop START
   if (playersOnline === false) {
-    player.anims.play("MK-idleRight", TextTrackCueList)
+    player.anims.play("MK-idleRight", true)
     if (jogador === 1) {
       roomMessage.anims.play("await-forMage", true);
     } else {
@@ -1700,31 +1700,31 @@ mainGame.update = function () {
     if (jogador === 1) {
       if (knightCirclePress === false) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 0);
-      } else {
+      } else if (KnightCirclePress === true) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 1);
       }
 
       if (knightSquarePress === false) {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREK", 0);
-      } else {
+      } else if (KnightSquarePress === true) {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREK", 1);
       }
 
       if (knightUpPress === false) {
         BUTTON_UP.setTexture("BUTTON_UPK", 0);
-      } else {
+      } else if (KnightUpPress === true) {
         BUTTON_UP.setTexture("BUTTON_UPK", 1);
       }
 
       if (knightRightPress === false) {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTK", 0);
-      } else {
+      } else if (KnightRightPress === true) {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTK", 1);
       }
 
       if (knightLeftPress === false) {
         BUTTON_LEFT.setTexture("BUTTON_LEFTK", 0);
-      } else {
+      } else if (KnightLeftPress === true) {
         BUTTON_LEFT.setTexture("BUTTON_LEFTK", 1);
       }
     }
@@ -1732,31 +1732,31 @@ mainGame.update = function () {
     if (jogador === 2) {
       if (mageCirclePress === false) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEM", 0);
-      } else {
+      } else if (mageCirclePress === true) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEM", 1);
       }
 
       if (mageSquarePress === false) {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREM", 0);
-      } else {
+      } else if (mageSquarePress === true) {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREM", 1);
       }
 
       if (mageUpPress === false) {
         BUTTON_UP.setTexture("BUTTON_UPM", 0);
-      } else {
+      } else if (mageUpPress === true) {
         BUTTON_UP.setTexture("BUTTON_UPM", 1);
       }
 
       if (mageRightPress === false) {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTM", 0);
-      } else {
+      } else if (mageRightPress === true) {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTM", 1);
       }
 
       if (mageLeftPress === false) {
         BUTTON_LEFT.setTexture("BUTTON_LEFTM", 0);
-      } else {
+      } else if (mageLeftPress === true) {
         BUTTON_LEFT.setTexture("BUTTON_LEFTM", 1);
       }
     }
