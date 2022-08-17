@@ -2047,41 +2047,39 @@ mainGame.update = function () {
       } else if (knightRightPress === false || knightLeftPress === false) {
        
         player.setVelocityX(0);
-      }
 
-      //ANDAR E CORRER FIM
+        if (MK_isAttacking === false) {
+          if (last_direction === "R" && knightUpPress === false) {
+            player.setSize(200, 250, true);
+            player.setOffset(207, 250, false);
+            player.anims.play("MK-idleRight", true);
 
-      //PARADO INÍCIO
-      if (player.body.velocity.x === 0 && MK_isAttacking === false && knightRightPress === false && knightLeftPress === false) {
-        
-        if (last_direction === "R" && knightUpPress === false) {
-          player.setSize(200, 250, true);
-          player.setOffset(207, 250, false);
-          player.anims.play("MK-idleRight", true);
-          
-        }
+          }
 
-        if (last_direction === "R" && knightUpPress === true) {
-          player.setSize(200, 250, true);
-          player.setOffset(207, 250, false);
-          player.anims.play("MK-lookupRight", true);
-          
-        }
+          if (last_direction === "R" && knightUpPress === true) {
+            player.setSize(200, 250, true);
+            player.setOffset(207, 250, false);
+            player.anims.play("MK-lookupRight", true);
 
-        if (last_direction === "L" && knightUpPress === false) {
-          player.setSize(200, 250, true);
-          player.setOffset(207, 250, false);
-          player.anims.play("MK-idleLeft", true);
-        }
+          }
 
-        if (last_direction === "L" && knightUpPress === true) {
-          player.setSize(200, 250, true);
-          player.setOffset(207, 250, false);
-          player.anims.play("MK-lookupLeft", true);
+          if (last_direction === "L" && knightUpPress === false) {
+            player.setSize(200, 250, true);
+            player.setOffset(207, 250, false);
+            player.anims.play("MK-idleLeft", true);
+          }
+
+          if (last_direction === "L" && knightUpPress === true) {
+            player.setSize(200, 250, true);
+            player.setOffset(207, 250, false);
+            player.anims.play("MK-lookupLeft", true);
+          }
         }
       }
+      }
 
-      //PARADO FIM
+      //ANDA
+    
     } else {
       //SE ESTÁ NO AR
       wasJumping = true;
@@ -2254,6 +2252,5 @@ mainGame.update = function () {
 
     }
   }
-};
 
 export { mainGame };
