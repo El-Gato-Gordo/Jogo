@@ -710,6 +710,8 @@ mainGame.create = function () {
     mageUpPress = botoes.mageUpPress;
     mageRightPress = botoes.mageRightPress;
     mageLeftPress = botoes.mageLeftPress;
+
+    
   });
 
   socket.on("jogadores", (jogadores) => {
@@ -2063,16 +2065,19 @@ mainGame.update = function () {
 
       //PARADO INÍCIO
       if (player.body.velocity.x === 0 && MK_isAttacking === false) {
+        console.log("paradao")
         if (last_direction === "R" && knightUpPress === false) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleRight", true);
+          console.log("idleright")
         }
 
         if (last_direction === "R" && knightUpPress === true) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-lookupRight", true);
+          console.log("lookupright")
         }
 
         if (last_direction === "L" && knightUpPress === false) {
