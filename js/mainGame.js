@@ -2052,7 +2052,7 @@ mainGame.update = function () {
       //ANDAR E CORRER FIM
 
       //PARADO INÍCIO
-      if (player.body.velocity.x === 0 && MK_isAttacking === false) {
+      if (player.body.velocity.x === 0 && MK_isAttacking === false && knightRightPress === false && knightLeftPress === false) {
         
         if (last_direction === "R" && knightUpPress === false) {
           player.setSize(200, 250, true);
