@@ -56,7 +56,6 @@ var jumpTimer = 0; //Tempo no ar
 var jumpTune = 0;
 
 var last_direction = "R"; //Verifica qual a última direção que o jogador se moveu
-var MK_isRunning = true;
 
 var MK_isAttacking = false;
 var MK_attackDuration = 0;
@@ -2032,32 +2031,21 @@ mainGame.update = function () {
       if (knightRightPress === true && MK_isAttacking === false) {
         last_direction = "R";
 
-        if (MK_isRunning === false) {
-          player.setSize(200, 250, true);
-          player.setOffset(207, 250, false);
-          player.setVelocityX(115);
-          player.anims.play("MK-walkRight", true);
-        } else {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.setVelocityX(350);
           player.anims.play("MK-runRight", true);
-        }
+    
       } else if (knightLeftPress === true && MK_isAttacking === false) {
         last_direction = "L";
-
-        if (MK_isRunning === false) {
-          player.setSize(200, 250, true);
-          player.setOffset(207, 250, false);
-          player.setVelocityX(-115);
-          player.anims.play("MK-walkLeft", true);
-        } else {
+     
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.setVelocityX(-350);
           player.anims.play("MK-runLeft", true);
-        }
+      
       } else {
+       
         player.setVelocityX(0);
       }
 
@@ -2065,19 +2053,19 @@ mainGame.update = function () {
 
       //PARADO INÍCIO
       if (player.body.velocity.x === 0 && MK_isAttacking === false) {
-        console.log("paradao")
+        
         if (last_direction === "R" && knightUpPress === false) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-idleRight", true);
-          console.log("idleright")
+          
         }
 
         if (last_direction === "R" && knightUpPress === true) {
           player.setSize(200, 250, true);
           player.setOffset(207, 250, false);
           player.anims.play("MK-lookupRight", true);
-          console.log("lookupright")
+          
         }
 
         if (last_direction === "L" && knightUpPress === false) {
