@@ -1700,31 +1700,31 @@ mainGame.update = function () {
     if (jogador === 1) {
       if (knightCirclePress === false) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 0);
-      } else if (KnightCirclePress === true) {
+      } else if (knightCirclePress === true) {
         BUTTON_CIRCLE.setTexture("BUTTON_CIRCLEK", 1);
       }
 
       if (knightSquarePress === false) {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREK", 0);
-      } else if (KnightSquarePress === true) {
+      } else if (knightSquarePress === true) {
         BUTTON_SQUARE.setTexture("BUTTON_SQUAREK", 1);
       }
 
       if (knightUpPress === false) {
         BUTTON_UP.setTexture("BUTTON_UPK", 0);
-      } else if (KnightUpPress === true) {
+      } else if (knightUpPress === true) {
         BUTTON_UP.setTexture("BUTTON_UPK", 1);
       }
 
       if (knightRightPress === false) {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTK", 0);
-      } else if (KnightRightPress === true) {
+      } else if (knightRightPress === true) {
         BUTTON_RIGHT.setTexture("BUTTON_RIGHTK", 1);
       }
 
       if (knightLeftPress === false) {
         BUTTON_LEFT.setTexture("BUTTON_LEFTK", 0);
-      } else if (KnightLeftPress === true) {
+      } else if (knightLeftPress === true) {
         BUTTON_LEFT.setTexture("BUTTON_LEFTK", 1);
       }
     }
